@@ -48,7 +48,9 @@ echo "Applying Witching Hour theme..."
 mkdir -p ./public/assets/css
 cp "$THEME_CSS" ./public/assets/css/
 CSS_HREF="/assets/css/$(basename "$THEME_CSS")"
+# Also fix Kiln's home link: with flat URLs it writes href="//", which browsers block
 find ./public -name '*.html' -exec \
-  sed -i "s#</head>#<link rel=\"stylesheet\" href=\"${CSS_HREF}\"></head>#" {} +
+  sed -i -e "s#</head>#<link rel=\"stylesheet\" href=\"${CSS_HREF}\"></head>#" \
+         -e 's#href="//"#href="/"#g' {} +
 
 echo "Kiln build complete successfully"

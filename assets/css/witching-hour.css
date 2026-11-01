@@ -649,3 +649,7 @@ main .ls-pin:hover .ls-pin__label { color: var(--wh-star); }
   main .ls-portrait--big { flex-basis: auto; width: 120px; }
   main .ls-pin__label, main .ls-area-label { display: none; }
 }
+
+/* Sidebar: show the home page as "Home" instead of "index" */
+li:has(> a[href="/"]) > a > span { font-size: 0; }
+li:has(> a[href="/"]) > a > span::after { content: "Home"; font-size: 0.875rem; }
