@@ -354,7 +354,7 @@ def entry_chips(n):
             chips.append(("ls-chip", span))
         if n["type"] == "event" and fm.get("date"):
             chips.append(("ls-chip", f'{fm["date"]}' + (f' – {fm["end"]}' if fm.get("end") else "")))
-    return " · ".join(esc(t) for _, t in chips)
+    return "".join(f'<span class="ls-chip">{esc(t)}</span>' for _, t in chips)
 
 
 def portrait(n, big=False):
@@ -375,7 +375,7 @@ def hero(n):
             f'<a class="ls-badge" data-type="{esc(n["type"])}" href="{slug_url(CODEX + "/" + plural + ".md")}">{esc(SINGULAR.get(n["type"], plural))}</a>'
             f'<p class="ls-hero__name">{esc(title)}{"<span class=ls-dagger title=Deceased>†</span>" if n["type"] == "character" and is_dead(n) else ""}</p>'
             f'{f"<p class=ls-hero__sub>{link(sub)}</p>" if sub else ""}'
-            f'{f"<p class=ls-meta>{meta}</p>" if (meta := entry_chips(n)) else ""}</div></header>')
+            f'{f"<div class=ls-chips>{chips}</div>" if (chips := entry_chips(n)) else ""}</div></header>')
 
 
 def details_panel(n):

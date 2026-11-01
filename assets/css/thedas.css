@@ -838,37 +838,36 @@ main .ls-portrait span { text-shadow: none; color: color-mix(in srgb, var(--da-h
 main .ls-card__foot { background: none; border-top: 1px solid color-mix(in srgb, var(--da-gold) 30%, transparent); }
 main .ls-card__link { font-weight: 500; }
 
-/* Home: a table of contents with dotted leaders, not a tile grid */
-main .ls-tiles {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  column-gap: 3rem;
-  row-gap: 0;
-  margin: 0.5rem 0 1.75rem;
-}
+/* Home tiles: framed boxes, name left, count right */
+main .ls-tiles { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.8rem; }
 main .ls-tile {
-  display: flex;
-  align-items: baseline;
-  padding: 0.35rem 0;
-  border: 0;
-  border-radius: 0;
-  background: none;
-  font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: 1.15rem;
+  padding: 0.95rem 1.1rem;
+  background: color-mix(in srgb, var(--da-surface) 88%, transparent);
+  font-family: "Cinzel", Georgia, serif;
+  font-size: 0.95rem;
   font-weight: 500;
+  letter-spacing: 0.03em;
   color: var(--da-text) !important;
 }
-main .ls-tile::before {
-  content: "";
-  order: 1;
-  flex: 1;
-  margin: 0 0.5em;
-  border-bottom: 1px dotted color-mix(in srgb, var(--da-gold) 55%, transparent);
-  transform: translateY(-0.3em);
-}
-main .ls-tile b { order: 2; font-size: 1rem; font-weight: 500; color: var(--da-gold); }
+main .ls-tile b { font-family: "Cormorant Garamond", Georgia, serif; font-size: 1.35rem; font-weight: 600; color: var(--ls-type, var(--da-gold)); }
 main .ls-tile:hover { color: var(--da-highlight) !important; }
-main .ls-tiles--feature .ls-tile { padding: 0.35rem 0; font-size: 1.25rem; }
+main .ls-tiles--feature .ls-tile { padding: 1.2rem 1.1rem; font-size: 1.05rem; }
+
+/* Chips under the name: small copper-outlined tags */
+main .ls-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.15rem; }
+main .ls-chip {
+  padding: 0.12em 0.6em;
+  border: 1px solid color-mix(in srgb, var(--da-gold) 50%, transparent);
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--da-deep) 60%, transparent);
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 0.9rem;
+  letter-spacing: 0;
+  color: var(--da-text);
+}
+
+/* Kiln adds its own line under h2; the hairlines replace it */
+main .content h2 { border-bottom: 0 !important; padding-bottom: 0 !important; }
 
 /* Drop cap: copper, no glow */
 main .ls-entry__main > p:first-of-type:not(.ls-empty)::first-letter { color: var(--da-gold); text-shadow: none; }
@@ -889,3 +888,15 @@ body::before {
     radial-gradient(ellipse 60% 55% at 50% 40%, color-mix(in srgb, var(--da-fade) 13%, transparent), transparent 70%),
     radial-gradient(ellipse at center, transparent 45%, var(--da-vignette) 100%);
 }
+
+/* Bubbles: rounder tiles with a soft type-colour tint, pill chips */
+main .ls-tile {
+  border-radius: 12px;
+  min-height: 3.6rem;
+  align-items: center;
+  background:
+    radial-gradient(ellipse at 100% 0%, color-mix(in srgb, var(--ls-type, var(--da-fade)) 22%, transparent), transparent 65%),
+    color-mix(in srgb, var(--da-surface) 88%, transparent);
+}
+main .ls-tile:hover { border-color: var(--ls-type, var(--da-highlight)); }
+main .ls-chip { border-radius: 999px; padding: 0.12em 0.75em; }
