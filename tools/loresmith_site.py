@@ -336,10 +336,10 @@ def entry_chips(n):
         if cat:
             chips.append(("ls-chip", f"{cat.title()} character"))
         if is_dead(n):
-            chips.append(("ls-chip ls-chip--dead", "☠ Deceased"))
+            chips.append(("", "Deceased"))
             b, d = abs_year(fm.get("born")), abs_year(fm.get("died"))
             if b is not None and d is not None and d >= b:
-                chips.append(("ls-chip", f"Died aged {d - b}"))
+                chips[-1] = ("", f"Died aged {d - b}")
         elif fm.get("status"):
             chips.append(("ls-chip", str(fm["status"])))
         if fm.get("pronouns"):
@@ -354,7 +354,7 @@ def entry_chips(n):
             chips.append(("ls-chip", span))
         if n["type"] == "event" and fm.get("date"):
             chips.append(("ls-chip", f'{fm["date"]}' + (f' – {fm["end"]}' if fm.get("end") else "")))
-    return "".join(f'<span class="{c}">{esc(t)}</span>' for c, t in chips)
+    return " · ".join(esc(t) for _, t in chips)
 
 
 def portrait(n, big=False):
@@ -373,9 +373,9 @@ def hero(n):
             f'{portrait(n, big=True) if n["type"] != "map" else ""}'
             f'<div class="ls-hero__text">'
             f'<a class="ls-badge" data-type="{esc(n["type"])}" href="{slug_url(CODEX + "/" + plural + ".md")}">{esc(SINGULAR.get(n["type"], plural))}</a>'
-            f'<p class="ls-hero__name">{esc(title)}</p>'
+            f'<p class="ls-hero__name">{esc(title)}{"<span class=ls-dagger title=Deceased>†</span>" if n["type"] == "character" and is_dead(n) else ""}</p>'
             f'{f"<p class=ls-hero__sub>{link(sub)}</p>" if sub else ""}'
-            f'<div class="ls-chips">{entry_chips(n)}</div></div></header>')
+            f'{f"<p class=ls-meta>{meta}</p>" if (meta := entry_chips(n)) else ""}</div></header>')
 
 
 def details_panel(n):
@@ -638,10 +638,10 @@ def write_page(rel, text):
 def card(n):
     fm = n["fm"]
     sub = (as_list(fm.get("titles")) or [None])[0] or fm.get("kind") or fm.get("date") or ""
-    dead = '<span class="ls-card__dead" title="Deceased">☠</span>' if n["type"] == "character" and is_dead(n) else ""
-    return (f'<li class="ls-card ls-card--portrait" data-type="{esc(n["type"])}">{dead}'
+    dead = '<span class="ls-dagger" title="Deceased">†</span>' if n["type"] == "character" and is_dead(n) else ""
+    return (f'<li class="ls-card ls-card--portrait" data-type="{esc(n["type"])}">'
             f'{portrait(n)}'
-            f'<div class="ls-card__foot"><a class="ls-card__link" href="{n["url"]}">{esc(n["name"])}</a>'
+            f'<div class="ls-card__foot"><a class="ls-card__link" href="{n["url"]}">{esc(n["name"])}</a>{dead}'
             f'{f"<p class=ls-card__sub>{esc(sub)}</p>" if sub else ""}</div></li>')
 
 
@@ -730,7 +730,7 @@ home = ['<p class="ls-lede">A codex of Thedas: people, places and history, kept 
         f'<ul class="ls-tiles ls-tiles--feature"><li><a class="ls-tile" data-type="event" href="{slug_url(CODEX + "/Timeline.md")}">'
         f'<span>Timeline</span><b>{len(events)}</b></a></li>'
         + (f'<li><a class="ls-tile" data-type="calendar" href="{slug_url(CODEX + "/Calendars.md")}"><span>Calendars</span><b>{len(cals)}</b></a></li>' if cals else "")
-        + "".join(f'<li><a class="ls-tile" data-type="map" href="{m["url"]}"><span>Map of {esc(m["name"])}</span><b>✦</b></a></li>' for m in lore_entries("map"))
+        + "".join(f'<li><a class="ls-tile" data-type="map" href="{m["url"]}"><span>Map of {esc(m["name"])}</span><b></b></a></li>' for m in lore_entries("map"))
         + "</ul>"]
 for group in ["People", "Nature", "Places", "Things", "History", "Language"]:
     if group in tiles:

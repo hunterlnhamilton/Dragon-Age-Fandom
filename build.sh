@@ -4,7 +4,7 @@
 SITE_NAME="Dragon Age: Fandom"
 INPUT_DIR="./DAFics"
 DEPLOYMENT_URL="https://dragonagefandom.pages.dev"
-THEME_CSS="assets/css/witching-hour.css"
+THEME_CSS="assets/css/thedas.css"
 # --- CONFIGURATION END ---
 
 # Exit immediately if any command fails
@@ -43,8 +43,8 @@ echo "Building site..."
   --name "$SITE_NAME" \
   --url "$DEPLOYMENT_URL"
 
-# Add the Witching Hour theme on top of Kiln's built-in one
-echo "Applying Witching Hour theme..."
+# Add the Fade theme on top of Kiln's built-in one
+echo "Applying Fade theme..."
 mkdir -p ./public/assets/css
 cp "$THEME_CSS" ./public/assets/css/
 CSS_HREF="/assets/css/$(basename "$THEME_CSS")"

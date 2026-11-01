@@ -1,9 +1,9 @@
 # Kiln configuration file
 # CLI flags in build.sh override these values.
 # Default mode mirrors the vault (folder pages, backlinks, graph, search).
-# The Witching Hour look is added on top by build.sh (see assets/css/witching-hour.css).
+# The Fade look is added on top by build.sh (see assets/css/thedas.css).
 
-theme: "rose-pine"   # base theme; witching-hour.css overrides its colors
+theme: "rose-pine"   # base theme; thedas.css overrides its colors
 mode: default
 # font: inter
 # flat-urls: false
