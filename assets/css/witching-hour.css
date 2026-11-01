@@ -451,8 +451,13 @@ main .ls-pin:hover .ls-pin__label, main .ls-pin:focus .ls-pin__label { opacity: 
    ============================================================= */
 
 /* Wider content on Loresmith pages; hide reading-time line on overviews */
-main .max-w-prose:has(.ls-hero, .ls-cards, .ls-tiles, .ls-year, .ls-mapwrap) { max-width: min(1150px, 100%); }
-main:has(.ls-tiles, .ls-cards, .ls-timeline) .note-meta-item { display: none; }
+/* Kiln caps notes at 65ch (.content); open it up on Loresmith pages */
+.content:has(.ls-hero, .ls-cards, .ls-tiles, .ls-year, .ls-mapwrap, .ls-timeline) { max-width: min(1150px, 100%); }
+/* "1 min read · words · updated" bar: hide on overview pages */
+main:has(.ls-tiles, .ls-cards, .ls-timeline) .note-meta-bar { display: none; }
+/* Sidebar: browse through Codex only; Lore pages keep their addresses */
+li:has(> details > summary > a:is([href="/lore"], [href="/lore/"])),
+li:has(> details > summary > a:is([href="/reference"], [href="/reference/"])) { display: none; }
 
 /* ---- Hero ---- */
 main .ls-hero {
