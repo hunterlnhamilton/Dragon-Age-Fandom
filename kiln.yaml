@@ -8,7 +8,7 @@
 # name: "My Notes"
 # input: ./vault
 # output: ./public
-#  mode: custom
+ mode: custom
 # layout: default
 # flat-urls: false
 # disable-toc: false
