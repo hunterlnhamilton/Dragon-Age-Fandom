@@ -13,13 +13,38 @@
             "state": {
               "type": "loresmith-overview",
               "state": {
-                "section": "timeline"
+                "section": "map"
               },
               "icon": "library",
               "title": "Canon"
             }
+          },
+          {
+            "id": "5e575b6663311fc4",
+            "type": "leaf",
+            "state": {
+              "type": "loresmith-map",
+              "state": {
+                "file": "Lore/Canon/Maps/Thedas.md"
+              },
+              "icon": "map",
+              "title": "Thedas"
+            }
+          },
+          {
+            "id": "0cc3d48b5aeadd82",
+            "type": "leaf",
+            "state": {
+              "type": "image",
+              "state": {
+                "file": "Reference/Assets/map2.png"
+              },
+              "icon": "lucide-image",
+              "title": "map2"
+            }
           }
-        ]
+        ],
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -205,8 +230,15 @@
       "github-sync:Sync with Remote": false
     }
   },
-  "active": "5041af30dcc2a5a8",
+  "active": "835458ff20585842",
   "lastOpenFiles": [
+    "Reference/Assets/ThedasMap.webp",
+    "Reference/Assets/map2.png",
+    "Reference/Assets/map1.png",
+    "Reference/Assets/25535832488_30e55ebe92_b.jpg",
+    "Reference/Assets/mapofthedashighres.png",
+    "Reference/Assets/771d1a48b433dd595d6b23bdc47182a1.jpg",
+    "Lore/Canon/Maps/Thedas.md",
     "Dragon Age Fandom/README.md",
     "Lore/Canon/Characters/Gods/Old Gods",
     "Lore/Canon/Characters/Gods/Elven Pantheon",
@@ -234,8 +266,6 @@
     "Lore/Canon/Species/Elves.md",
     "Lore/Canon/Species/Dwarves.md",
     "Lore/Canon/Settlements/Val Royeaux.md",
-    "Lore/Canon/Settlements/Tantervale.md",
-    "Lore/Canon/Settlements/Starkhaven.md",
     "Lore/Canon/Characters/Misc Humans",
     "Lore/Canon/Characters/Misc Elves",
     "Lore/Canon/Characters/Misc Dwarves",
@@ -243,12 +273,6 @@
     "Lore/Canon/Characters/Divines",
     "Lore/Canon/Characters/Ancient",
     "Lore/Canon/Species",
-    "Reference/Assets/771d1a48b433dd595d6b23bdc47182a1.jpg",
-    "Reference/Assets/25535832488_30e55ebe92_b.jpg",
-    "Reference/Assets/map1.png",
-    "Reference/Assets/map2.png",
-    "Reference/Assets/mapofthedashighres.png",
-    "Reference/Assets/ThedasMap.webp",
     "Reference/Assets/Worldofthedasmap.webp",
     "Reference/The World of Thedas/upscalemedia-transformed.jpeg"
   ]
