@@ -43,8 +43,7 @@
               "title": "map2"
             }
           }
-        ],
-        "currentTab": 2
+        ]
       }
     ],
     "direction": "vertical"
@@ -230,7 +229,7 @@
       "github-sync:Sync with Remote": false
     }
   },
-  "active": "835458ff20585842",
+  "active": "5041af30dcc2a5a8",
   "lastOpenFiles": [
     "Home.md",
     "Reference/Assets/ThedasMap.webp",

@@ -2,3 +2,6 @@
 # config dir
 DAFics/Reference/*
 !DAFics/Reference/Assets/
+.build/
+public/
+kiln

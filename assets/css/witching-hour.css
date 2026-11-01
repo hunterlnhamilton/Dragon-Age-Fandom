@@ -178,3 +178,268 @@ main .callout-title { font-family: "Cinzel", Georgia, serif; letter-spacing: 0.0
 @media (prefers-reduced-motion: reduce) {
   body::after { animation: none; }
 }
+
+
+/* =============================================================
+   Loresmith views (made by tools/loresmith_site.py)
+   ============================================================= */
+html:root {
+  --ls-surface: color-mix(in srgb, var(--wh-surface) 78%, transparent);
+  --ls-border: color-mix(in srgb, var(--wh-accent) 24%, var(--wh-surface));
+}
+[data-type="character"]                       { --ls-type: var(--color-purple); }
+[data-type="organization"]                    { --ls-type: var(--color-red); }
+[data-type="culture"], [data-type="species"]  { --ls-type: #f58cd2; }
+[data-type="nation"], [data-type="region"],
+[data-type="settlement"], [data-type="location"],
+[data-type="map"]                             { --ls-type: var(--color-green); }
+[data-type="creature"], [data-type="plant"]   { --ls-type: var(--color-cyan); }
+[data-type="item"], [data-type="discovery"]   { --ls-type: var(--color-yellow); }
+[data-type="event"], [data-type="holiday"],
+[data-type="calendar"]                        { --ls-type: var(--color-orange); }
+[data-type="language"], [data-type="word"]    { --ls-type: var(--color-blue); }
+
+main .ls-lede { color: var(--wh-muted); font-style: italic; }
+main .ls-note { color: var(--wh-muted); font-size: 0.85rem; }
+main .ls-empty { color: var(--wh-muted); font-style: italic; opacity: 0.8; }
+main .ls-unresolved { color: var(--wh-muted); border-bottom: 1px dashed currentColor; }
+
+/* ---- Info box (character sheet, place sheet…) ---- */
+main .ls-sheet {
+  float: right;
+  width: min(340px, 100%);
+  margin: 0 0 1.5rem 1.5rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--ls-border);
+  border-top: 3px solid var(--ls-type, var(--wh-accent));
+  border-radius: 12px;
+  background: var(--ls-surface);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  box-shadow: 0 14px 34px -18px rgba(0, 0, 0, 0.7), 0 0 22px -14px var(--wh-glow);
+  font-size: 0.92rem;
+}
+main .ls-sheet--bare { float: none; width: auto; margin: 0 0 1.5rem; padding: 0.6rem 1rem; }
+main .ls-sheet__head { display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 0.6rem; }
+main .ls-sheet__title {
+  margin: 0;
+  font-family: "Cinzel", Georgia, serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--wh-text);
+}
+main .ls-badge {
+  align-self: flex-start;
+  padding: 0.1em 0.65em;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--ls-type) 55%, transparent);
+  color: var(--ls-type) !important;
+  font-family: "Cinzel", Georgia, serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none !important;
+}
+main .ls-sheet dl, main .ls-connections dl { margin: 0; }
+main .ls-row {
+  display: grid;
+  grid-template-columns: 7.5rem 1fr;
+  gap: 0.75rem;
+  padding: 0.4rem 0;
+  border-top: 1px solid var(--ls-border);
+}
+main .ls-row dt {
+  font-family: "Cinzel", Georgia, serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--wh-accent);
+  padding-top: 0.15em;
+}
+main .ls-row dt span { text-transform: none; letter-spacing: 0; color: var(--wh-muted); font-weight: 400; }
+main .ls-row dd { margin: 0; }
+main .ls-row dd ul { margin: 0; padding: 0; list-style: none; }
+main .ls-connections { clear: both; margin-top: 2.5rem; }
+main .ls-connections .ls-row { grid-template-columns: 12rem 1fr; }
+
+/* ---- Cards and tiles ---- */
+main .ls-cards, main .ls-tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 0.9rem;
+  margin: 1rem 0 2rem;
+  padding: 0;
+  list-style: none;
+}
+main .ls-cards > li, main .ls-tiles > li { margin: 0; }
+main .ls-card {
+  position: relative;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--ls-border);
+  border-left: 3px solid var(--ls-type, var(--wh-accent));
+  border-radius: 10px;
+  background: var(--ls-surface);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+main .ls-card:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--ls-type) 60%, transparent);
+  box-shadow: 0 0 22px -12px var(--ls-type);
+}
+main .ls-card__link {
+  font-family: "Cinzel", Georgia, serif;
+  font-weight: 600;
+  color: var(--wh-text) !important;
+  text-decoration: none !important;
+}
+main .ls-card__link::after { content: ""; position: absolute; inset: 0; }
+main .ls-card:hover .ls-card__link { color: var(--wh-star) !important; }
+main .ls-card__sub { margin: 0.2rem 0 0; font-size: 0.85rem; font-style: italic; color: var(--wh-muted); }
+main .ls-card__sub a, main .ls-card__ex a { position: relative; z-index: 1; }
+main .ls-card__ex {
+  margin: 0.4rem 0 0;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+main h2 small { font-family: system-ui, sans-serif; font-size: 0.75rem; -webkit-text-fill-color: var(--wh-muted); }
+
+main .ls-tile {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--ls-border);
+  border-radius: 12px;
+  background:
+    radial-gradient(ellipse at 100% 0%, color-mix(in srgb, var(--ls-type) 22%, transparent), transparent 65%),
+    var(--ls-surface);
+  color: var(--wh-text) !important;
+  text-decoration: none !important;
+  font-family: "Cinzel", Georgia, serif;
+  font-weight: 600;
+  transition: transform .18s ease, border-color .18s ease;
+}
+main .ls-tile b { color: var(--ls-type); font-size: 1.3rem; }
+main .ls-tile:hover { transform: translateY(-2px); border-color: var(--ls-type); color: var(--wh-star) !important; }
+main .ls-tiles--feature .ls-tile { padding: 1.4rem 1.2rem; font-size: 1.1rem; }
+
+/* ---- Timeline ---- */
+main .ls-timeline {
+  list-style: none;
+  margin: 0.5rem 0 2rem;
+  padding: 0 0 0 1.5rem;
+  border-left: 1px solid var(--ls-border);
+}
+main .ls-timeline > li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 11rem 1fr;
+  gap: 1rem;
+  padding: 0.65rem 0;
+}
+main .ls-timeline > li::before {
+  content: "";
+  position: absolute;
+  left: calc(-1.5rem - 4px);
+  top: 1.05rem;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--wh-star);
+  box-shadow: 0 0 8px var(--wh-star-halo), 0 0 0 3px var(--wh-bg);
+}
+main .ls-timeline time { font-family: "Cinzel", Georgia, serif; font-size: 0.85rem; color: var(--wh-star); padding-top: 0.15em; }
+main .ls-timeline p { margin: 0.2rem 0 0; font-size: 0.9rem; color: var(--wh-muted); }
+main .ls-tl__kind {
+  margin-left: 0.5rem;
+  padding: 0 0.5em;
+  border: 1px solid var(--ls-border);
+  border-radius: 999px;
+  font-size: 0.72rem;
+  color: var(--wh-muted);
+}
+
+/* ---- Calendar year ---- */
+main .ls-year {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 1rem;
+  margin: 1rem 0;
+}
+main .ls-month {
+  padding: 0.7rem;
+  border: 1px solid var(--ls-border);
+  border-radius: 10px;
+  background: var(--ls-surface);
+}
+main .ls-month h3 { margin: 0 0 0.5rem; font-size: 0.95rem; text-align: center; }
+main .ls-month h3::after { display: none; }
+main .ls-days { display: grid; grid-template-columns: repeat(var(--cols, 7), 1fr); gap: 2px; font-size: 0.75rem; text-align: center; }
+main .ls-wk { display: contents; }
+main .ls-wk span { color: var(--wh-accent); font-family: "Cinzel", Georgia, serif; font-size: 0.65rem; padding-bottom: 2px; }
+main .ls-day { padding: 0.2rem 0; border-radius: 4px; color: var(--wh-muted); }
+main a.ls-day.is-holiday {
+  background: color-mix(in srgb, var(--wh-star) 22%, transparent);
+  color: var(--wh-star) !important;
+  font-weight: 600;
+  text-decoration: none !important;
+  box-shadow: 0 0 8px -2px var(--wh-star-halo);
+}
+
+/* ---- Map ---- */
+main .ls-map {
+  position: relative;
+  clear: both;
+  margin: 1.5rem 0 0.5rem;
+  border: 1px solid var(--ls-border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+main .ls-map img { display: block; width: 100%; height: 100%; object-fit: fill; margin: 0; border: 0; border-radius: 0; }
+main .ls-map svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+main .ls-map polygon {
+  fill: color-mix(in srgb, var(--wh-accent) 12%, transparent);
+  stroke: var(--wh-accent);
+  stroke-width: 0.25;
+  vector-effect: non-scaling-stroke;
+  transition: fill .18s ease;
+}
+main .ls-map a:hover polygon { fill: color-mix(in srgb, var(--wh-star) 30%, transparent); }
+main .ls-pin {
+  position: absolute;
+  width: 12px; height: 12px;
+  margin: -6px 0 0 -6px;
+  border-radius: 50%;
+  background: var(--wh-star);
+  border: 2px solid var(--wh-deep);
+  box-shadow: 0 0 10px var(--wh-star);
+  z-index: 2;
+}
+main .ls-pin__label {
+  position: absolute;
+  left: 50%; bottom: 150%;
+  transform: translateX(-50%);
+  padding: 0.15em 0.55em;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--wh-deep) 90%, transparent);
+  border: 1px solid var(--ls-border);
+  color: var(--wh-text);
+  font-family: "Cinzel", Georgia, serif;
+  font-size: 0.72rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .15s ease;
+}
+main .ls-pin:hover .ls-pin__label, main .ls-pin:focus .ls-pin__label { opacity: 1; }
+
+@media (max-width: 700px) {
+  main .ls-sheet { float: none; width: 100%; margin: 0 0 1.5rem; }
+  main .ls-timeline > li { grid-template-columns: 1fr; gap: 0.2rem; }
+  main .ls-connections .ls-row, main .ls-row { grid-template-columns: 1fr; gap: 0.15rem; }
+}

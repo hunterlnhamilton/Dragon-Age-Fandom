@@ -29,10 +29,15 @@ echo "Downloading binary from $URL..."
 curl -L -o ./kiln "$URL"
 chmod +x ./kiln
 
+# Turn Loresmith notes into sheets, category pages, timeline and calendars.
+# Works on a copy in ./.build, so the vault itself is never touched.
+echo "Preparing Loresmith pages..."
+python3 tools/loresmith_site.py "$INPUT_DIR" ./.build
+
 # Run the build
 echo "Building site..."
 ./kiln generate \
-  --input "$INPUT_DIR" \
+  --input ./.build \
   --output ./public \
   --flat-urls=true \
   --name "$SITE_NAME" \
