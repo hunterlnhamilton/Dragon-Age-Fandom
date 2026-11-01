@@ -1,0 +1,249 @@
+{
+  "rootFolder": "Lore",
+  "activeProject": "Canon",
+  "openInNewTab": true,
+  "layouts": {
+    "character": "grid",
+    "event": "list"
+  },
+  "dailyGoal": 500,
+  "showStatusBar": true,
+  "negativeEras": "BD",
+  "forwardEra": "AD",
+  "yearZero": false,
+  "presentYears": {
+    "Book 1": "1128 AD"
+  },
+  "calendars": {
+    "Book 1": {
+      "holidays": "Samhain, Poa, 4\nYule, Sambucus, 28\nImbolic, Sorbus, 12\nOstara, Alnus, 4\nBeltane, Salix, 17\nLitha, Quercus, 12\nLughnasadh, Ilex, 25\nMabon,Lianas, 20",
+      "months": "Betula, 28\nSorbus, 28\nOrnus, 28\nAlnus, 28\nSalix, 28\nHalmia, 28\nQuercus, 28\nIlex, 28\nCorylus, 28\nLianas, 28\nAralia, 28\nPoa, 27\nSambucus, 30",
+      "weekdays": "Dilúan\nDimàirt\nDimèrcles\nDijovi\nDiveneris\nDisatharn\nDisrol",
+      "moons": "Lúana, 28.077, 0"
+    }
+  },
+  "calendarView": {
+    "mode": "year",
+    "show": {
+      "moon": false
+    },
+    "cal": "Lore/Canon/Calendars/Tevinter Calendar.md",
+    "compare": "Lore/The First Blight/Calendars/Elvhen Calendar.md"
+  },
+  "manuscript": {
+    "legalName": "Hunter",
+    "byline": "Hunter L.N. Hamilton",
+    "contact": "",
+    "font": "Courier New",
+    "lang": "en"
+  },
+  "timeline": {
+    "births": true,
+    "foundings": true,
+    "calendar": true,
+    "cal": "Lore/Canon/Chantry Calendar.md"
+  },
+  "mapTime": {
+    "cal": "auto"
+  },
+  "web": {
+    "types": [
+      "character",
+      "organization"
+    ],
+    "edges": {
+      "family": true,
+      "sibling": true,
+      "kin": false,
+      "spouse": true,
+      "partner": true,
+      "allies": true,
+      "mentor": true,
+      "rivals": true,
+      "member": true,
+      "relation": true,
+      "past": true,
+      "scenes": false,
+      "other": false
+    },
+    "hideIsolated": false
+  },
+  "mirrorLinks": true,
+  "sheetGroups": {},
+  "groupBy": {
+    "character": "folder",
+    "event": "kind"
+  },
+  "foldedGroups": {},
+  "meet": {
+    "mode": "people",
+    "filter": "all"
+  },
+  "peopleView": {
+    "Lore/The First Blight/Organizations/The Chantry.md": {
+      "former": true
+    }
+  },
+  "webPins": {
+    "Book 1": {
+      "Lore/Book 1/Characters/Tarona Marenor Paric.md": [
+        -96,
+        371
+      ],
+      "Lore/Book 1/Characters/Ravana Tialha Virneiros.md": [
+        -8,
+        -124
+      ],
+      "Lore/Book 1/Characters/Evangeline Annalicia Vernithier.md": [
+        -37,
+        110
+      ],
+      "Lore/Book 1/Characters/Theodre Ilimitar Brywenys.md": [
+        -301,
+        87
+      ],
+      "Lore/Book 1/Characters/Conall Shalin Heleberos.md": [
+        201,
+        141
+      ],
+      "Lore/Book 1/Characters/Evernor Joseruil Ravahorn.md": [
+        84,
+        -74
+      ],
+      "Lore/Book 1/Characters/Aspen Calire Brymaer.md": [
+        -207,
+        -36
+      ],
+      "Lore/Book 1/Characters/Gaeleth Ruven Daewynn.md": [
+        106,
+        280
+      ],
+      "Lore/Book 1/Characters/Leoborin Galnalor Liaberos.md": [
+        -222,
+        198
+      ],
+      "Lore/Book 1/Characters/Asnor Leose Vernithier.md": [
+        480,
+        375
+      ],
+      "Lore/Book 1/Characters/Tobias Vernithier.md": [
+        452,
+        200
+      ],
+      "Lore/Book 1/Characters/Annalise Vernithier Née Hartwal.md": [
+        468,
+        -105
+      ],
+      "Lore/Book 1/Organizations/House Hartwal.md": [
+        533,
+        16
+      ],
+      "Lore/Book 1/Organizations/House Vernithier.md": [
+        556,
+        273
+      ]
+    }
+  },
+  "wordLog": {
+    "Book 1": {
+      "2026-10-02": 1255,
+      "2026-10-03": 1629
+    },
+    "Short Stories": {
+      "2026-10-19": 13,
+      "2026-10-20": 69,
+      "2026-10-21": 100
+    }
+  },
+  "typing": {
+    "outside": true,
+    "idleSeconds": 30,
+    "timeGoal": 0,
+    "pomodoro": 25,
+    "tab": "today",
+    "kinds": [
+      "scene",
+      "lore",
+      "other"
+    ],
+    "range": 7,
+    "metric": "typed",
+    "heat": "active",
+    "story": ""
+  },
+  "customStructures": {},
+  "generatorFiles": {
+    "Age.rdm": {
+      "hash": "0ab6eb5f15692a28df15ce87a912a7bb279f0ae5bc7897f7c7fcb0e239b2804e",
+      "ref": "1.0"
+    },
+    "Characters.rdm": {
+      "hash": "ef35b96a02077ce22f2cd8789af6b78a4c222f085887aee8f0fedb1bc6d08d71",
+      "ref": "1.0"
+    },
+    "Conflicts.rdm": {
+      "hash": "0247aa5c3f93d588fea436b5f8a2dc413aa6005ee4f12f184aa8a03109afed21",
+      "ref": "1.0"
+    },
+    "Dynamics.rdm": {
+      "hash": "80378a4548d939d4d3a562a0d2d6066e478d886d0a90bdb16213aa638f6b4039",
+      "ref": "1.0"
+    },
+    "Fantasy.rdm": {
+      "hash": "97d4ef7a3fb9fe3a0fd8c41130ccda1ed414e95f945025b2e9f2978e453c73d5",
+      "ref": "1.0"
+    },
+    "Genres.rdm": {
+      "hash": "73208fc3ebb8c70bd1969658e1a2aa177802084e0c266754c08946ecf2dda02b",
+      "ref": "1.0"
+    },
+    "Historical.rdm": {
+      "hash": "c366cb2e93349c7b1bd02632b3f559117c1b0ed6274cecf3772f460d41b8f62e",
+      "ref": "1.0"
+    },
+    "Horror.rdm": {
+      "hash": "2e8801aa89fd845f3091f9b2c1e1e1c8a3ce4e7419e0d7a8b1b5a6d7ed7003b8",
+      "ref": "1.0"
+    },
+    "Mystery.rdm": {
+      "hash": "2bfd4d1cb7b4a990be17ef801d197c89acffa720f20c912f9a3ac7083f59a6d0",
+      "ref": "1.0"
+    },
+    "Places.rdm": {
+      "hash": "e18540bc4ecd4084b835ce6d9d859e3d9b3d9e6c449ef8b75fa44c24465504ab",
+      "ref": "1.0"
+    },
+    "Plot.rdm": {
+      "hash": "db3a380c0af3b1b670f5b579c9e58b2c0bab9ddd8b6bf9aaf0da64374ce097eb",
+      "ref": "1.0"
+    },
+    "Romance.rdm": {
+      "hash": "d957c4eedcd43b328344b4299745ebb4957046c805034b991245ce04f4d9dab9",
+      "ref": "1.0"
+    },
+    "Science Fiction.rdm": {
+      "hash": "8b9c89e583eae77fd0cb73eefa6800a6eda4f1132572b5da8eb03104da8097f9",
+      "ref": "1.0"
+    },
+    "Setting.rdm": {
+      "hash": "60bec7623e990206aed4e533a40250f20f44bf7ca52f49f98e20d7857fa4e272",
+      "ref": "1.0"
+    },
+    "Story.rdm": {
+      "hash": "85748d15af944720d688f9db25375d0a6d7d3f36b9df9e3e7fb24dc4c95eb361",
+      "ref": "1.0"
+    },
+    "Thriller.rdm": {
+      "hash": "4fd89ec4a9bf2c61d452144265f373feb75ef86598c2ef17b0fe98d4f64979f4",
+      "ref": "1.0"
+    }
+  },
+  "mapStyles": {
+    "city-state": {
+      "marker": "star",
+      "size": "medium",
+      "label": "bold",
+      "far": true
+    }
+  }
+}

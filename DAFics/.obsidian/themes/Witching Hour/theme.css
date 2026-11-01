@@ -1,0 +1,2085 @@
+/* =============================================================
+   Witching Hour
+   A night-sky theme for Obsidian. Pair it with the Style Settings
+   plugin to choose palettes, fonts, stars and callout styles.
+   ============================================================= */
+
+@import url("https://fonts.googleapis.com/css2?family=Almendra:ital,wght@0,400;0,700;1,400&family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=IM+Fell+English:ital@0;1&family=Marcellus&family=Pirata+One&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Uncial+Antiqua&family=Courier+Prime:ital@0;1&display=swap");
+
+/* @settings
+
+name: Witching Hour
+id: witching-hour
+settings:
+    -
+        id: wh-h-palette
+        title: Palette
+        type: heading
+        level: 1
+        collapsed: false
+    -
+        id: wh-palette
+        title: Night sky palette
+        description: '"Your accent color" builds the whole sky from the accent you pick in Settings → Appearance. "Custom" uses the colors in the Custom palette section below.'
+        type: class-select
+        allowEmpty: false
+        default: wh-palette-midnight
+        options:
+            - label: Midnight Coven (violet and starlight)
+              value: wh-palette-midnight
+            - label: Amethyst Moon (plum and rose)
+              value: wh-palette-amethyst
+            - label: Aurora Hex (sea-glass and violet)
+              value: wh-palette-aurora
+            - label: Blood Moon (crimson and ember)
+              value: wh-palette-bloodmoon
+            - label: Gilded Eclipse (navy and gold)
+              value: wh-palette-gilded
+            - label: Frost Witch (ice and silver)
+              value: wh-palette-frost
+            - label: Your accent color (Obsidian system)
+              value: wh-palette-system
+            - label: Custom
+              value: wh-palette-custom
+    -
+        id: wh-h-custom
+        title: Custom palette
+        description: Only used when the palette is set to Custom. Each color has a light and dark mode version.
+        type: heading
+        level: 2
+        collapsed: true
+    -
+        id: wh-c-deep
+        title: Deepest sky
+        description: Sidebars, tab bar, ribbon
+        type: variable-themed-color
+        format: hex
+        opacity: false
+        default-light: '#e6e2f5'
+        default-dark: '#07061a'
+    -
+        id: wh-c-bg
+        title: Night sky
+        description: Behind your notes
+        type: variable-themed-color
+        format: hex
+        opacity: false
+        default-light: '#f5f3fc'
+        default-dark: '#0c0b24'
+    -
+        id: wh-c-surface
+        title: Raised surfaces
+        description: Callouts, code blocks, menus
+        type: variable-themed-color
+        format: hex
+        opacity: false
+        default-light: '#ebe7f8'
+        default-dark: '#161436'
+    -
+        id: wh-c-text
+        title: Text
+        type: variable-themed-color
+        format: hex
+        opacity: false
+        default-light: '#221d3f'
+        default-dark: '#e7e3f7'
+    -
+        id: wh-c-muted
+        title: Muted text
+        type: variable-themed-color
+        format: hex
+        opacity: false
+        default-light: '#6a6390'
+        default-dark: '#9d97c2'
+    -
+        id: wh-c-accent
+        title: Accent
+        description: Buttons, active items, H1
+        type: variable-themed-color
+        format: hex
+        opacity: false
+        default-light: '#6b4bd6'
+        default-dark: '#b79cff'
+    -
+        id: wh-c-accent-2
+        title: Second accent
+        description: Links, tags, H2
+        type: variable-themed-color
+        format: hex
+        opacity: false
+        default-light: '#1f84a8'
+        default-dark: '#86d4ec'
+    -
+        id: wh-c-star
+        title: Starlight
+        description: Stars, highlights, H3, the cursor
+        type: variable-themed-color
+        format: hex
+        opacity: false
+        default-light: '#b8902a'
+        default-dark: '#f7e9b5'
+
+    -
+        id: wh-h-fonts
+        title: Fonts
+        type: heading
+        level: 1
+        collapsed: true
+    -
+        id: wh-fonts-info
+        title: About the fonts
+        description: The named fonts load from Google Fonts. If one shows up as plain Georgia, Obsidian was offline when it started; it will appear next time you're connected. Pick Custom to type any font installed on your device.
+        type: info-text
+        markdown: false
+    -
+        id: wh-font-heading
+        title: Heading font (H1 to H3)
+        type: variable-select
+        default: '"Cinzel Decorative", "Cinzel", Georgia, serif'
+        options:
+            - label: Cinzel Decorative
+              value: '"Cinzel Decorative", "Cinzel", Georgia, serif'
+            - label: Cinzel
+              value: '"Cinzel", Georgia, serif'
+            - label: Uncial Antiqua
+              value: '"Uncial Antiqua", Georgia, serif'
+            - label: Pirata One (blackletter)
+              value: '"Pirata One", Georgia, serif'
+            - label: Almendra
+              value: '"Almendra", Georgia, serif'
+            - label: IM Fell English
+              value: '"IM Fell English", Georgia, serif'
+            - label: Cormorant Garamond
+              value: '"Cormorant Garamond", Garamond, Georgia, serif'
+            - label: Marcellus
+              value: '"Marcellus", Georgia, serif'
+            - label: Same as body text
+              value: 'var(--font-text)'
+            - label: Custom (type it below)
+              value: 'var(--wh-font-heading-custom)'
+    -
+        id: wh-font-heading-custom
+        title: Custom heading font
+        description: 'Example: "Mona Lisa Solid", serif'
+        type: variable-text
+        default: 'Georgia, serif'
+    -
+        id: wh-font-subheading
+        title: Small heading font (H4 to H6, callout titles, table headers)
+        type: variable-select
+        default: '"Cinzel", Georgia, serif'
+        options:
+            - label: Cinzel
+              value: '"Cinzel", Georgia, serif'
+            - label: Marcellus
+              value: '"Marcellus", Georgia, serif'
+            - label: Almendra
+              value: '"Almendra", Georgia, serif'
+            - label: IM Fell English
+              value: '"IM Fell English", Georgia, serif'
+            - label: Cormorant Garamond
+              value: '"Cormorant Garamond", Garamond, Georgia, serif'
+            - label: Same as body text
+              value: 'var(--font-text)'
+            - label: Custom (type it below)
+              value: 'var(--wh-font-subheading-custom)'
+    -
+        id: wh-font-subheading-custom
+        title: Custom small heading font
+        type: variable-text
+        default: 'Georgia, serif'
+    -
+        id: wh-font-title
+        title: Note title font
+        description: Used for the title at the top of each note, file names in the sidebar, and tab names, so they always match.
+        type: variable-select
+        default: '"Cinzel", Georgia, serif'
+        options:
+            - label: Cinzel
+              value: '"Cinzel", Georgia, serif'
+            - label: Cinzel Decorative
+              value: '"Cinzel Decorative", "Cinzel", Georgia, serif'
+            - label: Marcellus
+              value: '"Marcellus", Georgia, serif'
+            - label: Almendra
+              value: '"Almendra", Georgia, serif'
+            - label: IM Fell English
+              value: '"IM Fell English", Georgia, serif'
+            - label: Cormorant Garamond
+              value: '"Cormorant Garamond", Garamond, Georgia, serif'
+            - label: Uncial Antiqua
+              value: '"Uncial Antiqua", Georgia, serif'
+            - label: Interface font
+              value: 'var(--font-interface)'
+            - label: Custom (type it below)
+              value: 'var(--wh-font-title-custom)'
+    -
+        id: wh-font-title-custom
+        title: Custom note title font
+        type: variable-text
+        default: 'Georgia, serif'
+    -
+        id: wh-font-body
+        title: Body text font
+        description: Obsidian's own font setting in Appearance still wins if you've set one there.
+        type: variable-select
+        default: '"Spectral", Georgia, serif'
+        options:
+            - label: Spectral
+              value: '"Spectral", Georgia, serif'
+            - label: Cormorant Garamond
+              value: '"Cormorant Garamond", Garamond, Georgia, serif'
+            - label: IM Fell English
+              value: '"IM Fell English", Georgia, serif'
+            - label: Obsidian default
+              value: 'var(--font-default)'
+            - label: Custom (type it below)
+              value: 'var(--wh-font-body-custom)'
+    -
+        id: wh-font-body-custom
+        title: Custom body font
+        type: variable-text
+        default: 'Georgia, serif'
+    -
+        id: wh-font-interface
+        title: Interface font
+        description: Menus, settings, sidebars, buttons and the status bar. Obsidian's own interface font setting in Appearance still wins if you've set one there.
+        type: variable-select
+        default: 'var(--font-default)'
+        options:
+            - label: Obsidian default
+              value: 'var(--font-default)'
+            - label: Marcellus
+              value: '"Marcellus", Georgia, serif'
+            - label: Cormorant Garamond
+              value: '"Cormorant Garamond", Garamond, Georgia, serif'
+            - label: Spectral
+              value: '"Spectral", Georgia, serif'
+            - label: Cinzel (all capitals)
+              value: '"Cinzel", Georgia, serif'
+            - label: Almendra
+              value: '"Almendra", Georgia, serif'
+            - label: IM Fell English
+              value: '"IM Fell English", Georgia, serif'
+            - label: Same as body text
+              value: 'var(--wh-font-body)'
+            - label: Custom (type it below)
+              value: 'var(--wh-font-interface-custom)'
+    -
+        id: wh-font-interface-custom
+        title: Custom interface font
+        type: variable-text
+        default: 'system-ui, sans-serif'
+    -
+        id: wh-interface-size
+        title: Interface text size
+        description: Serif fonts often read small in menus; nudge this up if so.
+        type: variable-number-slider
+        default: 13
+        min: 11
+        max: 17
+        step: 0.5
+        format: px
+
+    -
+        id: wh-h-headings
+        title: Headings
+        type: heading
+        level: 1
+        collapsed: true
+    -
+        id: wh-heading-style
+        title: Heading color
+        type: class-select
+        allowEmpty: false
+        default: wh-headings-gradient
+        options:
+            - label: Starlight gradient
+              value: wh-headings-gradient
+            - label: One palette color per level
+              value: wh-headings-palette
+            - label: Plain text color
+              value: wh-headings-plain
+    -
+        id: wh-shimmer
+        title: Slow shimmer on gradient headings
+        type: class-toggle
+        default: false
+    -
+        id: wh-no-heading-glow
+        title: Turn off heading glow
+        type: class-toggle
+        default: false
+    -
+        id: wh-no-h1-ornament
+        title: Hide the star rule under H1
+        type: class-toggle
+        default: false
+
+    -
+        id: wh-h-titles
+        title: Note titles and sidebar
+        type: heading
+        level: 1
+        collapsed: true
+    -
+        id: wh-accent-titles
+        title: Color note titles with the accent
+        type: class-toggle
+        default: false
+    -
+        id: wh-folders-title-font
+        title: Use the note title font for folders too
+        type: class-toggle
+        default: false
+    -
+        id: wh-no-title-font-tabs
+        title: Keep the interface font in tabs
+        type: class-toggle
+        default: false
+
+    -
+        id: wh-h-sky
+        title: Stars
+        type: heading
+        level: 1
+        collapsed: true
+    -
+        id: wh-no-stars
+        title: Hide the starfield
+        type: class-toggle
+        default: false
+    -
+        id: wh-no-twinkle
+        title: Stop the stars twinkling
+        type: class-toggle
+        default: false
+    -
+        id: wh-shooting-stars
+        title: Shooting stars
+        description: One passes behind your note every so often.
+        type: class-toggle
+        default: false
+    -
+        id: wh-no-nebula
+        title: Hide the nebula glow
+        type: class-toggle
+        default: false
+    -
+        id: wh-sidebar-stars
+        title: Stars in the sidebars
+        type: class-toggle
+        default: false
+    -
+        id: wh-star-density
+        title: Star spacing
+        description: Lower numbers pack the stars closer together.
+        type: variable-number-slider
+        default: 220
+        min: 100
+        max: 420
+        step: 10
+        format: px
+    -
+        id: wh-star-brightness
+        title: Star brightness
+        type: variable-number-slider
+        default: 0.8
+        min: 0.1
+        max: 1
+        step: 0.05
+    -
+        id: wh-twinkle-speed
+        title: Twinkle speed (seconds per twinkle)
+        type: variable-number-slider
+        default: 5
+        min: 2
+        max: 14
+        step: 0.5
+        format: s
+
+    -
+        id: wh-h-callouts
+        title: Callouts
+        type: heading
+        level: 1
+        collapsed: true
+    -
+        id: wh-callout-style
+        title: Callout style
+        type: class-select
+        allowEmpty: false
+        default: wh-callouts-starglass
+        options:
+            - label: Starglass (translucent, glowing)
+              value: wh-callouts-starglass
+            - label: Grimoire (double border, corner stars)
+              value: wh-callouts-grimoire
+            - label: Plain Obsidian
+              value: wh-callouts-plain
+    -
+        id: wh-callouts-info
+        title: Callout types and options
+        type: info-text
+        markdown: true
+        description: "Works with every built-in callout type. **Options** go after a pipe, and you can combine them: `> [!quote|card glow]`\n\n`glow` pulses softly · `sparkle` fills it with twinkling stars · `card` makes a tall centered card · `left` or `right` floats it beside text (reading view) · `center` centers the text · `no-icon` hides the icon\n\n**Writerly types:** `epigraph` · `letter` · `journal` · `poem` · `dream` · `spell` · `prophecy` · `margin` (a pencilled note). Try `> [!letter] Dear Aria,`"
+
+    -
+        id: wh-h-book
+        title: Writing and books
+        type: heading
+        level: 1
+        collapsed: true
+    -
+        id: wh-dropcap
+        title: Drop caps
+        description: The first paragraph after a chapter heading (H1 or H2) opens with a big illuminated letter and small-caps first line. Reading view.
+        type: class-toggle
+        default: true
+    -
+        id: wh-chapter-headings
+        title: Chapter-style headings
+        description: Centered, spaced capitals for H1, and a centered note title, like the opening of a chapter.
+        type: class-toggle
+        default: false
+    -
+        id: wh-book-prose
+        title: Book-style paragraphs
+        description: Justified text with indented paragraphs and no gaps between them, as in a printed novel. Reading view.
+        type: class-toggle
+        default: false
+    -
+        id: wh-page
+        title: Paper page
+        description: Puts reading view on a softly lit page with margins, with a reading width you choose.
+        type: class-toggle
+        default: false
+    -
+        id: wh-page-width
+        title: Page width
+        type: variable-number-slider
+        default: 40
+        min: 30
+        max: 60
+        step: 1
+        format: rem
+    -
+        id: wh-typewriter
+        title: Typewriter editing font
+        description: Edit in Courier Prime, the classic manuscript look (pairs with Loresmith's manuscript export).
+        type: class-toggle
+        default: false
+    -
+        id: wh-epigraphs
+        title: Blockquotes as epigraphs
+        description: Quotes get an opening mark and italic serif, set apart like a book epigraph.
+        type: class-toggle
+        default: true
+    -
+        id: wh-loresmith
+        title: Style the Loresmith plugin
+        description: Gives Loresmith's overview, sheets, chapters board and sidebar the same bookish look (title fonts, rules, framed portraits, starfield).
+        type: class-toggle
+        default: true
+
+    -
+        id: wh-h-perf
+        title: Performance
+        type: heading
+        level: 1
+        collapsed: true
+    -
+        id: wh-performance
+        title: Performance mode
+        description: Turns off animation, blur and glow. Helpful on an iPad or when running on battery.
+        type: class-toggle
+        default: false
+
+*/
+
+
+/* =============================================================
+   1. Setting defaults
+   Style Settings writes to body.css-settings-manager, which
+   outranks these.
+   ============================================================= */
+
+body {
+  --wh-font-heading: "Cinzel Decorative", "Cinzel", Georgia, serif;
+  --wh-font-heading-custom: Georgia, serif;
+  --wh-font-subheading: "Cinzel", Georgia, serif;
+  --wh-font-subheading-custom: Georgia, serif;
+  --wh-font-title: "Cinzel", Georgia, serif;
+  --wh-font-title-custom: Georgia, serif;
+  --wh-font-body: "Spectral", Georgia, serif;
+  --wh-font-body-custom: Georgia, serif;
+  --wh-font-interface: var(--font-default);
+  --wh-font-interface-custom: system-ui, sans-serif;
+  --wh-interface-size: 13px;
+
+  --wh-star-density: 220px;
+  --wh-star-brightness: 0.8;
+  --wh-twinkle-speed: 5s;
+}
+
+
+/* =============================================================
+   2. Palettes
+   Each palette defines eight colors. Everything else derives
+   from them.
+   ============================================================= */
+
+/* Midnight Coven (default) */
+.theme-dark {
+  --wh-deep: #07061a;
+  --wh-bg: #0c0b24;
+  --wh-surface: #161436;
+  --wh-text: #e7e3f7;
+  --wh-muted: #9d97c2;
+  --wh-accent: #b79cff;
+  --wh-accent-2: #86d4ec;
+  --wh-star: #f7e9b5;
+
+  --wh-mode-star: 1;
+  --wh-nebula: 16%;
+  --wh-hl: 26%;
+  --wh-on-accent: var(--wh-deep);
+}
+.theme-light {
+  --wh-deep: #e6e2f5;
+  --wh-bg: #f5f3fc;
+  --wh-surface: #ebe7f8;
+  --wh-text: #221d3f;
+  --wh-muted: #6a6390;
+  --wh-accent: #6b4bd6;
+  --wh-accent-2: #1f84a8;
+  --wh-star: #b8902a;
+
+  --wh-mode-star: 0.5;
+  --wh-nebula: 9%;
+  --wh-hl: 40%;
+  --wh-on-accent: #ffffff;
+}
+
+/* Amethyst Moon */
+.theme-dark.wh-palette-amethyst {
+  --wh-deep: #0f0717;
+  --wh-bg: #160c22;
+  --wh-surface: #221533;
+  --wh-text: #f0e6f7;
+  --wh-muted: #ab93bf;
+  --wh-accent: #d58cff;
+  --wh-accent-2: #ff9ad5;
+  --wh-star: #ffe9f5;
+}
+.theme-light.wh-palette-amethyst {
+  --wh-deep: #efe3f5;
+  --wh-bg: #fbf6fd;
+  --wh-surface: #f3e8f8;
+  --wh-text: #2d1638;
+  --wh-muted: #7c5e8a;
+  --wh-accent: #9a3fcf;
+  --wh-accent-2: #c23a8a;
+  --wh-star: #b0668f;
+}
+
+/* Aurora Hex */
+.theme-dark.wh-palette-aurora {
+  --wh-deep: #03101a;
+  --wh-bg: #061925;
+  --wh-surface: #0c2533;
+  --wh-text: #e1f4f2;
+  --wh-muted: #8fb3b5;
+  --wh-accent: #5ef0c0;
+  --wh-accent-2: #a797ff;
+  --wh-star: #d9fff4;
+}
+.theme-light.wh-palette-aurora {
+  --wh-deep: #dff0ee;
+  --wh-bg: #f3fbfa;
+  --wh-surface: #e5f4f2;
+  --wh-text: #0f2a30;
+  --wh-muted: #56777a;
+  --wh-accent: #0d8f70;
+  --wh-accent-2: #5b49d6;
+  --wh-star: #2f9580;
+}
+
+/* Blood Moon */
+.theme-dark.wh-palette-bloodmoon {
+  --wh-deep: #0d0508;
+  --wh-bg: #15080d;
+  --wh-surface: #221016;
+  --wh-text: #f5e4e6;
+  --wh-muted: #b8959b;
+  --wh-accent: #ff5f6d;
+  --wh-accent-2: #ffab5c;
+  --wh-star: #ffd9c7;
+}
+.theme-light.wh-palette-bloodmoon {
+  --wh-deep: #f4e2e3;
+  --wh-bg: #fdf6f6;
+  --wh-surface: #f7e8e9;
+  --wh-text: #3a1016;
+  --wh-muted: #86585f;
+  --wh-accent: #c42637;
+  --wh-accent-2: #b35e0e;
+  --wh-star: #b35a3a;
+}
+
+/* Gilded Eclipse */
+.theme-dark.wh-palette-gilded {
+  --wh-deep: #05070f;
+  --wh-bg: #0a0e1c;
+  --wh-surface: #141a2e;
+  --wh-text: #efe9dc;
+  --wh-muted: #a8a28e;
+  --wh-accent: #e7c46a;
+  --wh-accent-2: #8aa7ff;
+  --wh-star: #fff3c4;
+}
+.theme-light.wh-palette-gilded {
+  --wh-deep: #efe9da;
+  --wh-bg: #fbf8f0;
+  --wh-surface: #f3eee0;
+  --wh-text: #1c2238;
+  --wh-muted: #6d6852;
+  --wh-accent: #94700f;
+  --wh-accent-2: #3a58c9;
+  --wh-star: #a8841c;
+}
+
+/* Frost Witch */
+.theme-dark.wh-palette-frost {
+  --wh-deep: #070b14;
+  --wh-bg: #0c1220;
+  --wh-surface: #151e31;
+  --wh-text: #e8f0fa;
+  --wh-muted: #97a7bf;
+  --wh-accent: #9fd2ff;
+  --wh-accent-2: #d7c2ff;
+  --wh-star: #ffffff;
+}
+.theme-light.wh-palette-frost {
+  --wh-deep: #e3ebf5;
+  --wh-bg: #f6f9fd;
+  --wh-surface: #e9f0f8;
+  --wh-text: #16223a;
+  --wh-muted: #5e6e88;
+  --wh-accent: #2f7fc9;
+  --wh-accent-2: #7b56d0;
+  --wh-star: #6f8fb5;
+}
+
+/* Your accent color: the sky is tinted with the hue you pick in
+   Settings → Appearance → Accent color. */
+.theme-dark.wh-palette-system {
+  --wh-deep: hsl(var(--accent-h), 35%, 5%);
+  --wh-bg: hsl(var(--accent-h), 32%, 8%);
+  --wh-surface: hsl(var(--accent-h), 28%, 13%);
+  --wh-text: hsl(var(--accent-h), 30%, 92%);
+  --wh-muted: hsl(var(--accent-h), 15%, 66%);
+  --wh-accent: hsl(var(--accent-h), var(--accent-s), max(var(--accent-l), 62%));
+  --wh-accent-2: hsl(calc(var(--accent-h) + 45), 70%, 74%);
+  --wh-star: hsl(calc(var(--accent-h) + 180), 80%, 88%);
+}
+.theme-light.wh-palette-system {
+  --wh-deep: hsl(var(--accent-h), 30%, 91%);
+  --wh-bg: hsl(var(--accent-h), 35%, 97%);
+  --wh-surface: hsl(var(--accent-h), 30%, 93%);
+  --wh-text: hsl(var(--accent-h), 30%, 15%);
+  --wh-muted: hsl(var(--accent-h), 12%, 42%);
+  --wh-accent: hsl(var(--accent-h), var(--accent-s), min(var(--accent-l), 48%));
+  --wh-accent-2: hsl(calc(var(--accent-h) + 45), 60%, 36%);
+  --wh-star: hsl(calc(var(--accent-h) + 180), 55%, 42%);
+}
+
+/* Custom */
+.theme-dark.wh-palette-custom {
+  --wh-deep: var(--wh-c-deep, #07061a);
+  --wh-bg: var(--wh-c-bg, #0c0b24);
+  --wh-surface: var(--wh-c-surface, #161436);
+  --wh-text: var(--wh-c-text, #e7e3f7);
+  --wh-muted: var(--wh-c-muted, #9d97c2);
+  --wh-accent: var(--wh-c-accent, #b79cff);
+  --wh-accent-2: var(--wh-c-accent-2, #86d4ec);
+  --wh-star: var(--wh-c-star, #f7e9b5);
+}
+.theme-light.wh-palette-custom {
+  --wh-deep: var(--wh-c-deep, #e6e2f5);
+  --wh-bg: var(--wh-c-bg, #f5f3fc);
+  --wh-surface: var(--wh-c-surface, #ebe7f8);
+  --wh-text: var(--wh-c-text, #221d3f);
+  --wh-muted: var(--wh-c-muted, #6a6390);
+  --wh-accent: var(--wh-c-accent, #6b4bd6);
+  --wh-accent-2: var(--wh-c-accent-2, #1f84a8);
+  --wh-star: var(--wh-c-star, #b8902a);
+}
+
+
+/* Jewel-toned base colors. Obsidian's built-in callouts
+   (note, tip, warning...) and a few UI accents draw from these. */
+.theme-dark {
+  --color-red-rgb: 255, 110, 130;     --color-red: #ff6e82;
+  --color-orange-rgb: 255, 160, 100;  --color-orange: #ffa064;
+  --color-yellow-rgb: 240, 210, 130;  --color-yellow: #f0d282;
+  --color-green-rgb: 120, 220, 170;   --color-green: #78dcaa;
+  --color-cyan-rgb: 110, 215, 230;    --color-cyan: #6ed7e6;
+  --color-blue-rgb: 140, 170, 255;    --color-blue: #8caaff;
+  --color-purple-rgb: 190, 150, 255;  --color-purple: #be96ff;
+  --color-pink-rgb: 245, 140, 210;    --color-pink: #f58cd2;
+}
+.theme-light {
+  --color-red-rgb: 200, 40, 70;       --color-red: #c82846;
+  --color-orange-rgb: 200, 100, 30;   --color-orange: #c8641e;
+  --color-yellow-rgb: 160, 120, 20;   --color-yellow: #a07814;
+  --color-green-rgb: 30, 140, 100;    --color-green: #1e8c64;
+  --color-cyan-rgb: 20, 130, 150;     --color-cyan: #148296;
+  --color-blue-rgb: 60, 90, 210;      --color-blue: #3c5ad2;
+  --color-purple-rgb: 120, 70, 210;   --color-purple: #7846d2;
+  --color-pink-rgb: 190, 50, 140;     --color-pink: #be328c;
+}
+
+
+/* =============================================================
+   3. Derived colors and Obsidian variables
+   ============================================================= */
+
+.theme-dark,
+.theme-light {
+  /* derived */
+  --wh-faint: color-mix(in srgb, var(--wh-muted) 55%, var(--wh-bg));
+  --wh-border: color-mix(in srgb, var(--wh-accent) 22%, var(--wh-surface));
+  --wh-border-strong: color-mix(in srgb, var(--wh-accent) 45%, var(--wh-surface));
+  --wh-glow: color-mix(in srgb, var(--wh-accent) 55%, transparent);
+  --wh-star-halo: color-mix(in srgb, var(--wh-star) 30%, transparent);
+  --wh-star-tint: color-mix(in srgb, var(--wh-star) 55%, var(--wh-accent-2));
+  --wh-glass: color-mix(in srgb, var(--wh-surface) 72%, transparent);
+  --wh-glass-strong: color-mix(in srgb, var(--wh-surface) 94%, transparent);
+  --wh-heading-gradient: linear-gradient(100deg, var(--wh-accent) 0%, var(--wh-star) 50%, var(--wh-accent-2) 100%);
+
+  /* fonts */
+  --font-text-theme: var(--wh-font-body);
+  --font-interface-theme: var(--wh-font-interface);
+  --font-ui-smaller: calc(var(--wh-interface-size) - 1px);
+  --font-ui-small: var(--wh-interface-size);
+  --font-ui-medium: calc(var(--wh-interface-size) + 2px);
+  --font-ui-large: calc(var(--wh-interface-size) + 7px);
+  --h1-font: var(--wh-font-heading);
+  --h2-font: var(--wh-font-heading);
+  --h3-font: var(--wh-font-heading);
+  --h4-font: var(--wh-font-subheading);
+  --h5-font: var(--wh-font-subheading);
+  --h6-font: var(--wh-font-subheading);
+  --inline-title-font: var(--wh-font-title);
+
+  /* heading colors (used by the palette mode) */
+  --h1-color: var(--wh-accent);
+  --h2-color: var(--wh-accent-2);
+  --h3-color: var(--wh-star);
+  --h4-color: var(--wh-accent);
+  --h5-color: var(--wh-accent-2);
+  --h6-color: var(--wh-muted);
+  --inline-title-color: var(--wh-text);
+
+  /* surfaces */
+  --background-primary: var(--wh-bg);
+  --background-primary-alt: var(--wh-surface);
+  --background-secondary: var(--wh-deep);
+  --background-secondary-alt: color-mix(in srgb, var(--wh-deep) 65%, var(--wh-surface));
+  --background-modifier-border: var(--wh-border);
+  --background-modifier-border-hover: var(--wh-border-strong);
+  --background-modifier-border-focus: var(--wh-accent);
+  --background-modifier-hover: color-mix(in srgb, var(--wh-accent) 10%, transparent);
+  --background-modifier-active-hover: color-mix(in srgb, var(--wh-accent) 18%, transparent);
+  --background-modifier-form-field: color-mix(in srgb, var(--wh-deep) 60%, var(--wh-bg));
+  --titlebar-background: var(--wh-deep);
+  --titlebar-background-focused: var(--wh-deep);
+  --tab-container-background: var(--wh-deep);
+  --ribbon-background: var(--wh-deep);
+  --ribbon-background-collapsed: var(--wh-deep);
+  --status-bar-background: var(--wh-deep);
+  --divider-color: var(--wh-border);
+
+  /* text */
+  --text-normal: var(--wh-text);
+  --text-muted: var(--wh-muted);
+  --text-faint: var(--wh-faint);
+  --text-accent: var(--wh-accent);
+  --text-accent-hover: var(--wh-star);
+  --text-on-accent: var(--wh-on-accent);
+  --text-selection: color-mix(in srgb, var(--wh-accent) 30%, transparent);
+  --text-highlight-bg: color-mix(in srgb, var(--wh-star) var(--wh-hl), transparent);
+  --caret-color: var(--wh-star);
+  --bold-color: var(--wh-text);
+  --italic-color: color-mix(in srgb, var(--wh-text) 82%, var(--wh-star));
+
+  /* accent */
+  --color-accent: var(--wh-accent);
+  --color-accent-1: color-mix(in srgb, var(--wh-accent) 85%, white);
+  --color-accent-2: color-mix(in srgb, var(--wh-accent) 80%, black);
+  --interactive-accent: var(--wh-accent);
+  --interactive-accent-hover: color-mix(in srgb, var(--wh-accent) 82%, var(--wh-star));
+
+  /* links and tags */
+  --link-color: var(--wh-accent-2);
+  --link-color-hover: var(--wh-star);
+  --link-external-color: var(--wh-accent-2);
+  --link-external-color-hover: var(--wh-star);
+  --link-unresolved-color: var(--wh-muted);
+  --link-unresolved-opacity: 0.8;
+  --tag-color: var(--wh-accent-2);
+  --tag-color-hover: var(--wh-star);
+  --tag-background: color-mix(in srgb, var(--wh-accent-2) 12%, transparent);
+  --tag-background-hover: color-mix(in srgb, var(--wh-accent-2) 20%, transparent);
+  --tag-border-color: color-mix(in srgb, var(--wh-accent-2) 35%, transparent);
+  --tag-border-color-hover: color-mix(in srgb, var(--wh-accent-2) 60%, transparent);
+  --tag-border-width: 1px;
+  --tag-radius: 999px;
+
+  /* blocks */
+  --blockquote-border-color: var(--wh-accent-2);
+  --blockquote-border-thickness: 2px;
+  --code-background: color-mix(in srgb, var(--wh-surface) 88%, transparent);
+  --code-normal: var(--wh-text);
+  --code-comment: var(--wh-faint);
+  --code-keyword: var(--wh-accent);
+  --code-function: var(--wh-accent-2);
+  --code-string: var(--wh-star);
+  --code-value: var(--wh-star-tint);
+  --code-property: var(--wh-accent-2);
+  --code-tag: var(--wh-accent);
+  --code-operator: var(--wh-muted);
+  --code-punctuation: var(--wh-muted);
+  --code-important: var(--wh-accent);
+  --table-header-background: color-mix(in srgb, var(--wh-surface) 85%, transparent);
+  --table-border-color: var(--wh-border);
+  --hr-color: var(--wh-border);
+  --checkbox-color: var(--wh-accent);
+  --checkbox-color-hover: var(--interactive-accent-hover);
+  --checkbox-border-color: var(--wh-border-strong);
+  --checkbox-marker-color: var(--wh-on-accent);
+  --checklist-done-color: var(--wh-muted);
+
+  /* chrome */
+  --scrollbar-thumb-bg: color-mix(in srgb, var(--wh-accent) 22%, transparent);
+  --scrollbar-active-thumb-bg: color-mix(in srgb, var(--wh-accent) 40%, transparent);
+  --scrollbar-bg: transparent;
+
+  /* starfield layers */
+  --wh-stars-small:
+    radial-gradient(circle at 8% 14%, var(--wh-star) 0 0.7px, transparent 1.3px),
+    radial-gradient(circle at 23% 67%, var(--wh-star) 0 0.6px, transparent 1.2px),
+    radial-gradient(circle at 41% 31%, var(--wh-star) 0 0.8px, transparent 1.4px),
+    radial-gradient(circle at 57% 84%, var(--wh-star) 0 0.6px, transparent 1.2px),
+    radial-gradient(circle at 69% 9%, var(--wh-star) 0 0.7px, transparent 1.3px),
+    radial-gradient(circle at 82% 52%, var(--wh-star) 0 0.8px, transparent 1.4px),
+    radial-gradient(circle at 93% 76%, var(--wh-star) 0 0.6px, transparent 1.2px),
+    radial-gradient(circle at 34% 94%, var(--wh-star) 0 0.7px, transparent 1.3px);
+  --wh-stars-mid:
+    radial-gradient(circle at 16% 42%, var(--wh-star-tint) 0 1px, transparent 1.7px),
+    radial-gradient(circle at 48% 58%, var(--wh-star) 0 1.1px, transparent 1.8px),
+    radial-gradient(circle at 74% 28%, var(--wh-star-tint) 0 1px, transparent 1.7px),
+    radial-gradient(circle at 88% 91%, var(--wh-star) 0 1.1px, transparent 1.8px),
+    radial-gradient(circle at 5% 81%, var(--wh-star) 0 0.9px, transparent 1.6px);
+  --wh-stars-bright-a:
+    radial-gradient(circle at 21% 22%, var(--wh-star) 0 1.3px, var(--wh-star-halo) 1.8px, transparent 4.5px),
+    radial-gradient(circle at 63% 71%, var(--wh-star) 0 1.4px, var(--wh-star-halo) 2px, transparent 5px),
+    radial-gradient(circle at 87% 13%, var(--wh-star) 0 1.2px, var(--wh-star-halo) 1.7px, transparent 4px);
+  --wh-stars-bright-b:
+    radial-gradient(circle at 37% 47%, var(--wh-star) 0 1.2px, var(--wh-star-halo) 1.8px, transparent 4.5px),
+    radial-gradient(circle at 78% 83%, var(--wh-star-tint) 0 1.3px, var(--wh-star-halo) 1.9px, transparent 4.5px),
+    radial-gradient(circle at 9% 66%, var(--wh-star) 0 1.1px, var(--wh-star-halo) 1.6px, transparent 4px);
+}
+
+
+/* =============================================================
+   4. The night sky behind notes
+   Layers, back to front: nebula (leaf background), twinkle layer B
+   and shooting star (leaf pseudos), then the static field and
+   twinkle layer A (view-content pseudos), then your note.
+   ============================================================= */
+
+.workspace-leaf-content:is([data-type="markdown"], [data-type="empty"]) {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background-color: var(--background-primary);
+  background-image:
+    radial-gradient(ellipse 65% 45% at 90% 0%, color-mix(in srgb, var(--wh-accent) var(--wh-nebula), transparent), transparent 70%),
+    radial-gradient(ellipse 55% 40% at 0% 100%, color-mix(in srgb, var(--wh-accent-2) calc(var(--wh-nebula) * 0.75), transparent), transparent 70%);
+}
+
+.workspace-leaf-content:is([data-type="markdown"], [data-type="empty"]) > .view-content {
+  position: relative;
+  isolation: isolate;
+  background-color: transparent;
+}
+
+.workspace-leaf-content:is([data-type="markdown"], [data-type="empty"]) :is(
+  .markdown-source-view,
+  .markdown-reading-view,
+  .markdown-preview-view,
+  .cm-editor,
+  .cm-scroller,
+  .empty-state
+) {
+  background-color: transparent;
+}
+
+/* shared pseudo setup */
+.workspace-leaf-content:is([data-type="markdown"], [data-type="empty"])::before,
+.workspace-leaf-content:is([data-type="markdown"], [data-type="empty"]) > .view-content::before,
+.workspace-leaf-content:is([data-type="markdown"], [data-type="empty"]) > .view-content::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* static field */
+.workspace-leaf-content:is([data-type="markdown"], [data-type="empty"]) > .view-content::before {
+  background-image: var(--wh-stars-small), var(--wh-stars-mid);
+  background-size:
+    var(--wh-star-density) var(--wh-star-density),
+    calc(var(--wh-star-density) * 1.37) calc(var(--wh-star-density) * 1.37),
+    calc(var(--wh-star-density) * 0.83) calc(var(--wh-star-density) * 0.83);
+  opacity: calc(var(--wh-star-brightness) * var(--wh-mode-star) * 0.8);
+}
+
+/* twinkle layer A */
+.workspace-leaf-content:is([data-type="markdown"], [data-type="empty"]) > .view-content::after {
+  background-image: var(--wh-stars-bright-a);
+  background-size:
+    calc(var(--wh-star-density) * 1.9) calc(var(--wh-star-density) * 1.9),
+    calc(var(--wh-star-density) * 2.6) calc(var(--wh-star-density) * 2.6);
+  opacity: calc(var(--wh-star-brightness) * var(--wh-mode-star));
+  animation: wh-twinkle var(--wh-twinkle-speed) ease-in-out infinite;
+}
+
+/* twinkle layer B, out of phase with A */
+.workspace-leaf-content:is([data-type="markdown"], [data-type="empty"])::before {
+  background-image: var(--wh-stars-bright-b);
+  background-size:
+    calc(var(--wh-star-density) * 2.2) calc(var(--wh-star-density) * 2.2),
+    calc(var(--wh-star-density) * 3.1) calc(var(--wh-star-density) * 3.1);
+  opacity: calc(var(--wh-star-brightness) * var(--wh-mode-star));
+  animation: wh-twinkle calc(var(--wh-twinkle-speed) * 1.6) ease-in-out infinite;
+  animation-delay: calc(var(--wh-twinkle-speed) * -0.7);
+}
+
+@keyframes wh-twinkle {
+  0%, 100% { opacity: calc(var(--wh-star-brightness) * var(--wh-mode-star) * 0.3); }
+  50%      { opacity: calc(var(--wh-star-brightness) * var(--wh-mode-star)); }
+}
+
+/* shooting star */
+.wh-shooting-stars .workspace-leaf-content[data-type="markdown"]::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 9%;
+  right: -170px;
+  width: 170px;
+  height: 1.5px;
+  border-radius: 999px;
+  pointer-events: none;
+  background: linear-gradient(90deg, var(--wh-star), color-mix(in srgb, var(--wh-star) 35%, transparent) 35%, transparent);
+  filter: drop-shadow(0 0 4px var(--wh-star));
+  opacity: 0;
+  animation: wh-shoot 14s linear 4s infinite;
+}
+
+@keyframes wh-shoot {
+  0%   { opacity: 0; transform: rotate(-22deg) translateX(0); }
+  1.5% { opacity: calc(var(--wh-mode-star) * 0.9); }
+  9%   { opacity: 0; transform: rotate(-22deg) translateX(-1200px); }
+  100% { opacity: 0; transform: rotate(-22deg) translateX(-1200px); }
+}
+
+/* sidebar stars (opt-in, static) */
+.wh-sidebar-stars .workspace-split.mod-sidedock .workspace-leaf-content > .view-content {
+  background-color: var(--background-secondary);
+  background-image: var(--wh-stars-small), var(--wh-stars-mid);
+  background-size:
+    var(--wh-star-density) var(--wh-star-density),
+    calc(var(--wh-star-density) * 1.37) calc(var(--wh-star-density) * 1.37);
+}
+.wh-sidebar-stars .workspace-split.mod-sidedock .nav-files-container {
+  background-color: transparent;
+}
+
+/* toggles */
+.wh-no-stars .workspace-leaf-content:is([data-type="markdown"], [data-type="empty"])::before,
+.wh-no-stars .workspace-leaf-content:is([data-type="markdown"], [data-type="empty"])::after,
+.wh-no-stars .workspace-leaf-content:is([data-type="markdown"], [data-type="empty"]) > .view-content::before,
+.wh-no-stars .workspace-leaf-content:is([data-type="markdown"], [data-type="empty"]) > .view-content::after {
+  display: none;
+}
+
+.wh-no-twinkle .workspace-leaf-content:is([data-type="markdown"], [data-type="empty"])::before,
+.wh-no-twinkle .workspace-leaf-content:is([data-type="markdown"], [data-type="empty"]) > .view-content::after {
+  animation: none;
+}
+
+.wh-no-nebula .workspace-leaf-content:is([data-type="markdown"], [data-type="empty"]) {
+  background-image: none;
+}
+
+
+/* =============================================================
+   5. Headings
+   ============================================================= */
+
+/* Starlight gradient (default) */
+.markdown-rendered :is(h1, h2, h3, h4, h5, h6),
+.markdown-source-view.mod-cm6 .cm-header:not(.cm-formatting) {
+  background-image: var(--wh-heading-gradient);
+  background-size: 200% 100%;
+  background-position: 0% 50%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 7px var(--wh-glow));
+}
+
+.markdown-source-view.mod-cm6 .cm-formatting-header {
+  color: var(--wh-faint);
+}
+
+h1, h2, h3,
+.markdown-source-view.mod-cm6 :is(.cm-header-1, .cm-header-2, .cm-header-3) {
+  letter-spacing: 0.02em;
+}
+
+/* Palette and plain modes drop the gradient */
+.wh-headings-palette .markdown-rendered :is(h1, h2, h3, h4, h5, h6),
+.wh-headings-palette .markdown-source-view.mod-cm6 .cm-header:not(.cm-formatting),
+.wh-headings-plain .markdown-rendered :is(h1, h2, h3, h4, h5, h6),
+.wh-headings-plain .markdown-source-view.mod-cm6 .cm-header:not(.cm-formatting) {
+  background-image: none;
+  -webkit-text-fill-color: currentColor;
+}
+
+.wh-headings-plain {
+  --h1-color: var(--wh-text);
+  --h2-color: var(--wh-text);
+  --h3-color: var(--wh-text);
+  --h4-color: var(--wh-text);
+  --h5-color: var(--wh-text);
+  --h6-color: var(--wh-muted);
+}
+
+/* Shimmer (opt-in) */
+.wh-shimmer:not(.wh-headings-palette):not(.wh-headings-plain) .markdown-rendered :is(h1, h2, h3),
+.wh-shimmer:not(.wh-headings-palette):not(.wh-headings-plain) .markdown-source-view.mod-cm6 :is(.cm-header-1, .cm-header-2, .cm-header-3):not(.cm-formatting) {
+  animation: wh-shimmer 9s ease-in-out infinite alternate;
+}
+
+@keyframes wh-shimmer {
+  from { background-position: 0% 50%; }
+  to   { background-position: 100% 50%; }
+}
+
+.wh-no-heading-glow .markdown-rendered :is(h1, h2, h3, h4, h5, h6),
+.wh-no-heading-glow .markdown-source-view.mod-cm6 .cm-header {
+  filter: none;
+}
+
+/* Star rule under H1 */
+.markdown-rendered h1::after {
+  content: "";
+  display: block;
+  height: 8px;
+  margin-top: 0.3em;
+  background:
+    radial-gradient(circle at 50% 50%, var(--wh-star) 0 1.7px, var(--wh-star-halo) 2.5px, transparent 4px),
+    linear-gradient(90deg, transparent, var(--wh-accent) 22%, var(--wh-star) 50%, var(--wh-accent-2) 78%, transparent) center / 100% 1px no-repeat;
+}
+
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-header-1 {
+  padding-bottom: 0.45em;
+  background:
+    radial-gradient(circle at 50% calc(100% - 3px), var(--wh-star) 0 1.7px, var(--wh-star-halo) 2.5px, transparent 4px),
+    linear-gradient(90deg, transparent, var(--wh-accent) 22%, var(--wh-star) 50%, var(--wh-accent-2) 78%, transparent) center bottom 3px / 100% 1px no-repeat;
+}
+
+.wh-no-h1-ornament .markdown-rendered h1::after {
+  display: none;
+}
+.wh-no-h1-ornament .markdown-source-view.mod-cm6 .cm-line.HyperMD-header-1 {
+  padding-bottom: 0;
+  background: none;
+}
+
+
+/* =============================================================
+   6. Note titles, file explorer, tabs
+   The same font everywhere a note's name appears.
+   ============================================================= */
+
+.inline-title,
+.view-header-title,
+.nav-file-title-content,
+.wh-folders-title-font .nav-folder-title-content,
+body:not(.wh-no-title-font-tabs) .workspace-tab-header-inner-title {
+  font-family: var(--wh-font-title);
+}
+
+.inline-title {
+  letter-spacing: 0.02em;
+}
+
+.wh-accent-titles {
+  --inline-title-color: var(--wh-accent);
+}
+.wh-accent-titles .view-header-title,
+.wh-accent-titles .nav-file-title.is-active .nav-file-title-content {
+  color: var(--wh-accent);
+}
+
+.nav-file-title.is-active,
+.nav-file-title.is-active:hover {
+  background-color: color-mix(in srgb, var(--wh-accent) 16%, transparent);
+  color: var(--text-normal);
+  box-shadow: inset 2px 0 0 var(--wh-accent), 0 0 14px -8px var(--wh-glow);
+}
+
+.workspace-tab-header.is-active .workspace-tab-header-inner-title {
+  color: var(--wh-text);
+}
+.workspace-tab-header.is-active .workspace-tab-header-inner-icon {
+  color: var(--wh-accent);
+}
+
+
+/* =============================================================
+   7. Callouts
+   ============================================================= */
+
+/* Starglass (default) */
+.callout {
+  --callout-radius: 10px;
+  --callout-border-width: 1px;
+  --callout-border-opacity: 0.35;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background-color: var(--wh-glass);
+  background-image: linear-gradient(140deg, rgba(var(--callout-color), 0.17), rgba(var(--callout-color), 0.04) 55%, rgba(var(--callout-color), 0.1));
+  box-shadow: 0 0 22px -10px rgba(var(--callout-color), 0.7);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+}
+
+/* three tiny stars in the corner */
+.callout::before {
+  content: "";
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  width: 46px;
+  height: 28px;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.75;
+  background:
+    radial-gradient(circle at 82% 30%, rgb(var(--callout-color)) 0 1.2px, transparent 2px),
+    radial-gradient(circle at 48% 72%, rgb(var(--callout-color)) 0 0.8px, transparent 1.5px),
+    radial-gradient(circle at 16% 22%, rgb(var(--callout-color)) 0 0.7px, transparent 1.3px);
+}
+
+.callout-title {
+  font-family: var(--wh-font-subheading);
+  letter-spacing: 0.02em;
+}
+
+.callout-icon {
+  filter: drop-shadow(0 0 4px rgba(var(--callout-color), 0.8));
+}
+
+.theme-light .callout {
+  background-image: linear-gradient(140deg, rgba(var(--callout-color), 0.26), rgba(var(--callout-color), 0.08) 55%, rgba(var(--callout-color), 0.18));
+  --callout-border-opacity: 0.55;
+}
+.theme-light .callout-title,
+.theme-light .callout-icon {
+  color: color-mix(in srgb, rgb(var(--callout-color)) 55%, var(--wh-text));
+}
+
+/* Grimoire */
+.wh-callouts-grimoire .callout {
+  --callout-radius: 3px;
+  background-color: var(--wh-surface);
+  background-image: radial-gradient(ellipse at top, rgba(var(--callout-color), 0.12), transparent 70%);
+  border: 3px double rgba(var(--callout-color), 0.55);
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.22);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.wh-callouts-grimoire .callout::before,
+.wh-callouts-grimoire .callout::after {
+  content: "\2726";
+  position: absolute;
+  width: auto;
+  height: auto;
+  background: none;
+  font-size: 9px;
+  line-height: 1;
+  color: rgb(var(--callout-color));
+  opacity: 0.85;
+  pointer-events: none;
+}
+.wh-callouts-grimoire .callout::before { top: 4px; left: 6px; right: auto; }
+.wh-callouts-grimoire .callout::after { bottom: 4px; right: 6px; }
+.wh-callouts-grimoire .callout-title {
+  padding-bottom: 0.45em;
+  border-bottom: 1px solid rgba(var(--callout-color), 0.3);
+}
+.wh-callouts-grimoire .callout.is-collapsed .callout-title {
+  border-bottom-color: transparent;
+}
+
+/* Plain */
+.wh-callouts-plain .callout {
+  --callout-radius: var(--radius-s);
+  background-color: rgba(var(--callout-color), 0.1);
+  background-image: none;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.wh-callouts-plain .callout::before {
+  display: none;
+}
+.wh-callouts-plain .callout-icon {
+  filter: none;
+}
+
+/* ---------- Callout options: > [!type|option option] ---------- */
+
+/* glow */
+.callout[data-callout-metadata*="glow"] {
+  animation: wh-callout-glow 3.6s ease-in-out infinite;
+}
+@keyframes wh-callout-glow {
+  0%, 100% { box-shadow: 0 0 14px -8px rgba(var(--callout-color), 0.6); }
+  50%      { box-shadow: 0 0 32px -4px rgba(var(--callout-color), 0.95); }
+}
+
+/* sparkle */
+.callout[data-callout-metadata*="sparkle"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: auto;
+  height: auto;
+  font-size: 0;
+  opacity: 0.9;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 12% 30%, rgb(var(--callout-color)) 0 0.9px, transparent 1.6px),
+    radial-gradient(circle at 38% 78%, rgb(var(--callout-color)) 0 0.7px, transparent 1.4px),
+    radial-gradient(circle at 61% 18%, rgb(var(--callout-color)) 0 1.1px, rgba(var(--callout-color), 0.3) 1.7px, transparent 3.5px),
+    radial-gradient(circle at 83% 64%, rgb(var(--callout-color)) 0 0.8px, transparent 1.5px),
+    radial-gradient(circle at 94% 12%, rgb(var(--callout-color)) 0 0.7px, transparent 1.4px);
+  background-size: 90px 70px, 130px 110px, 170px 120px, 110px 90px, 150px 140px;
+  animation: wh-sparkle 4s ease-in-out infinite;
+}
+@keyframes wh-sparkle {
+  0%, 100% { opacity: 0.35; }
+  50%      { opacity: 1; }
+}
+
+/* card */
+.callout[data-callout-metadata*="card"] {
+  --callout-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  max-width: 280px;
+  min-height: 390px;
+  margin-inline: auto;
+  padding: 20px 18px;
+  text-align: center;
+  border: 1px solid rgba(var(--callout-color), 0.65);
+  outline: 1px solid rgba(var(--callout-color), 0.35);
+  outline-offset: -8px;
+}
+.callout[data-callout-metadata*="card"] .callout-title {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6em;
+  font-size: 1.15em;
+}
+.callout[data-callout-metadata*="card"] .callout-icon {
+  transform: scale(1.7);
+  margin-block: 0.4em 0.2em;
+}
+.callout[data-callout-metadata*="card"] .callout-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* left / right: float beside text in reading view */
+.markdown-reading-view .callout[data-callout-metadata*="right"] {
+  float: right;
+  width: min(45%, 320px);
+  margin: 0.2em 0 1em 1.4em;
+}
+.markdown-reading-view .callout[data-callout-metadata*="left"] {
+  float: left;
+  width: min(45%, 320px);
+  margin: 0.2em 1.4em 1em 0;
+}
+
+/* center */
+.callout[data-callout-metadata*="center"] {
+  text-align: center;
+}
+.callout[data-callout-metadata*="center"] .callout-title {
+  justify-content: center;
+}
+
+/* no-icon */
+.callout[data-callout-metadata*="no-icon"] .callout-icon {
+  display: none;
+}
+
+
+/* =============================================================
+   8. Task checkboxes
+   [x] done   [/] half moon (in progress)   [!] star (important)
+   [*] sparkle (idea)   [>] crescent (tonight / deferred)   [-] cancelled
+   ============================================================= */
+
+input[type="checkbox"]:checked {
+  box-shadow: 0 0 8px -2px var(--wh-glow);
+}
+
+/* alt tasks keep normal text */
+:is(li, .HyperMD-task-line):is([data-task="/"], [data-task="!"], [data-task="*"], [data-task=">"]) {
+  --checklist-done-decoration: none;
+  --checklist-done-color: var(--text-normal);
+}
+:is(li, .HyperMD-task-line):is([data-task="x"], [data-task="X"]) {
+  --checklist-done-decoration: line-through;
+  --checklist-done-color: var(--text-muted);
+}
+:is(li, .HyperMD-task-line)[data-task="-"] {
+  --checklist-done-decoration: line-through;
+  --checklist-done-color: var(--text-faint);
+}
+
+/* alt task marker base */
+:is(
+  input[data-task="/"], li[data-task="/"] > input, li[data-task="/"] > p > input,
+  input[data-task="!"], li[data-task="!"] > input, li[data-task="!"] > p > input,
+  input[data-task="*"], li[data-task="*"] > input, li[data-task="*"] > p > input,
+  input[data-task=">"], li[data-task=">"] > input, li[data-task=">"] > p > input
+):checked {
+  background-color: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+:is(
+  input[data-task="/"], li[data-task="/"] > input, li[data-task="/"] > p > input,
+  input[data-task="!"], li[data-task="!"] > input, li[data-task="!"] > p > input,
+  input[data-task="*"], li[data-task="*"] > input, li[data-task="*"] > p > input,
+  input[data-task=">"], li[data-task=">"] > input, li[data-task=">"] > p > input
+):checked::after {
+  -webkit-mask-size: 100%;
+  mask-size: 100%;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  filter: drop-shadow(0 0 3px var(--wh-glow));
+}
+
+/* [/] half moon */
+:is(input[data-task="/"], li[data-task="/"] > input, li[data-task="/"] > p > input):checked::after {
+  background-color: var(--wh-accent-2);
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill-rule='evenodd' d='M12 2a10 10 0 1 0 0 20a10 10 0 1 0 0-20zm0 2a8 8 0 1 1 0 16a8 8 0 1 1 0-16z'/%3E%3Cpath d='M12 5.5a6.5 6.5 0 0 1 0 13z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill-rule='evenodd' d='M12 2a10 10 0 1 0 0 20a10 10 0 1 0 0-20zm0 2a8 8 0 1 1 0 16a8 8 0 1 1 0-16z'/%3E%3Cpath d='M12 5.5a6.5 6.5 0 0 1 0 13z'/%3E%3C/svg%3E");
+}
+
+/* [!] star */
+:is(input[data-task="!"], li[data-task="!"] > input, li[data-task="!"] > p > input):checked::after {
+  background-color: var(--wh-star);
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7-6.3-3.8-6.3 3.8 1.7-7-5.4-4.7 7.1-.6z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7-6.3-3.8-6.3 3.8 1.7-7-5.4-4.7 7.1-.6z'/%3E%3C/svg%3E");
+}
+
+/* [*] sparkle */
+:is(input[data-task="*"], li[data-task="*"] > input, li[data-task="*"] > p > input):checked::after {
+  background-color: var(--wh-accent);
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 1c.9 5.4 4.6 9.1 10 10-5.4.9-9.1 4.6-10 10-.9-5.4-4.6-9.1-10-10 5.4-.9 9.1-4.6 10-10z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 1c.9 5.4 4.6 9.1 10 10-5.4.9-9.1 4.6-10 10-.9-5.4-4.6-9.1-10-10 5.4-.9 9.1-4.6 10-10z'/%3E%3C/svg%3E");
+}
+
+/* [>] crescent */
+:is(input[data-task=">"], li[data-task=">"] > input, li[data-task=">"] > p > input):checked::after {
+  background-color: var(--wh-star-tint);
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z'/%3E%3C/svg%3E");
+}
+
+/* [-] cancelled */
+:is(input[data-task="-"], li[data-task="-"] > input, li[data-task="-"] > p > input):checked {
+  background-color: var(--wh-faint);
+  border-color: var(--wh-faint);
+  box-shadow: none;
+}
+:is(input[data-task="-"], li[data-task="-"] > input, li[data-task="-"] > p > input):checked::after {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='5' y='10.8' width='14' height='2.4' rx='1.2'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='5' y='10.8' width='14' height='2.4' rx='1.2'/%3E%3C/svg%3E");
+}
+
+
+/* =============================================================
+   9. Text details
+   ============================================================= */
+
+/* highlights glow like starlight */
+.markdown-rendered mark,
+.markdown-source-view.mod-cm6 .cm-highlight {
+  color: var(--text-normal);
+  border-radius: 3px;
+  box-shadow: 0 0 10px -3px color-mix(in srgb, var(--wh-star) 55%, transparent);
+}
+
+/* links brighten on hover */
+.markdown-rendered a:hover,
+.markdown-source-view.mod-cm6 .cm-hmd-internal-link:hover,
+.markdown-source-view.mod-cm6 .cm-url:hover {
+  text-shadow: 0 0 10px color-mix(in srgb, var(--wh-star) 60%, transparent);
+}
+
+/* tags */
+.tag,
+.markdown-source-view.mod-cm6 .cm-hashtag {
+  box-shadow: 0 0 10px -6px var(--wh-accent-2);
+}
+
+/* horizontal rule: a line with a star at its heart */
+.markdown-rendered hr,
+.markdown-source-view.mod-cm6 hr {
+  border: none;
+  height: 9px;
+  margin-block: 2em;
+  background:
+    radial-gradient(circle at 50% 50%, var(--wh-star) 0 1.8px, var(--wh-star-halo) 2.6px, transparent 4.5px),
+    radial-gradient(circle at calc(50% - 22px) 50%, var(--wh-accent) 0 1px, transparent 1.8px),
+    radial-gradient(circle at calc(50% + 22px) 50%, var(--wh-accent-2) 0 1px, transparent 1.8px),
+    linear-gradient(90deg, transparent, var(--wh-border-strong) 30%, transparent calc(50% - 30px), transparent calc(50% + 30px), var(--wh-border-strong) 70%, transparent) center / 100% 1px no-repeat;
+}
+
+/* blockquotes */
+.markdown-rendered blockquote {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--wh-accent-2) 8%, transparent), transparent 70%);
+  border-radius: 0 6px 6px 0;
+  padding-block: 0.4em;
+}
+
+/* code */
+.markdown-rendered pre,
+.markdown-source-view.mod-cm6 .HyperMD-codeblock {
+  border: 1px solid var(--wh-border);
+}
+.markdown-source-view.mod-cm6 .HyperMD-codeblock {
+  border-block: none;
+}
+.markdown-source-view.mod-cm6 .HyperMD-codeblock-begin {
+  border-top: 1px solid var(--wh-border);
+}
+.markdown-source-view.mod-cm6 .HyperMD-codeblock-end {
+  border-bottom: 1px solid var(--wh-border);
+}
+
+/* tables */
+.markdown-rendered th {
+  font-family: var(--wh-font-subheading);
+  letter-spacing: 0.02em;
+  color: var(--wh-accent);
+}
+
+/* images */
+.markdown-rendered img:not([width]),
+.markdown-rendered .image-embed img {
+  border-radius: 6px;
+}
+
+
+/* =============================================================
+   10. Menus, modals, popovers
+   ============================================================= */
+
+.menu,
+.modal,
+.popover,
+.prompt,
+.suggestion-container {
+  background-color: var(--wh-glass-strong);
+  border: 1px solid var(--wh-border);
+  box-shadow: 0 12px 40px -14px rgba(0, 0, 0, 0.6), 0 0 26px -14px var(--wh-glow);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+
+.menu-item.selected:not(.is-disabled):not(.is-label),
+.suggestion-item.is-selected {
+  background-color: color-mix(in srgb, var(--wh-accent) 18%, transparent);
+}
+
+.modal-title,
+.setting-item-heading .setting-item-name {
+  font-family: var(--wh-font-subheading);
+  letter-spacing: 0.02em;
+}
+
+
+/* =============================================================
+   11. Graph view as a constellation
+   (plain colors only; the graph can't read color-mix)
+   ============================================================= */
+
+.graph-view.color-fill { color: var(--wh-star); }
+.graph-view.color-fill-focused { color: var(--wh-accent); }
+.graph-view.color-fill-highlight { color: var(--wh-accent); }
+.graph-view.color-fill-tag { color: var(--wh-accent-2); }
+.graph-view.color-fill-attachment { color: var(--wh-muted); }
+.graph-view.color-fill-unresolved { color: var(--wh-muted); }
+.graph-view.color-line { color: var(--wh-muted); }
+.graph-view.color-line-highlight { color: var(--wh-accent); }
+.graph-view.color-arrow { color: var(--wh-accent); }
+.graph-view.color-circle { color: var(--wh-accent); }
+.graph-view.color-text { color: var(--wh-text); }
+
+
+/* =============================================================
+   12. Performance mode and reduced motion
+   ============================================================= */
+
+.wh-performance .workspace-leaf-content::before,
+.wh-performance .workspace-leaf-content::after,
+.wh-performance .workspace-leaf-content > .view-content::after,
+.wh-performance .callout,
+.wh-performance .callout::after,
+.wh-performance .markdown-rendered :is(h1, h2, h3),
+.wh-performance .markdown-source-view.mod-cm6 .cm-header {
+  animation: none !important;
+}
+
+
+.wh-performance.wh-shooting-stars .workspace-leaf-content::after {
+  display: none;
+}
+
+.wh-performance :is(.callout, .menu, .modal, .popover, .prompt, .suggestion-container) {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.wh-performance .menu,
+.wh-performance .modal,
+.wh-performance .popover,
+.wh-performance .prompt,
+.wh-performance .suggestion-container {
+  background-color: var(--wh-surface);
+}
+
+.wh-performance .markdown-rendered :is(h1, h2, h3, h4, h5, h6),
+.wh-performance .markdown-source-view.mod-cm6 .cm-header,
+.wh-performance .callout-icon,
+.wh-performance input[type="checkbox"]::after {
+  filter: none;
+}
+
+/* =============================================================
+   13. Writing and books
+   ============================================================= */
+
+body {
+  --wh-page-width: 40rem;
+}
+
+/* ---------- Drop caps and small-caps openers (reading view) ---------- */
+.wh-dropcap .markdown-rendered :is(.el-h1, .el-h2) + .el-p > p::first-letter {
+  float: left;
+  font-family: var(--wh-font-heading);
+  font-size: 3.5em;
+  line-height: 0.8;
+  padding: 0.07em 0.1em 0 0;
+  color: var(--wh-star);
+  text-shadow: 0 0 16px var(--wh-star-halo);
+}
+.wh-dropcap .markdown-rendered :is(.el-h1, .el-h2, .el-hr) + .el-p > p::first-line {
+  font-variant: small-caps;
+  letter-spacing: 0.05em;
+}
+
+/* ---------- Chapter-style headings ---------- */
+.wh-chapter-headings .inline-title {
+  text-align: center;
+}
+.wh-chapter-headings .markdown-rendered h1 {
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 1.7em;
+  margin-top: 1.4em;
+}
+.wh-chapter-headings .markdown-rendered h2 {
+  text-align: center;
+  letter-spacing: 0.08em;
+}
+.wh-chapter-headings .markdown-rendered h2::before {
+  content: "\2766";
+  display: block;
+  font-size: 0.7em;
+  margin-bottom: 0.15em;
+  color: var(--wh-star);
+  -webkit-text-fill-color: var(--wh-star);
+  opacity: 0.8;
+}
+
+/* ---------- Book-style paragraphs ---------- */
+.wh-book-prose .markdown-preview-section > .el-p > p {
+  margin-block: 0;
+  text-align: justify;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  line-height: 1.7;
+}
+.wh-book-prose .markdown-preview-section > .el-p + .el-p > p {
+  text-indent: 1.6em;
+}
+.wh-book-prose .markdown-preview-section > .el-p:has(+ :not(.el-p)) > p,
+.wh-book-prose .markdown-preview-section > .el-p:last-child > p {
+  margin-bottom: 1em;
+}
+
+/* ---------- Paper page ---------- */
+.wh-page .markdown-reading-view .markdown-preview-sizer {
+  max-width: var(--wh-page-width);
+  margin-inline: auto;
+  margin-block: 1.5rem;
+  padding: 2.4rem 3rem 3rem;
+  border: 1px solid var(--wh-border);
+  border-radius: 6px;
+  background:
+    radial-gradient(ellipse at top, color-mix(in srgb, var(--wh-star) 6%, transparent), transparent 60%),
+    color-mix(in srgb, var(--wh-surface) 70%, var(--wh-bg));
+  box-shadow: 0 18px 50px -24px rgba(0, 0, 0, 0.7), inset 0 0 0 4px color-mix(in srgb, var(--wh-bg) 60%, transparent), inset 0 0 0 5px var(--wh-border);
+}
+.wh-page .markdown-source-view.mod-cm6 .cm-sizer {
+  max-width: var(--wh-page-width);
+}
+@media (max-width: 600px) {
+  .wh-page .markdown-reading-view .markdown-preview-sizer {
+    margin-block: 0.5rem;
+    padding: 1.4rem 1.2rem 2rem;
+  }
+}
+
+/* ---------- Typewriter editing ---------- */
+.wh-typewriter .markdown-source-view.mod-cm6 .cm-content,
+.wh-typewriter .markdown-source-view.mod-cm6 .cm-line:not(.HyperMD-codeblock):not(.cm-header) {
+  font-family: "Courier Prime", "Courier New", monospace;
+}
+
+/* ---------- Epigraphs ---------- */
+.wh-epigraphs .markdown-rendered blockquote {
+  position: relative;
+  padding: 0.6em 1.2em 0.6em 2.4em;
+  border-left-width: 1px;
+  font-style: italic;
+  font-family: var(--wh-font-body);
+  color: color-mix(in srgb, var(--wh-text) 88%, var(--wh-star));
+}
+.wh-epigraphs .markdown-rendered blockquote::before {
+  content: "\201C";
+  position: absolute;
+  left: 0.35em;
+  top: -0.1em;
+  font-family: var(--wh-font-heading);
+  font-size: 2.6em;
+  line-height: 1;
+  font-style: normal;
+  color: var(--wh-star);
+  opacity: 0.55;
+}
+.wh-epigraphs .markdown-rendered blockquote p:last-child em:only-child {
+  font-style: normal;
+}
+
+/* ---------- Footnotes ---------- */
+.markdown-rendered .footnotes {
+  font-size: 0.88em;
+  color: var(--wh-muted);
+}
+.markdown-rendered .footnotes hr {
+  margin-block: 1.4em 0.8em;
+}
+.markdown-rendered .footnote-ref a,
+.markdown-rendered sup a {
+  color: var(--wh-star);
+  text-decoration: none;
+}
+
+/* ---------- Writerly callouts ---------- */
+
+/* Epigraph: no box, centered, italic */
+.callout[data-callout="epigraph"] {
+  --callout-color: 157, 151, 194;
+  --callout-icon: lucide-quote;
+  --callout-radius: 0;
+  background: none;
+  box-shadow: none;
+  border: none;
+  border-block: 1px solid var(--wh-border);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  text-align: center;
+  padding: 1em 1.6em;
+  max-width: 34em;
+  margin-inline: auto;
+}
+.callout[data-callout="epigraph"]::before { display: none; }
+.callout[data-callout="epigraph"] .callout-title { display: none; }
+.callout[data-callout="epigraph"] .callout-content {
+  font-style: italic;
+  font-family: var(--wh-font-body);
+  font-size: 1.05em;
+  color: var(--wh-text);
+}
+.callout[data-callout="epigraph"] .callout-content p:last-child { color: var(--wh-muted); font-style: normal; font-size: 0.88em; }
+
+/* Letter: warm paper in the middle of a night sky */
+.callout[data-callout="letter"] {
+  --callout-color: 240, 210, 130;
+  --callout-icon: lucide-mail;
+  --callout-radius: 3px;
+  background-color: color-mix(in srgb, #f0d282 10%, var(--wh-surface));
+  background-image: repeating-linear-gradient(180deg, transparent 0 1.7em, rgba(var(--callout-color), 0.07) 1.7em calc(1.7em + 1px));
+  border-left: 3px solid rgba(var(--callout-color), 0.6);
+}
+.callout[data-callout="letter"] .callout-title { font-family: "IM Fell English", var(--wh-font-subheading); font-style: italic; }
+.callout[data-callout="letter"] .callout-content { font-family: "IM Fell English", var(--wh-font-body); line-height: 1.7; }
+
+/* Journal */
+.callout[data-callout="journal"] {
+  --callout-color: 140, 170, 255;
+  --callout-icon: lucide-book-open;
+  --callout-radius: 4px;
+  border-left: 3px double rgba(var(--callout-color), 0.7);
+}
+.callout[data-callout="journal"] .callout-content { font-family: "Almendra", var(--wh-font-body); }
+
+/* Poem: centered lines, generous leading */
+.callout[data-callout="poem"] {
+  --callout-color: 245, 140, 210;
+  --callout-icon: lucide-feather;
+  text-align: center;
+  max-width: 36em;
+  margin-inline: auto;
+}
+.callout[data-callout="poem"] .callout-title { justify-content: center; }
+.callout[data-callout="poem"] .callout-content { font-style: italic; line-height: 1.9; }
+
+/* Dream: soft edges, dashed */
+.callout[data-callout="dream"] {
+  --callout-color: 190, 150, 255;
+  --callout-icon: lucide-moon;
+  --callout-radius: 18px;
+  border-style: dashed;
+}
+.callout[data-callout="dream"] .callout-content { font-style: italic; color: var(--wh-muted); }
+
+/* Spell */
+.callout[data-callout="spell"] {
+  --callout-color: 110, 215, 230;
+  --callout-icon: lucide-sparkles;
+  border: 3px double rgba(var(--callout-color), 0.55);
+  text-align: center;
+}
+.callout[data-callout="spell"] .callout-title { justify-content: center; letter-spacing: 0.12em; text-transform: uppercase; }
+.callout[data-callout="spell"] .callout-content { font-family: var(--wh-font-heading); letter-spacing: 0.04em; }
+
+/* Prophecy */
+.callout[data-callout="prophecy"] {
+  --callout-color: 255, 160, 100;
+  --callout-icon: lucide-scroll-text;
+  border: 3px double rgba(var(--callout-color), 0.55);
+}
+.callout[data-callout="prophecy"] .callout-title { font-variant: small-caps; letter-spacing: 0.08em; }
+.callout[data-callout="prophecy"] .callout-content { font-family: "IM Fell English", var(--wh-font-body); font-style: italic; }
+
+/* Margin note: a pencilled aside */
+.callout[data-callout="margin"] {
+  --callout-color: 157, 151, 194;
+  --callout-icon: lucide-pen-line;
+  --callout-radius: 2px;
+  background: none;
+  box-shadow: none;
+  border: none;
+  border-left: 2px dashed rgba(var(--callout-color), 0.6);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  font-size: 0.92em;
+}
+.callout[data-callout="margin"]::before { display: none; }
+.callout[data-callout="margin"] .callout-content { font-family: "Almendra", var(--wh-font-body); color: var(--wh-muted); }
+
+
+/* =============================================================
+   14. Loresmith
+   Titles in the theme's fonts, framed portraits, bookish rules,
+   and the same night sky behind the plugin's pages.
+   ============================================================= */
+
+/* The sky behind the full-page views (the sidebar panel stays plain, or follows "Stars in the sidebars") */
+.wh-loresmith .workspace-leaf-content:is(
+  [data-type="loresmith-overview"],
+  [data-type="loresmith-entity"],
+  [data-type="loresmith-chapters"],
+  [data-type="loresmith-outline"]
+) > .view-content {
+  background-color: var(--background-primary);
+  background-image:
+    radial-gradient(ellipse 65% 45% at 90% 0%, color-mix(in srgb, var(--wh-accent) var(--wh-nebula), transparent), transparent 70%),
+    radial-gradient(ellipse 55% 40% at 0% 100%, color-mix(in srgb, var(--wh-accent-2) calc(var(--wh-nebula) * 0.75), transparent), transparent 70%),
+    var(--wh-stars-small), var(--wh-stars-mid);
+  background-size:
+    auto, auto,
+    var(--wh-star-density) var(--wh-star-density),
+    calc(var(--wh-star-density) * 1.37) calc(var(--wh-star-density) * 1.37);
+  background-attachment: local;
+}
+.wh-loresmith.wh-no-stars .workspace-leaf-content:is([data-type="loresmith-overview"], [data-type="loresmith-entity"], [data-type="loresmith-chapters"], [data-type="loresmith-outline"]) > .view-content {
+  background-image: none;
+}
+.wh-loresmith.wh-no-nebula:not(.wh-no-stars) .workspace-leaf-content:is([data-type="loresmith-overview"], [data-type="loresmith-entity"], [data-type="loresmith-chapters"], [data-type="loresmith-outline"]) > .view-content {
+  background-image: var(--wh-stars-small), var(--wh-stars-mid);
+  background-size:
+    var(--wh-star-density) var(--wh-star-density),
+    calc(var(--wh-star-density) * 1.37) calc(var(--wh-star-density) * 1.37);
+}
+.wh-loresmith .ls-nav {
+  background: color-mix(in srgb, var(--wh-deep) 88%, transparent);
+}
+
+/* Titles */
+.wh-loresmith :is(.ls-panel-title, .ls-entity-name, .ls-pv-title, .ls-card-title, .ls-meet-focus-name, .ls-web-card-name, .ls-goal-story-name, .ls-chapter-name, .ls-pv-chapter-name, .ls-position-name) {
+  font-family: var(--wh-font-title);
+  letter-spacing: 0.02em;
+}
+.wh-loresmith .ls-panel-title {
+  font-family: var(--wh-font-heading);
+  font-size: 1.35em;
+}
+.wh-loresmith .ls-panel-title::before {
+  content: "\2726";
+  display: inline-block;
+  margin-right: 0.45em;
+  font-size: 0.55em;
+  vertical-align: 0.25em;
+  color: var(--wh-star);
+  opacity: 0.8;
+}
+.wh-loresmith .ls-hero-name {
+  letter-spacing: 0.02em;
+  filter: drop-shadow(0 0 8px var(--wh-glow));
+}
+.wh-loresmith :is(.ls-nav-group, .ls-prop-group-name, .ls-pv-sec-title, .ls-tl-era, .ls-rel-group, .ls-ol-act, .ls-glance-label, .ls-pv-label, .ls-cal-title, .ls-entity-kind) {
+  font-family: var(--wh-font-subheading);
+}
+.wh-loresmith :is(.ls-nav-group, .ls-pv-sec-title, .ls-rel-group, .ls-glance-label) {
+  font-variant: small-caps;
+  text-transform: none;
+  letter-spacing: 0.1em;
+  font-size: 1.05em;
+}
+.wh-loresmith .ls-epithet,
+.wh-loresmith .ls-hero-sub {
+  font-family: "Cormorant Garamond", var(--wh-font-body);
+  font-size: 1.12em;
+}
+
+/* Panels and cards: a page with a gilt edge */
+.wh-loresmith .ls-panel {
+  background: color-mix(in srgb, var(--wh-surface) 82%, transparent);
+  border-color: var(--wh-border);
+  box-shadow: 0 0 28px -18px var(--wh-glow), inset 0 1px 0 color-mix(in srgb, var(--wh-star) 14%, transparent);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+}
+.wh-loresmith .ls-card {
+  background: color-mix(in srgb, var(--wh-bg) 88%, var(--wh-surface));
+  border-left: 3px solid color-mix(in srgb, var(--ls-accent) 70%, transparent);
+}
+.wh-loresmith .ls-card:hover {
+  box-shadow: 0 0 18px -8px var(--ls-accent);
+}
+/* Story cards read like book covers */
+.wh-loresmith .ls-story-card {
+  background-image: linear-gradient(160deg, color-mix(in srgb, var(--ls-accent) 10%, transparent), transparent 55%);
+  border: 1px solid var(--wh-border-strong);
+  border-left: 6px double color-mix(in srgb, var(--ls-accent) 75%, transparent);
+  box-shadow: inset 0 0 0 3px color-mix(in srgb, var(--wh-bg) 70%, transparent), inset 0 0 0 4px var(--wh-border);
+}
+.wh-loresmith .ls-story-card .ls-card-title {
+  font-family: var(--wh-font-heading);
+  font-size: 1.2em;
+}
+.wh-loresmith .ls-chapter {
+  border-left: none;
+  background: color-mix(in srgb, var(--wh-bg) 85%, var(--wh-surface));
+}
+.wh-loresmith .ls-chapter-head {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--ls-accent) 12%, transparent), transparent);
+}
+.wh-loresmith .ls-chapter-name {
+  font-variant: small-caps;
+  letter-spacing: 0.06em;
+  font-size: 1.05em;
+}
+.wh-loresmith .ls-words { color: var(--wh-star); }
+.wh-loresmith .ls-badge { color: var(--wh-star); box-shadow: inset 0 0 0 1px var(--wh-border); }
+
+/* Portraits in frames */
+.wh-loresmith .ls-hero-portrait {
+  outline: 1px solid color-mix(in srgb, var(--wh-star) 45%, transparent);
+  outline-offset: 4px;
+  box-shadow: 0 14px 30px -16px rgba(0, 0, 0, 0.7), 0 0 24px -12px var(--wh-glow);
+}
+.wh-loresmith .ls-portrait {
+  box-shadow: inset 0 0 0 1px var(--wh-border);
+}
+.wh-loresmith .ls-portrait:hover {
+  box-shadow: 0 0 20px -8px var(--wh-glow);
+}
+.wh-loresmith .ls-portrait-name {
+  font-family: var(--wh-font-title);
+  background: linear-gradient(0deg, color-mix(in srgb, var(--wh-deep) 92%, transparent) 55%, transparent);
+  padding-top: var(--size-4-4);
+}
+.wh-loresmith .ls-avatar { box-shadow: inset 0 0 0 1px var(--wh-border-strong); }
+
+/* Epigraph quote on character sheets */
+.wh-loresmith .ls-quote {
+  position: relative;
+  padding-left: 1.9em;
+  border-left: none;
+  font-family: var(--wh-font-body);
+  color: color-mix(in srgb, var(--wh-text) 85%, var(--wh-star));
+}
+.wh-loresmith .ls-quote::before {
+  content: "\201C";
+  position: absolute;
+  left: 0.1em;
+  top: -0.15em;
+  font-family: var(--wh-font-heading);
+  font-size: 2.4em;
+  font-style: normal;
+  line-height: 1;
+  color: var(--wh-star);
+  opacity: 0.55;
+}
+
+/* Section blocks: title with a fading rule instead of a flat line */
+.wh-loresmith .ls-block-head {
+  border-bottom: none;
+  padding-bottom: 6px;
+  background: linear-gradient(90deg, var(--wh-border-strong), transparent 85%) left bottom / 100% 1px no-repeat;
+}
+.wh-loresmith .ls-block-title {
+  font-family: var(--wh-font-subheading);
+  font-variant: small-caps;
+  letter-spacing: 0.08em;
+  font-size: 1.05em;
+}
+.wh-loresmith .ls-prop-group {
+  border-bottom: none;
+  background: linear-gradient(90deg, var(--wh-border-strong), transparent 90%) left bottom / 100% 1px no-repeat;
+  padding-bottom: 4px;
+}
+
+/* Writing surfaces feel like paper in the dark */
+.wh-loresmith :is(.ls-textarea, .ls-note-input, .ls-ol-card-input, .ls-ol-hint) {
+  font-family: var(--wh-font-body);
+}
+.wh-loresmith .ls-textarea {
+  background: color-mix(in srgb, var(--wh-surface) 55%, var(--wh-bg));
+  line-height: 1.7;
+}
+.wh-loresmith .ls-textarea:focus,
+.wh-loresmith .ls-note-input:focus {
+  box-shadow: 0 0 0 1px var(--ls-accent), 0 0 18px -8px var(--wh-glow);
+}
+.wh-loresmith .ls-preview {
+  line-height: 1.7;
+}
+.wh-loresmith .ls-ol-card {
+  background: color-mix(in srgb, var(--wh-surface) 75%, var(--wh-bg));
+  box-shadow: 0 0 16px -10px var(--ls-accent);
+}
+.wh-loresmith .ls-ol-beat-name {
+  font-family: var(--wh-font-title);
+}
+
+/* Timeline, calendar and the little things */
+.wh-loresmith .ls-tl-year,
+.wh-loresmith .ls-tl-now-label {
+  font-family: var(--wh-font-subheading);
+}
+.wh-loresmith .ls-tl-title { font-family: var(--wh-font-title); }
+.wh-loresmith .ls-tl-dot { box-shadow: 0 0 0 3px var(--background-primary), 0 0 12px -2px var(--ls-k, var(--color-yellow)); }
+.wh-loresmith .ls-chip:hover,
+.wh-loresmith .ls-tag:hover { box-shadow: 0 0 12px -6px var(--wh-accent-2); }
+.wh-loresmith .ls-nav-item.is-active {
+  box-shadow: inset 2px 0 0 var(--ls-accent), 0 0 14px -8px var(--wh-glow);
+}
+.wh-loresmith .ls-pv-scene-card {
+  box-shadow: 0 0 18px -12px var(--wh-glow);
+}
+.wh-loresmith .ls-pv-scene-name { font-family: var(--wh-font-title); }
+
+/* Relations web as a constellation */
+.wh-loresmith .ls-web-dot { filter: drop-shadow(0 0 4px var(--ls-accent)); }
+.wh-loresmith .ls-web-label { font-family: var(--wh-font-title); font-size: 11px; }
+.wh-loresmith .ls-web-card {
+  background: var(--wh-glass-strong);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+/* Dictionary hover tip, inside the editor */
+.wh-loresmith .ls-word-tip-name { font-family: var(--wh-font-title); }
+.wh-loresmith .ls-word-tip-meaning { font-family: var(--wh-font-body); }
+
+/* Performance mode: no glow or blur */
+.wh-performance.wh-loresmith :is(.ls-panel, .ls-web-card) {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.wh-performance.wh-loresmith :is(.ls-hero-name, .ls-web-dot) { filter: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .workspace-leaf-content::before,
+  .workspace-leaf-content::after,
+  .workspace-leaf-content > .view-content::after,
+  .callout,
+  .callout::after,
+  .markdown-rendered :is(h1, h2, h3),
+  .markdown-source-view.mod-cm6 .cm-header {
+    animation: none !important;
+  }
+  .wh-shooting-stars .workspace-leaf-content::after {
+    display: none;
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "id": "loresmith",
+  "name": "Loresmith",
+  "version": "1.2",
+  "minAppVersion": "1.5.0",
+  "description": "Worldbuilding and story manager: characters, nations, regions, settlements and places, cultures, creatures, plants, items, events, a dictionary, story outlines, plot arcs, story generators, a timeline and any number of custom calendars that convert between each other, a relations web with automatic family and two-way links, tension graph, moodboards, writing goals, and manuscript/ebook export, all stored as plain markdown notes.",
+  "author": "Hunter",
+  "isDesktopOnly": false
+}

@@ -1,0 +1,255 @@
+{
+  "main": {
+    "id": "1d05aff3a7dc3eca",
+    "type": "split",
+    "children": [
+      {
+        "id": "79c27744a9772001",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "5041af30dcc2a5a8",
+            "type": "leaf",
+            "state": {
+              "type": "loresmith-overview",
+              "state": {
+                "section": "timeline"
+              },
+              "icon": "library",
+              "title": "Canon"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "2fac6ba7d42cb29f",
+    "type": "split",
+    "children": [
+      {
+        "id": "8d5033dd03a1e124",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "835458ff20585842",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "a4f12f8429663f02",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "cc83541fb05ad0fb",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 248.5
+  },
+  "right": {
+    "id": "335bbf2c55b4542e",
+    "type": "split",
+    "children": [
+      {
+        "id": "b92c053f339ad440",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "563fa4598aa97543",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Welcome.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks"
+            }
+          },
+          {
+            "id": "f8842987e1dfc2c8",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Welcome.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links"
+            }
+          },
+          {
+            "id": "840ead16b11b7db5",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "74106442fdb818c6",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "9d3cda4d6179a2a1",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline"
+            }
+          },
+          {
+            "id": "7cf3255b8072bffd",
+            "type": "leaf",
+            "state": {
+              "type": "loresmith-panel",
+              "state": {
+                "stack": [
+                  {
+                    "page": "home"
+                  }
+                ]
+              },
+              "icon": "book-marked",
+              "title": "Loresmith"
+            }
+          }
+        ],
+        "currentTab": 5
+      }
+    ],
+    "direction": "horizontal",
+    "width": 507.5
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false,
+      "templater-obsidian:Templater": false,
+      "loresmith:Open lore overview": false,
+      "loresmith:Open lore sidebar": false,
+      "github-sync:Sync with Remote": false
+    }
+  },
+  "active": "5041af30dcc2a5a8",
+  "lastOpenFiles": [
+    "Dragon Age Fandom/README.md",
+    "Lore/Canon/Characters/Gods/Old Gods",
+    "Lore/Canon/Characters/Gods/Elven Pantheon",
+    "Lore/Canon/Characters/Gods/Chantry",
+    "Lore/Canon/Characters/Divines/Rosamund.md",
+    "Lore/Canon/Characters/Divines/Renata I.md",
+    "Lore/Canon/Characters/Divines/Justinia V.md",
+    "Lore/Canon/Characters/Divines/Justinia II.md",
+    "Lore/Canon/Characters/Divines/Justinia I.md",
+    "Lore/Canon/Characters/Divines/Joyous II.md",
+    "Lore/Canon/Characters/Divines/Innocente.md",
+    "Lore/Canon/Characters/Divines/Hortensia II.md",
+    "Lore/Canon/Characters/Divines/Hortensia I.md",
+    "Lore/Canon/Characters/Divines/Galatea.md",
+    "Lore/Canon/Characters/Divines/Clemence I.md",
+    "Lore/Canon/Characters/Divines/Beatrix I.md",
+    "Lore/Canon/Characters/Divines/Ambrosia II.md",
+    "Lore/Canon/Characters/Divines/Ambrosia I.md",
+    "Lore/Canon/Characters/Divines/Amara III.md",
+    "Lore/Canon/Characters/Divines/Amara I.md",
+    "Lore/Canon/Characters/Ancient/Shartan.md",
+    "Lore/Canon/Characters/Ancient/Andraste.md",
+    "Lore/Canon/Species/Qunari.md",
+    "Lore/Canon/Species/Humans.md",
+    "Lore/Canon/Species/Elves.md",
+    "Lore/Canon/Species/Dwarves.md",
+    "Lore/Canon/Settlements/Val Royeaux.md",
+    "Lore/Canon/Settlements/Tantervale.md",
+    "Lore/Canon/Settlements/Starkhaven.md",
+    "Lore/Canon/Characters/Misc Humans",
+    "Lore/Canon/Characters/Misc Elves",
+    "Lore/Canon/Characters/Misc Dwarves",
+    "Lore/Canon/Characters/Gods",
+    "Lore/Canon/Characters/Divines",
+    "Lore/Canon/Characters/Ancient",
+    "Lore/Canon/Species",
+    "Reference/Assets/771d1a48b433dd595d6b23bdc47182a1.jpg",
+    "Reference/Assets/25535832488_30e55ebe92_b.jpg",
+    "Reference/Assets/map1.png",
+    "Reference/Assets/map2.png",
+    "Reference/Assets/mapofthedashighres.png",
+    "Reference/Assets/ThedasMap.webp",
+    "Reference/Assets/Worldofthedasmap.webp",
+    "Reference/The World of Thedas/upscalemedia-transformed.jpeg"
+  ]
+}

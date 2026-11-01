@@ -1,0 +1,9 @@
+{
+  "remoteURL": "https://github.com/hunterlnhamilton/dragonagefandom",
+  "gitLocation": "",
+  "syncinterval": 0,
+  "isSyncOnLoad": false,
+  "checkStatusOnLoad": true,
+  "noticeLevel": "ALL",
+  "showSyncSuccessNotice": true
+}
