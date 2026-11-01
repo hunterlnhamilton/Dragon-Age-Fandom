@@ -443,3 +443,204 @@ main .ls-pin:hover .ls-pin__label, main .ls-pin:focus .ls-pin__label { opacity: 
   main .ls-timeline > li { grid-template-columns: 1fr; gap: 0.2rem; }
   main .ls-connections .ls-row, main .ls-row { grid-template-columns: 1fr; gap: 0.15rem; }
 }
+
+
+/* =============================================================
+   Loresmith look, round 2: hero header, details panel,
+   portrait cards, coloured map
+   ============================================================= */
+
+/* Wider content on Loresmith pages; hide reading-time line on overviews */
+main .max-w-prose:has(.ls-hero, .ls-cards, .ls-tiles, .ls-year, .ls-mapwrap) { max-width: min(1150px, 100%); }
+main:has(.ls-tiles, .ls-cards, .ls-timeline) .note-meta-item { display: none; }
+
+/* ---- Hero ---- */
+main .ls-hero {
+  display: flex;
+  gap: 1.4rem;
+  align-items: flex-start;
+  margin: 0.5rem 0 1.75rem;
+}
+main .ls-portrait {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 3 / 4;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--ls-border);
+  background:
+    radial-gradient(ellipse at 50% 110%, color-mix(in srgb, var(--ls-type) 28%, transparent), transparent 70%),
+    color-mix(in srgb, var(--wh-deep) 85%, transparent);
+}
+main .ls-portrait span {
+  font-family: "Cinzel Decorative", "Cinzel", Georgia, serif;
+  font-size: 2.6rem;
+  color: color-mix(in srgb, var(--ls-type) 70%, var(--wh-muted));
+}
+main .ls-portrait img { width: 100%; height: 100%; object-fit: cover; margin: 0; border: 0; border-radius: 0; }
+main .ls-portrait--big {
+  flex: 0 0 150px;
+  border-bottom: 4px solid var(--ls-type);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--wh-text) 25%, transparent), 0 14px 30px -16px rgba(0,0,0,.8);
+}
+main .ls-portrait--big span { font-size: 3.4rem; color: var(--ls-type); }
+main .ls-hero__text { display: flex; flex-direction: column; gap: 0.45rem; padding-top: 0.25rem; }
+main .ls-hero__name {
+  margin: 0;
+  font-family: "Cinzel Decorative", "Cinzel", Georgia, serif;
+  font-size: clamp(1.7rem, 3.5vw, 2.4rem);
+  line-height: 1.1;
+  background-image: var(--wh-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 7px var(--wh-glow));
+}
+main .ls-hero__sub { margin: 0; font-style: italic; color: var(--wh-muted); }
+main .ls-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.2rem; }
+main .ls-chip {
+  padding: 0.15em 0.6em;
+  border: 1px solid var(--ls-border);
+  border-radius: 6px;
+  font-size: 0.8rem;
+  color: var(--wh-text);
+  background: color-mix(in srgb, var(--wh-deep) 55%, transparent);
+}
+main .ls-chip--dead { border-style: dashed; border-color: color-mix(in srgb, var(--ls-type) 60%, transparent); }
+
+/* ---- Body + details panel ---- */
+main .ls-entry {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 2rem;
+  align-items: start;
+}
+main .ls-entry--full { grid-template-columns: minmax(0, 1fr); }
+main .ls-entry__main > :first-child { margin-top: 0; }
+main .ls-details {
+  position: sticky;
+  top: 1rem;
+  padding: 0.9rem 1.1rem;
+  border: 1px solid var(--ls-border);
+  border-radius: 12px;
+  background: var(--ls-surface);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  font-size: 0.9rem;
+}
+main .ls-details__title {
+  margin: 0 0 0.4rem;
+  font-family: "Cinzel", Georgia, serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--wh-accent);
+}
+main .ls-details .ls-row { grid-template-columns: 7rem 1fr; }
+
+/* ---- Portrait cards ---- */
+main .ls-cards:has(.ls-card--portrait) { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+main .ls-card--portrait {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+  border-left-width: 3px;
+}
+main .ls-card--portrait .ls-portrait { border: 0; border-radius: 0; aspect-ratio: 4 / 5; }
+main .ls-card__foot {
+  padding: 0.55rem 0.75rem 0.7rem;
+  background: linear-gradient(transparent, color-mix(in srgb, var(--wh-deep) 75%, transparent));
+}
+main .ls-card--portrait .ls-card__link { font-size: 0.92rem; }
+main .ls-card--portrait .ls-card__sub {
+  font-size: 0.75rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+main .ls-card__dead {
+  position: absolute;
+  top: 0.4rem; left: 0.55rem;
+  font-size: 0.85rem;
+  color: var(--wh-muted);
+  z-index: 1;
+}
+
+/* ---- Map ---- */
+main .ls-mapwrap { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; margin: 0 0 1.5rem; }
+main .ls-filters-label { font-size: 0.8rem; color: var(--wh-muted); margin-right: 0.2rem; }
+main .ls-filter {
+  padding: 0.15em 0.7em;
+  border: 1px solid color-mix(in srgb, var(--ls-type) 55%, transparent);
+  border-radius: 999px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  user-select: none;
+  background: color-mix(in srgb, var(--ls-type) 14%, transparent);
+}
+main .ls-filter::before { content: "● "; color: var(--ls-type); }
+main input:not(:checked) + .ls-filter { opacity: 0.45; background: transparent; }
+main .ls-mapwrap .ls-map { flex-basis: 100%; margin-top: 0.4rem; }
+main .ls-map polygon {
+  fill: color-mix(in srgb, var(--c) 22%, transparent);
+  stroke: var(--c);
+  stroke-width: 2;
+}
+main .ls-map a:hover polygon { fill: color-mix(in srgb, var(--c) 40%, transparent); }
+main .ls-area-label {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  font-family: "Cinzel", Georgia, serif;
+  font-weight: 600;
+  font-size: clamp(0.5rem, 1.1vw, 0.85rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 0 0 3px #000, 0 0 6px #000, 0 1px 2px #000;
+  white-space: nowrap;
+  pointer-events: none;
+}
+main .ls-area-label[data-type="region"] { text-transform: none; font-style: italic; font-weight: 500; }
+main .ls-pin {
+  display: grid;
+  place-items: center;
+  width: 16px; height: 16px;
+  margin: -8px 0 0 -8px;
+  background: var(--c);
+  border: 2px solid #120a14;
+  box-shadow: 0 0 6px color-mix(in srgb, var(--c) 70%, transparent);
+  font-size: 10px;
+  line-height: 1;
+  color: #120a14;
+  text-decoration: none !important;
+}
+main .ls-pin--star {
+  width: 20px; height: 20px; margin: -10px 0 0 -10px;
+  background: none; border: 0; box-shadow: none;
+  font-size: 22px; color: var(--c);
+  text-shadow: 0 0 2px #000, 0 0 4px #000;
+}
+main .ls-pin__label {
+  opacity: 1;
+  bottom: 120%;
+  background: none;
+  border: 0;
+  padding: 0;
+  color: #fff;
+  font-size: clamp(0.5rem, 0.95vw, 0.78rem);
+  font-weight: 600;
+  text-shadow: 0 0 3px #000, 0 0 6px #000, 0 1px 2px #000;
+}
+main .ls-pin:hover .ls-pin__label { color: var(--wh-star); }
+
+@media (max-width: 860px) {
+  main .ls-entry { grid-template-columns: 1fr; }
+  main .ls-details { position: static; order: -1; }
+}
+@media (max-width: 560px) {
+  main .ls-hero { flex-direction: column; }
+  main .ls-portrait--big { flex-basis: auto; width: 120px; }
+  main .ls-pin__label, main .ls-area-label { display: none; }
+}

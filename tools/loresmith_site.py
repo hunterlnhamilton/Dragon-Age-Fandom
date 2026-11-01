@@ -293,33 +293,6 @@ for n in notes.values():
 
 
 # ---------------------------------------------------------------- entry sheets
-def infobox(n):
-    fm = n["fm"]
-    rows = []
-    keys = [k for k in ORDER if k in fm] + sorted(k for k in fm if k not in ORDER)
-    for key in keys:
-        if key in HIDDEN or (n["type"] == "calendar"):
-            continue
-        vals = [v for v in as_list(fm[key]) if v not in (None, "", [])]
-        if not vals or isinstance(fm[key], (dict, bool)):
-            continue
-        if len(vals) == 1:
-            cell = link(vals[0])
-        else:
-            cell = "<ul>" + "".join(f"<li>{link(v)}</li>" for v in vals) + "</ul>"
-        rows.append(f'<div class="ls-row"><dt>{esc(label(key))}</dt><dd>{cell}</dd></div>')
-
-    plural, group = TYPES[n["type"]]
-    title = fm.get("full_name") or n["name"]
-    codex = slug_url(f"{CODEX}/{plural}.md")
-    head = (f'<div class="ls-sheet__head">'
-            f'<a class="ls-badge" data-type="{esc(n["type"])}" href="{codex}">{esc(SINGULAR.get(n["type"], plural))}</a>'
-            f'<p class="ls-sheet__title">{esc(title)}</p></div>')
-    if not rows:
-        return f'<div class="ls-sheet ls-sheet--bare" data-type="{esc(n["type"])}">{head}</div>'
-    return f'<aside class="ls-sheet" data-type="{esc(n["type"])}">{head}<dl>{"".join(rows)}</dl></aside>'
-
-
 def connections(n):
     refs = backlinks.get(n["name"], [])
     if not refs:
@@ -333,6 +306,109 @@ def connections(n):
         links = ", ".join(f'<a class="internal-link" href="{s["url"]}">{esc(s["name"])}</a>' for s in uniq)
         parts.append(f'<div class="ls-row"><dt>{esc(TYPES[stype][0])} <span>({esc(label(key).lower())})</span></dt><dd>{links}</dd></div>')
     return f'<section class="ls-connections"><h2>Connections</h2><dl>{"".join(parts)}</dl></section>'
+
+
+# ---------------------------------------------------------------- entry header + details
+NAMED_COLORS = {
+    "red": "var(--color-red)", "orange": "var(--color-orange)", "yellow": "var(--color-yellow)",
+    "green": "var(--color-green)", "cyan": "var(--color-cyan)", "blue": "var(--color-blue)",
+    "purple": "var(--color-purple)", "pink": "#f58cd2",
+}
+FALLBACK_COLORS = ["#c9a0ff", "#86d4ec", "#f0d282", "#78dcaa", "#ffa064", "#f58cd2", "#8caaff"]
+
+
+def color_of(n, i=0):
+    c = str((n or {}).get("fm", {}).get("color") or "").strip().lower()
+    if c.startswith("#"):
+        return c
+    return NAMED_COLORS.get(c, FALLBACK_COLORS[i % len(FALLBACK_COLORS)])
+
+
+def is_dead(n):
+    fm = n["fm"]
+    return bool(fm.get("died")) or str(fm.get("status") or "").lower() in ("dead", "deceased")
+
+
+def entry_chips(n):
+    fm, chips = n["fm"], []
+    if n["type"] == "character":
+        cat = str(fm.get("category") or "").strip()
+        if cat:
+            chips.append(("ls-chip", f"{cat.title()} character"))
+        if is_dead(n):
+            chips.append(("ls-chip ls-chip--dead", "☠ Deceased"))
+            b, d = abs_year(fm.get("born")), abs_year(fm.get("died"))
+            if b is not None and d is not None and d >= b:
+                chips.append(("ls-chip", f"Died aged {d - b}"))
+        elif fm.get("status"):
+            chips.append(("ls-chip", str(fm["status"])))
+        if fm.get("pronouns"):
+            chips.append(("ls-chip", str(fm["pronouns"])))
+    else:
+        for key in ("kind", "status", "government", "classification", "rarity"):
+            if fm.get(key) and isinstance(fm[key], str):
+                chips.append(("ls-chip", fm[key]))
+        if fm.get("founded") or fm.get("dissolved"):
+            span = f'{fm.get("founded") or "?"} – {fm.get("dissolved") or "now"}' if fm.get("dissolved") \
+                else f'Founded {fm["founded"]}'
+            chips.append(("ls-chip", span))
+        if n["type"] == "event" and fm.get("date"):
+            chips.append(("ls-chip", f'{fm["date"]}' + (f' – {fm["end"]}' if fm.get("end") else "")))
+    return "".join(f'<span class="{c}">{esc(t)}</span>' for c, t in chips)
+
+
+def portrait(n, big=False):
+    img = targets(n["fm"].get("image")) if n["type"] != "map" else []
+    url = assets.get(os.path.basename(img[0])) if img else None
+    inner = f'<img src="{url}" alt="" loading="lazy">' if url else f'<span>{esc(n["name"][:1].upper())}</span>'
+    return f'<div class="ls-portrait{" ls-portrait--big" if big else ""}">{inner}</div>'
+
+
+def hero(n):
+    fm = n["fm"]
+    plural = TYPES[n["type"]][0]
+    title = fm.get("full_name") or n["name"]
+    sub = (as_list(fm.get("titles")) or [None])[0]
+    return (f'<header class="ls-hero" data-type="{esc(n["type"])}">'
+            f'{portrait(n, big=True) if n["type"] != "map" else ""}'
+            f'<div class="ls-hero__text">'
+            f'<a class="ls-badge" data-type="{esc(n["type"])}" href="{slug_url(CODEX + "/" + plural + ".md")}">{esc(SINGULAR.get(n["type"], plural))}</a>'
+            f'<p class="ls-hero__name">{esc(title)}</p>'
+            f'{f"<p class=ls-hero__sub>{link(sub)}</p>" if sub else ""}'
+            f'<div class="ls-chips">{entry_chips(n)}</div></div></header>')
+
+
+def details_panel(n):
+    fm = n["fm"]
+    shown_in_chips = {"category", "pronouns", "status", "kind", "government", "classification", "rarity"}
+    rows = []
+    keys = [k for k in ORDER if k in fm] + sorted(k for k in fm if k not in ORDER)
+    for key in keys:
+        if key in HIDDEN or key in shown_in_chips:
+            continue
+        if key == "titles" and len(as_list(fm[key])) < 2:
+            continue
+        vals = [v for v in as_list(fm[key]) if v not in (None, "", [])]
+        if not vals or isinstance(fm[key], (dict, bool)):
+            continue
+        cell = link(vals[0]) if len(vals) == 1 else \
+            "<ul>" + "".join(f"<li>{link(v)}</li>" for v in vals) + "</ul>"
+        rows.append(f'<div class="ls-row"><dt>{esc(label(key))}</dt><dd>{cell}</dd></div>')
+    if not rows:
+        return ""
+    return f'<aside class="ls-details"><p class="ls-details__title">At a glance</p><dl>{"".join(rows)}</dl></aside>'
+
+
+def entry_page(n, body, extra=""):
+    panel = details_panel(n)
+    body = body or '<p class="ls-empty">Nothing written yet.</p>'
+    parts = [hero(n)]
+    if extra:
+        parts.append(extra)
+    parts.append(f'<div class="ls-entry{" ls-entry--full" if not panel else ""}">\n<div class="ls-entry__main">')
+    parts.append(body)
+    parts.append(f"</div>\n{panel}\n</div>")
+    return "\n\n".join(parts)
 
 
 # ---------------------------------------------------------------- calendars
@@ -457,24 +533,34 @@ def map_view(n):
     except (TypeError, ValueError):
         aspect = 1.3333
 
-    areas = []
-    for a in as_list(fm.get("areas")):
+    capitals = {t: nat for nat in lore_entries("nation") for t in targets(nat["fm"].get("capital"))}
+    counts, areas, labels, pins = {}, [], [], []
+
+    for i, a in enumerate(as_list(fm.get("areas"))):
         name_part, _, pts = str(a).partition("|")
         t = targets(name_part)
         if not t or not pts.strip():
             continue
-        coords = []
+        xs, ys, coords = [], [], []
         for pair in pts.split():
             try:
                 x, y = (float(v) for v in pair.split(","))
-                coords.append(f"{x * 100:.2f},{y * 100:.2f}")
             except ValueError:
-                pass
+                continue
+            xs.append(x); ys.append(y)
+            coords.append(f"{x * 100:.2f},{y * 100:.2f}")
+        if not coords:
+            continue
         target = notes.get(t[0])
-        poly = f'<polygon points="{" ".join(coords)}"><title>{esc(t[0])}</title></polygon>'
+        ttype = target["type"] if target else "region"
+        counts[ttype] = counts.get(ttype, 0) + 1
+        col = color_of(target, i)
+        poly = (f'<polygon data-type="{ttype}" style="--c:{col}" points="{" ".join(coords)}">'
+                f'<title>{esc(t[0])}</title></polygon>')
         areas.append(f'<a href="{target["url"]}">{poly}</a>' if target else poly)
+        cx, cy = sum(xs) / len(xs) * 100, sum(ys) / len(ys) * 100
+        labels.append(f'<span class="ls-area-label" data-type="{ttype}" style="left:{cx:.2f}%;top:{cy:.2f}%">{esc(t[0])}</span>')
 
-    pins = []
     for p in as_list(fm.get("pins")):
         name_part, _, xy = str(p).partition("|")
         t = targets(name_part)
@@ -485,16 +571,34 @@ def map_view(n):
         if not t:
             continue
         target = notes.get(t[0])
-        tag = "a" if target else "span"
-        href = f' href="{target["url"]}"' if target else ""
-        pins.append(f'<{tag} class="ls-pin"{href} style="left:{x * 100:.3f}%;top:{y * 100:.3f}%">'
+        tfm = target["fm"] if target else {}
+        ttype = target["type"] if target else "settlement"
+        counts[ttype] = counts.get(ttype, 0) + 1
+        kind = str(tfm.get("kind") or "").lower()
+        owner = capitals.get(t[0]) or notes.get((targets(tfm.get("nation")) or [""])[0])
+        shape = "anchor" if "port" in kind else ("star" if t[0] in capitals or "capital" in kind or "city-state" in kind else "dot")
+        icon = {"anchor": "⚓", "star": "★", "dot": ""}[shape]
+        col = color_of(owner) if owner else "var(--wh-accent-2)"
+        tag, href = ("a", f' href="{target["url"]}"') if target else ("span", "")
+        pins.append(f'<{tag} class="ls-pin ls-pin--{shape}" data-type="{ttype}"{href} '
+                    f'style="left:{x * 100:.3f}%;top:{y * 100:.3f}%;--c:{col}">{icon}'
                     f'<span class="ls-pin__label">{esc(t[0])}</span></{tag}>')
 
-    return (f'<figure class="ls-map" style="aspect-ratio:{aspect}">'
+    uid = re.sub(r"[^a-z0-9]+", "-", n["name"].lower())
+    chips, rules = [], []
+    for ttype in sorted(counts, key=lambda k: list(TYPES).index(k) if k in TYPES else 99):
+        cid = f"ls-f-{uid}-{ttype}"
+        chips.append(f'<input type="checkbox" id="{cid}" checked hidden>'
+                     f'<label for="{cid}" class="ls-filter" data-type="{ttype}">{esc(TYPES.get(ttype, (ttype.title(),))[0])} ({counts[ttype]})</label>')
+        rules.append(f'#{cid}:not(:checked) ~ .ls-map [data-type="{ttype}"]{{display:none}}'
+                     f'#{cid}:not(:checked) ~ .ls-map a:has(polygon[data-type="{ttype}"]){{display:none}}')
+
+    return (f'<div class="ls-mapwrap"><style>{"".join(rules)}</style>'
+            f'<span class="ls-filters-label">Show</span>{"".join(chips)}'
+            f'<figure class="ls-map" style="aspect-ratio:{aspect}">'
             f'<img src="{url}" alt="Map of {esc(n["name"])}" loading="lazy">'
-            f'<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="false">{"".join(areas)}</svg>'
-            f'{"".join(pins)}</figure>'
-            f'<p class="ls-note">{len(pins)} places, {len(areas)} areas. Hover or tap to see names.</p>')
+            f'<svg viewBox="0 0 100 100" preserveAspectRatio="none">{"".join(areas)}</svg>'
+            f'{"".join(labels)}{"".join(pins)}</figure></div>')
 
 
 # ---------------------------------------------------------------- write sheets
@@ -510,8 +614,7 @@ for n in notes.values():
     else:
         body = drop_empty_sections(strip_comments(n["body"]))
         extra = map_view(n) if n["type"] == "map" else ""
-        main = infobox(n) + "\n\n" + (extra + "\n\n" if extra else "") + \
-            (body if body else '<p class="ls-empty">Nothing written yet.</p>')
+        main = entry_page(n, body, extra)
     main += "\n\n" + connections(n)
 
     # keep tags so Kiln's tag pages still work
@@ -534,13 +637,12 @@ def write_page(rel, text):
 
 def card(n):
     fm = n["fm"]
-    sub = fm.get("full_name") if fm.get("full_name") not in (None, n["name"]) else None
-    sub = sub or (as_list(fm.get("titles")) or [None])[0] or fm.get("kind") or fm.get("date") or ""
-    ex = plain_excerpt(n["body"])
-    return (f'<li class="ls-card" data-type="{esc(n["type"])}">'
-            f'<a class="ls-card__link" href="{n["url"]}">{esc(n["name"])}</a>'
-            f'{f"<p class=ls-card__sub>{link(sub)}</p>" if sub else ""}'
-            f'{f"<p class=ls-card__ex>{esc(ex)}</p>" if ex else ""}</li>')
+    sub = (as_list(fm.get("titles")) or [None])[0] or fm.get("kind") or fm.get("date") or ""
+    dead = '<span class="ls-card__dead" title="Deceased">☠</span>' if n["type"] == "character" and is_dead(n) else ""
+    return (f'<li class="ls-card ls-card--portrait" data-type="{esc(n["type"])}">{dead}'
+            f'{portrait(n)}'
+            f'<div class="ls-card__foot"><a class="ls-card__link" href="{n["url"]}">{esc(n["name"])}</a>'
+            f'{f"<p class=ls-card__sub>{esc(sub)}</p>" if sub else ""}</div></li>')
 
 
 category_counts = {}

@@ -13,10 +13,46 @@
             "state": {
               "type": "loresmith-overview",
               "state": {
-                "section": "map"
+                "section": "timeline"
               },
               "icon": "library",
               "title": "Canon"
+            }
+          },
+          {
+            "id": "7edfffc2d02c101f",
+            "type": "leaf",
+            "state": {
+              "type": "loresmith-entity",
+              "state": {
+                "file": "Lore/Canon/Nations/Anderfels.md"
+              },
+              "icon": "crown",
+              "title": "Anderfels"
+            }
+          },
+          {
+            "id": "da26259f6404b0e8",
+            "type": "leaf",
+            "state": {
+              "type": "loresmith-entity",
+              "state": {
+                "file": "Lore/Canon/Characters/Ancient/Andraste.md"
+              },
+              "icon": "user",
+              "title": "Andraste"
+            }
+          },
+          {
+            "id": "69a770ef80ca24e5",
+            "type": "leaf",
+            "state": {
+              "type": "loresmith-map",
+              "state": {
+                "file": "Lore/Canon/Maps/Thedas.md"
+              },
+              "icon": "map",
+              "title": "Thedas"
             }
           },
           {
@@ -43,7 +79,8 @@
               "title": "map2"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -200,6 +237,14 @@
                 "stack": [
                   {
                     "page": "home"
+                  },
+                  {
+                    "page": "category",
+                    "type": "nation"
+                  },
+                  {
+                    "page": "entry",
+                    "path": "Lore/Canon/Nations/Anderfels.md"
                   }
                 ]
               },
@@ -229,7 +274,7 @@
       "github-sync:Sync with Remote": false
     }
   },
-  "active": "5041af30dcc2a5a8",
+  "active": "7edfffc2d02c101f",
   "lastOpenFiles": [
     "Home.md",
     "Reference/Assets/ThedasMap.webp",
