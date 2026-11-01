@@ -1,3 +1,4 @@
 ### Obsidian ###
 # config dir
-./DAFics/Reference
+DAFics/Reference/*
+!DAFics/Reference/Assets/
