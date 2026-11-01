@@ -1,0 +1,180 @@
+/* =============================================================
+   witching-hour.css
+   Witching Hour (Midnight Coven) for Kiln's DEFAULT mode.
+   build.sh copies this into public/assets/css/ and links it at the
+   end of every page's <head>, so it overrides Kiln's built-in theme.
+   Kiln switches modes with data-theme="dark|light" on <html>.
+   ============================================================= */
+
+@import url("https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;500;600&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&display=swap");
+
+/* ---------- Dark (default) ---------- */
+html:root,
+html:root[data-theme="dark"] {
+  --wh-deep: #07061a;
+  --wh-bg: #0c0b24;
+  --wh-surface: #161436;
+  --wh-text: #e7e3f7;
+  --wh-muted: #9d97c2;
+  --wh-accent: #b79cff;
+  --wh-accent-2: #86d4ec;
+  --wh-star: #f7e9b5;
+  --wh-star-opacity: 0.8;
+  --wh-nebula: 16%;
+
+  --color-red: #ff6e82;
+  --color-orange: #ffa064;
+  --color-yellow: #f0d282;
+  --color-green: #78dcaa;
+  --color-cyan: #6ed7e6;
+  --color-blue: #8caaff;
+  --color-purple: #be96ff;
+  --color-comment: #9d97c2;
+  color-scheme: dark;
+}
+
+/* ---------- Light ---------- */
+html:root[data-theme="light"] {
+  --wh-deep: #e6e2f5;
+  --wh-bg: #f5f3fc;
+  --wh-surface: #ebe7f8;
+  --wh-text: #221d3f;
+  --wh-muted: #6a6390;
+  --wh-accent: #6b4bd6;
+  --wh-accent-2: #1f84a8;
+  --wh-star: #b8902a;
+  --wh-star-opacity: 0.4;
+  --wh-nebula: 9%;
+
+  --color-red: #c82846;
+  --color-orange: #c8641e;
+  --color-yellow: #a07814;
+  --color-green: #1e8c64;
+  --color-cyan: #148296;
+  --color-blue: #3c5ad2;
+  --color-purple: #7846d2;
+  --color-comment: #6a6390;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: light) {
+  html:root:not([data-theme="dark"]) {
+    --wh-deep: #e6e2f5; --wh-bg: #f5f3fc; --wh-surface: #ebe7f8;
+    --wh-text: #221d3f; --wh-muted: #6a6390;
+    --wh-accent: #6b4bd6; --wh-accent-2: #1f84a8; --wh-star: #b8902a;
+    --wh-star-opacity: 0.4; --wh-nebula: 9%;
+    color-scheme: light;
+  }
+}
+
+/* ---------- Map onto Kiln's own variables ---------- */
+html:root {
+  --bg-color: var(--wh-bg);
+  --text-color: var(--wh-text);
+  --accent-color: var(--wh-accent);
+  --sidebar-bg: var(--wh-deep);
+  --sidebar-border: color-mix(in srgb, var(--wh-accent) 22%, var(--wh-surface));
+  --hover-color: color-mix(in srgb, var(--wh-accent) 12%, transparent);
+  --font-main: "Spectral", Georgia, serif;
+
+  --wh-star-halo: color-mix(in srgb, var(--wh-star) 30%, transparent);
+  --wh-star-tint: color-mix(in srgb, var(--wh-star) 55%, var(--wh-accent-2));
+  --wh-glow: color-mix(in srgb, var(--wh-accent) 55%, transparent);
+  --wh-gradient: linear-gradient(100deg, var(--wh-accent) 0%, var(--wh-star) 50%, var(--wh-accent-2) 100%);
+}
+
+::selection { background: color-mix(in srgb, var(--wh-accent) 30%, transparent); }
+
+/* ---------- Night sky behind everything ---------- */
+body { background-color: var(--wh-bg); position: relative; isolation: isolate; }
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+body::before {
+  background-image:
+    radial-gradient(circle at 8% 14%,  var(--wh-star) 0 0.7px, transparent 1.3px),
+    radial-gradient(circle at 23% 67%, var(--wh-star) 0 0.6px, transparent 1.2px),
+    radial-gradient(circle at 41% 31%, var(--wh-star) 0 0.8px, transparent 1.4px),
+    radial-gradient(circle at 57% 84%, var(--wh-star) 0 0.6px, transparent 1.2px),
+    radial-gradient(circle at 69% 9%,  var(--wh-star) 0 0.7px, transparent 1.3px),
+    radial-gradient(circle at 82% 52%, var(--wh-star) 0 0.8px, transparent 1.4px),
+    radial-gradient(circle at 16% 42%, var(--wh-star-tint) 0 1px, transparent 1.7px),
+    radial-gradient(circle at 74% 28%, var(--wh-star-tint) 0 1px, transparent 1.7px),
+    radial-gradient(ellipse 65% 45% at 90% 0%,  color-mix(in srgb, var(--wh-accent) var(--wh-nebula), transparent), transparent 70%),
+    radial-gradient(ellipse 55% 40% at 0% 100%, color-mix(in srgb, var(--wh-accent-2) var(--wh-nebula), transparent), transparent 70%);
+  background-size:
+    220px 220px, 220px 220px, 220px 220px, 220px 220px, 220px 220px, 220px 220px,
+    300px 300px, 300px 300px, 100% 100%, 100% 100%;
+  opacity: var(--wh-star-opacity);
+}
+body::after {
+  background-image:
+    radial-gradient(circle at 21% 22%, var(--wh-star) 0 1.3px, var(--wh-star-halo) 1.8px, transparent 4.5px),
+    radial-gradient(circle at 63% 71%, var(--wh-star) 0 1.4px, var(--wh-star-halo) 2px, transparent 5px),
+    radial-gradient(circle at 87% 13%, var(--wh-star-tint) 0 1.2px, var(--wh-star-halo) 1.7px, transparent 4px);
+  background-size: 420px 420px;
+  animation: wh-twinkle 5s ease-in-out infinite;
+}
+@keyframes wh-twinkle {
+  0%, 100% { opacity: calc(var(--wh-star-opacity) * 0.3); }
+  50%      { opacity: var(--wh-star-opacity); }
+}
+
+/* Let the sky show through Kiln's solid page backgrounds */
+main, article, .bg-background { background-color: transparent !important; }
+aside, nav { background-color: color-mix(in srgb, var(--wh-deep) 88%, transparent); }
+
+/* ---------- Headings: Cinzel + starlight gradient ---------- */
+main :is(h1, h2, h3, h4, h5, h6) {
+  background-image: var(--wh-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 7px var(--wh-glow));
+  letter-spacing: 0.02em;
+}
+main :is(h1, h2, h3) { font-family: "Cinzel Decorative", "Cinzel", Georgia, serif; font-weight: 400; }
+main :is(h4, h5, h6),
+aside, nav, th { font-family: "Cinzel", Georgia, serif; }
+
+/* star ornament under the page title */
+main h1::after {
+  content: "";
+  display: block;
+  height: 8px;
+  margin-top: 0.3em;
+  background:
+    radial-gradient(circle at 50% 50%, var(--wh-star) 0 1.7px, var(--wh-star-halo) 2.5px, transparent 4px),
+    linear-gradient(90deg, transparent, var(--wh-accent) 22%, var(--wh-star) 50%, var(--wh-accent-2) 78%, transparent) center / 100% 1px no-repeat;
+}
+
+/* ---------- Text details ---------- */
+main a { color: var(--wh-accent-2); }
+main a:hover { color: var(--wh-star); }
+main em { color: color-mix(in srgb, var(--wh-text) 82%, var(--wh-star)); }
+main mark { background: color-mix(in srgb, var(--wh-star) 26%, transparent); color: inherit; }
+main blockquote {
+  border-left: 2px solid var(--wh-accent);
+  background: linear-gradient(90deg, var(--hover-color), transparent 70%);
+  font-style: italic;
+}
+main :not(pre) > code { color: var(--wh-star); }
+main th { color: var(--wh-accent); }
+
+/* ---------- Callouts: starglass ---------- */
+main .callout {
+  border-radius: 10px;
+  background-color: color-mix(in srgb, var(--wh-surface) 72%, transparent);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+  box-shadow: 0 0 22px -10px var(--wh-glow);
+}
+main .callout-title { font-family: "Cinzel", Georgia, serif; letter-spacing: 0.02em; }
+
+@media (prefers-reduced-motion: reduce) {
+  body::after { animation: none; }
+}
