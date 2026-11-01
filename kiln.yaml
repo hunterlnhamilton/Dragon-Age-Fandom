@@ -2,7 +2,7 @@
 # Uncomment and edit the options below to set defaults for your project.
 # CLI flags will override these values.
 
- theme: witching-hour
+ theme: "witching-hour"
 # font: inter
 # url: ""
 # name: "My Notes"
