@@ -1,0 +1,111 @@
+/* =============================================================
+   responsive.css
+   Breakpoints: 1100px (laptop) · 860px (tablet) · 560px (phone)
+   ============================================================= */
+
+/* ---------- Laptop ---------- */
+@media (max-width: 1100px) {
+  :root { --sidebar-width: 230px; }
+  .site-search { width: 170px; }
+  .site-nav__link { padding: var(--space-2); letter-spacing: 0.04em; }
+}
+
+/* ---------- Tablet: sidebar becomes a slide-out drawer ---------- */
+@media (max-width: 860px) {
+  :root { --header-height: 58px; }
+
+  .layout { grid-template-columns: minmax(0, 1fr); }
+
+  .menu-toggle { display: inline-flex; }
+  .site-nav { display: none; }
+  .site-search { margin-left: auto; }
+
+  .sidebar {
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    bottom: 0;
+    z-index: 40;
+    width: min(300px, 85vw);
+    height: auto;
+    padding: var(--space-5) var(--space-4);
+    background: var(--wh-deep);
+    border-right: 1px solid var(--wh-border-strong);
+    box-shadow: var(--shadow-lg);
+    transform: translateX(-105%);
+    transition: transform 240ms var(--ease);
+  }
+  body.sidebar-open .sidebar { transform: translateX(0); }
+
+  .sidebar-backdrop {
+    display: block;
+    position: fixed;
+    inset: var(--header-height) 0 0 0;
+    z-index: 39;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 240ms var(--ease);
+  }
+  body.sidebar-open .sidebar-backdrop { opacity: 1; pointer-events: auto; }
+  body.sidebar-open { overflow: hidden; }
+
+  /* main nav links are repeated in the drawer */
+  .sidebar__section--mobile-nav { display: block; }
+
+  .main { padding-top: var(--space-6); }
+  .page-title { font-size: var(--text-2xl); }
+
+  .site-footer__inner { grid-template-columns: 1fr 1fr; }
+  .site-footer__brand { grid-column: 1 / -1; }
+}
+
+/* Hidden on desktop: main nav copy inside the sidebar */
+@media (min-width: 861px) {
+  .sidebar__section--mobile-nav { display: none; }
+}
+
+/* ---------- Phone ---------- */
+@media (max-width: 560px) {
+  :root {
+    --text-base: 1rem;
+    --gutter: 16px;
+    --star-density: 180px;
+  }
+
+  .site-header__inner { gap: var(--space-3); }
+  .brand__name { font-size: 0.95rem; }
+  .brand__mark { width: 28px; height: 28px; }
+
+  /* search collapses to its icon button */
+  .site-search { display: none; }
+  .search-toggle { display: inline-flex; }
+
+  .main { padding-top: var(--space-5); padding-bottom: var(--space-7); }
+  .page-title { font-size: var(--text-xl); }
+  .prose h1 { font-size: var(--text-xl); }
+  .prose h2 { font-size: var(--text-lg); }
+
+  .card-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--space-3); }
+  .card__body { padding: var(--space-2) var(--space-3) var(--space-3); }
+  .card__title { font-size: 1rem; }
+  .card__excerpt { -webkit-line-clamp: 2; }
+
+  .site-footer__inner { grid-template-columns: 1fr; gap: var(--space-5); }
+  .site-footer__bottom { flex-direction: column; }
+}
+
+/* search icon only appears on phones */
+@media (min-width: 561px) {
+  .search-toggle { display: none; }
+}
+
+/* ---------- Print ---------- */
+@media print {
+  body::before, body::after,
+  .site-header, .sidebar, .site-footer, .sidebar-backdrop { display: none !important; }
+  .layout { display: block; }
+  body { background: #fff; color: #000; }
+  .prose :is(h1, h2, h3, h4, h5, h6) { -webkit-text-fill-color: #000; filter: none; background: none; }
+  .card { break-inside: avoid; box-shadow: none; }
+}

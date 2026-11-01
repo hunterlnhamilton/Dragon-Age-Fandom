@@ -1,0 +1,103 @@
+<!-- =============================================================
+     footer.html
+     Site footer + the small script that powers the header's
+     theme toggle, the mobile drawer and the sidebar folding.
+     ============================================================= -->
+<footer class="site-footer">
+  <div class="site-footer__inner">
+
+    <div class="site-footer__brand">
+      <a class="brand" href="{{base_url}}/">
+        <svg class="brand__mark" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <path d="M20.5 4.5A11.5 11.5 0 1 0 27.5 21 9 9 0 0 1 20.5 4.5Z" fill="currentColor" opacity=".9"/>
+          <path d="M24 6l.9 2.1L27 9l-2.1.9L24 12l-.9-2.1L21 9l2.1-.9L24 6Z" fill="currentColor"/>
+        </svg>
+        <span class="brand__name">{{site_name}}</span>
+      </a>
+      <p>Fan fiction, lore notes and a codex of Thedas, kept by {{author}}.</p>
+    </div>
+
+    <nav aria-label="Explore">
+      <h2 class="site-footer__heading">Explore</h2>
+      <ul class="site-footer__list">
+        <li><a href="{{base_url}}/Stories/">Fics</a></li>
+        <li><a href="{{base_url}}/Lore/Canon/Characters/">Characters</a></li>
+        <li><a href="{{base_url}}/Lore/Canon/Timeline/">Timeline</a></li>
+        <li><a href="{{base_url}}/Reference/">Reference</a></li>
+      </ul>
+    </nav>
+
+    <nav aria-label="Elsewhere">
+      <h2 class="site-footer__heading">Elsewhere</h2>
+      <ul class="site-footer__list">
+        <li><a href="{{ao3_url}}" rel="me noopener">Archive of Our Own</a></li>
+        <li><a href="{{tumblr_url}}" rel="me noopener">Tumblr</a></li>
+        <li><a href="{{base_url}}/index.xml">RSS feed</a></li>
+      </ul>
+    </nav>
+
+  </div>
+
+  <div class="site-footer__bottom">
+    <p class="site-footer__disclaimer">
+      A non-commercial fan site. Dragon Age and all related names are the property of
+      BioWare and Electronic Arts; no affiliation or endorsement is implied.
+    </p>
+    <p>© {{year}} {{author}} · Last built {{build_date}}</p>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var body = document.body;
+
+    /* ---- Theme toggle (remembers the choice) ---- */
+    try {
+      var saved = localStorage.getItem("theme");
+      if (saved) root.setAttribute("data-theme", saved);
+    } catch (e) {}
+
+    var themeBtn = document.querySelector(".theme-toggle");
+    if (themeBtn) themeBtn.addEventListener("click", function () {
+      var current = root.getAttribute("data-theme") ||
+        (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+      var next = current === "light" ? "dark" : "light";
+      root.setAttribute("data-theme", next);
+      try { localStorage.setItem("theme", next); } catch (e) {}
+    });
+
+    /* ---- Mobile drawer ---- */
+    var menuBtn = document.querySelector(".menu-toggle");
+    var backdrop = document.querySelector(".sidebar-backdrop");
+    function setDrawer(open) {
+      body.classList.toggle("sidebar-open", open);
+      if (menuBtn) {
+        menuBtn.setAttribute("aria-expanded", String(open));
+        menuBtn.setAttribute("aria-label", open ? "Close navigation" : "Open navigation");
+      }
+    }
+    if (menuBtn) menuBtn.addEventListener("click", function () {
+      setDrawer(!body.classList.contains("sidebar-open"));
+    });
+    if (backdrop) backdrop.addEventListener("click", function () { setDrawer(false); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") setDrawer(false); });
+
+    /* ---- Highlight the current page in nav + sidebar ---- */
+    var here = location.pathname.replace(/\/+$/, "") || "/";
+    document.querySelectorAll(".site-nav__link, .sidebar__link").forEach(function (a) {
+      var path = new URL(a.href, location.href).pathname.replace(/\/+$/, "") || "/";
+      if (path === here) a.setAttribute("aria-current", "page");
+    });
+
+    /* ---- Foldable sidebar groups ---- */
+    document.querySelectorAll(".sidebar__heading").forEach(function (btn) {
+      /* a group holding the current page always starts open */
+      var list = btn.nextElementSibling;
+      if (list && list.querySelector('[aria-current="page"]')) btn.setAttribute("aria-expanded", "true");
+      btn.addEventListener("click", function () {
+        btn.setAttribute("aria-expanded", btn.getAttribute("aria-expanded") === "true" ? "false" : "true");
+      });
+    });
+  })();
+</script>

@@ -1,0 +1,36 @@
+<!-- =============================================================
+     card.html
+     One Loresmith entry as a card. Repeat it inside
+       <ul class="card-grid"> … </ul>
+     Fill from the note's frontmatter:
+       {{type}}      character | organization | nation | settlement |
+                     location | creature | item | event | story …
+                     (sets the badge color, see components.css)
+       {{type_label}} what the badge says, e.g. "Character"
+       {{url}}       link to the entry page
+       {{image}}     portrait / header image (optional)
+       {{title}}     note name
+       {{subtitle}}  role, title or kind, e.g. "Warden-Commander"
+       {{excerpt}}   first lines of the description
+       {{tags}}      zero or more <a class="tag"> links
+     No image? Delete just the <img> and add class "card--compact"
+     (keep the <figure>, it holds the badge).
+     ============================================================= -->
+<li class="card" data-type="{{type}}">
+  <figure class="card__media">
+    <img src="{{image}}" alt="" loading="lazy" decoding="async">
+    <span class="card__badge">{{type_label}}</span>
+  </figure>
+
+  <div class="card__body">
+    <h3 class="card__title">
+      <a class="card__link" href="{{url}}">{{title}}</a>
+    </h3>
+    <p class="card__subtitle">{{subtitle}}</p>
+    <p class="card__excerpt">{{excerpt}}</p>
+    <div class="card__tags">
+      {{tags}}
+      <!-- e.g. <a class="tag" href="{{base_url}}/tags/grey-wardens/">#grey-wardens</a> -->
+    </div>
+  </div>
+</li>

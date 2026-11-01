@@ -1,0 +1,101 @@
+<!-- =============================================================
+     sidebar.html
+     Lore navigation, grouped like Loresmith's overview
+     (People · Places · Things · History · Language) plus your fics.
+     Desktop: sticky left column. Tablet/phone: slide-out drawer
+     opened by the header's menu button.
+     Mark the current page's link with aria-current="page".
+     Each group's heading button folds its list.
+     ============================================================= -->
+<aside class="sidebar" id="sidebar" aria-label="Lore navigation">
+
+  <!-- Main nav copy, shown only in the mobile drawer -->
+  <div class="sidebar__section sidebar__section--mobile-nav">
+    <button class="sidebar__heading" type="button" aria-expanded="true">
+      <span>Navigate</span>
+      <svg class="sidebar__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <ul class="sidebar__list">
+      <li><a class="sidebar__link" href="{{base_url}}/">Home</a></li>
+      <li><a class="sidebar__link" href="{{base_url}}/Lore/">Lore</a></li>
+      <li><a class="sidebar__link" href="{{base_url}}/Lore/Canon/Timeline/">Timeline</a></li>
+      <li><a class="sidebar__link" href="{{base_url}}/Reference/">Reference</a></li>
+    </ul>
+  </div>
+
+  <div class="sidebar__section">
+    <button class="sidebar__heading" type="button" aria-expanded="true">
+      <span>Fics</span>
+      <svg class="sidebar__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <ul class="sidebar__list">
+      <li><a class="sidebar__link" href="{{base_url}}/Stories/">All stories <span class="sidebar__count">{{count_stories}}</span></a></li>
+      <li><a class="sidebar__link" href="{{base_url}}/Lore/Canon/Plot%20Arcs/">Plot arcs</a></li>
+    </ul>
+  </div>
+
+  <div class="sidebar__section">
+    <button class="sidebar__heading" type="button" aria-expanded="true">
+      <span>People</span>
+      <svg class="sidebar__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <ul class="sidebar__list">
+      <li><a class="sidebar__link" href="{{base_url}}/Lore/Canon/Characters/">Characters <span class="sidebar__count">{{count_characters}}</span></a></li>
+      <li><a class="sidebar__link" href="{{base_url}}/Lore/Canon/Organizations/">Factions &amp; orders <span class="sidebar__count">{{count_organizations}}</span></a></li>
+      <li><a class="sidebar__link" href="{{base_url}}/Lore/Canon/Cultures/">Cultures</a></li>
+      <li><a class="sidebar__link" href="{{base_url}}/Lore/Canon/Species/">Races</a></li>
+    </ul>
+  </div>
+
+  <div class="sidebar__section">
+    <button class="sidebar__heading" type="button" aria-expanded="true">
+      <span>Places</span>
+      <svg class="sidebar__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <ul class="sidebar__list">
+      <li><a class="sidebar__link" href="{{base_url}}/Lore/Canon/Nations/">Nations</a></li>
+      <li><a class="sidebar__link" href="{{base_url}}/Lore/Canon/Regions/">Regions</a></li>
+      <li><a class="sidebar__link" href="{{base_url}}/Lore/Canon/Settlements/">Settlements</a></li>
+      <li><a class="sidebar__link" href="{{base_url}}/Lore/Canon/Locations/">Locations</a></li>
+      <li><a class="sidebar__link" href="{{base_url}}/Lore/Canon/Maps/">Maps</a></li>
+    </ul>
+  </div>
+
+  <div class="sidebar__section">
+    <button class="sidebar__heading" type="button" aria-expanded="false">
+      <span>Nature &amp; things</span>
+      <svg class="sidebar__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <ul class="sidebar__list">
+      <li><a class="sidebar__link" href="{{base_url}}/Lore/Canon/Creatures/">Bestiary</a></li>
+      <li><a class="sidebar__link" href="{{base_url}}/Lore/Canon/Plants/">Flora</a></li>
+      <li><a class="sidebar__link" href="{{base_url}}/Lore/Canon/Items/">Items &amp; artifacts</a></li>
+    </ul>
+  </div>
+
+  <div class="sidebar__section">
+    <button class="sidebar__heading" type="button" aria-expanded="false">
+      <span>History</span>
+      <svg class="sidebar__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <ul class="sidebar__list">
+      <li><a class="sidebar__link" href="{{base_url}}/Lore/Canon/Events/">Events</a></li>
+      <li><a class="sidebar__link" href="{{base_url}}/Lore/Canon/Timeline/">Timeline</a></li>
+      <li><a class="sidebar__link" href="{{base_url}}/Lore/Canon/Holidays/">Holidays</a></li>
+      <li><a class="sidebar__link" href="{{base_url}}/Lore/Canon/Calendars/">Calendars</a></li>
+    </ul>
+  </div>
+
+  <div class="sidebar__section">
+    <button class="sidebar__heading" type="button" aria-expanded="false">
+      <span>Language</span>
+      <svg class="sidebar__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <ul class="sidebar__list">
+      <li><a class="sidebar__link" href="{{base_url}}/Lore/Canon/Languages/">Languages</a></li>
+      <li><a class="sidebar__link" href="{{base_url}}/Lore/Canon/Dictionary/">Dictionary</a></li>
+    </ul>
+  </div>
+
+</aside>
+<div class="sidebar-backdrop" aria-hidden="true"></div>

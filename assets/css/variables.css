@@ -1,0 +1,140 @@
+/* =============================================================
+   variables.css
+   Design tokens ported from the Witching Hour Obsidian theme.
+   Midnight Coven is the default palette. Swap a palette by adding
+   data-palette="bloodmoon" (etc.) to <html>.
+   Theme: dark by default, light via OS setting or data-theme="light".
+   ============================================================= */
+
+@import url("https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;500;600&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Courier+Prime&display=swap");
+
+:root {
+  /* ---- Midnight Coven (dark) ---- */
+  --wh-deep:     #07061a;
+  --wh-bg:       #0c0b24;
+  --wh-surface:  #161436;
+  --wh-text:     #e7e3f7;
+  --wh-muted:    #9d97c2;
+  --wh-accent:   #b79cff;
+  --wh-accent-2: #86d4ec;
+  --wh-star:     #f7e9b5;
+  --wh-on-accent: var(--wh-deep);
+  --wh-star-opacity: 0.8;
+  --wh-nebula: 16%;
+
+  /* ---- Fonts ---- */
+  --font-heading:    "Cinzel Decorative", "Cinzel", Georgia, serif;
+  --font-subheading: "Cinzel", Georgia, serif;
+  --font-body:       "Spectral", Georgia, serif;
+  --font-ui:         system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono:       "Courier Prime", ui-monospace, monospace;
+
+  /* ---- Type scale ---- */
+  --text-xs:   0.78rem;
+  --text-sm:   0.9rem;
+  --text-base: 1.0625rem;
+  --text-lg:   1.25rem;
+  --text-xl:   1.6rem;
+  --text-2xl:  2.1rem;
+  --text-3xl:  2.8rem;
+  --leading:   1.7;
+
+  /* ---- Spacing ---- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4.5rem;
+
+  /* ---- Layout ---- */
+  --header-height: 64px;
+  --sidebar-width: 270px;
+  --content-width: 760px;
+  --page-max:      1320px;
+  --gutter:        clamp(16px, 4vw, 40px);
+
+  /* ---- Shape & motion ---- */
+  --radius-sm: 6px;
+  --radius:    10px;
+  --radius-lg: 16px;
+  --ease:      cubic-bezier(.2, .7, .2, 1);
+  --dur:       180ms;
+  --star-density: 220px;
+  --twinkle-speed: 5s;
+
+  /* ---- Jewel tones (callouts, type badges) ---- */
+  --color-red:    255, 110, 130;
+  --color-orange: 255, 160, 100;
+  --color-yellow: 240, 210, 130;
+  --color-green:  120, 220, 170;
+  --color-cyan:   110, 215, 230;
+  --color-blue:   140, 170, 255;
+  --color-purple: 190, 150, 255;
+  --color-pink:   245, 140, 210;
+
+  color-scheme: dark;
+}
+
+/* ---- Light mode (OS preference, unless forced dark) ---- */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --wh-deep: #e6e2f5; --wh-bg: #f5f3fc; --wh-surface: #ebe7f8;
+    --wh-text: #221d3f; --wh-muted: #6a6390;
+    --wh-accent: #6b4bd6; --wh-accent-2: #1f84a8; --wh-star: #b8902a;
+    --wh-on-accent: #ffffff; --wh-star-opacity: 0.4; --wh-nebula: 9%;
+    --color-red: 200, 40, 70; --color-orange: 200, 100, 30;
+    --color-yellow: 160, 120, 20; --color-green: 30, 140, 100;
+    --color-cyan: 20, 130, 150; --color-blue: 60, 90, 210;
+    --color-purple: 120, 70, 210; --color-pink: 190, 50, 140;
+    color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --wh-deep: #e6e2f5; --wh-bg: #f5f3fc; --wh-surface: #ebe7f8;
+  --wh-text: #221d3f; --wh-muted: #6a6390;
+  --wh-accent: #6b4bd6; --wh-accent-2: #1f84a8; --wh-star: #b8902a;
+  --wh-on-accent: #ffffff; --wh-star-opacity: 0.4; --wh-nebula: 9%;
+  --color-red: 200, 40, 70; --color-orange: 200, 100, 30;
+  --color-yellow: 160, 120, 20; --color-green: 30, 140, 100;
+  --color-cyan: 20, 130, 150; --color-blue: 60, 90, 210;
+  --color-purple: 120, 70, 210; --color-pink: 190, 50, 140;
+  color-scheme: light;
+}
+
+/* ---- Alternate palettes (dark) ---- */
+:root[data-palette="bloodmoon"] {
+  --wh-deep: #0d0508; --wh-bg: #15080d; --wh-surface: #221016;
+  --wh-text: #f5e4e6; --wh-muted: #b8959b;
+  --wh-accent: #ff5f6d; --wh-accent-2: #ffab5c; --wh-star: #ffd9c7;
+}
+:root[data-palette="gilded"] {
+  --wh-deep: #05070f; --wh-bg: #0a0e1c; --wh-surface: #141a2e;
+  --wh-text: #efe9dc; --wh-muted: #a8a28e;
+  --wh-accent: #e7c46a; --wh-accent-2: #8aa7ff; --wh-star: #fff3c4;
+}
+:root[data-palette="aurora"] {
+  --wh-deep: #03101a; --wh-bg: #061925; --wh-surface: #0c2533;
+  --wh-text: #e1f4f2; --wh-muted: #8fb3b5;
+  --wh-accent: #5ef0c0; --wh-accent-2: #a797ff; --wh-star: #d9fff4;
+}
+
+/* ---- Derived (keep last so they follow the palette) ---- */
+:root {
+  --wh-faint:         color-mix(in srgb, var(--wh-muted) 55%, var(--wh-bg));
+  --wh-border:        color-mix(in srgb, var(--wh-accent) 22%, var(--wh-surface));
+  --wh-border-strong: color-mix(in srgb, var(--wh-accent) 45%, var(--wh-surface));
+  --wh-glow:          color-mix(in srgb, var(--wh-accent) 55%, transparent);
+  --wh-star-halo:     color-mix(in srgb, var(--wh-star) 30%, transparent);
+  --wh-star-tint:     color-mix(in srgb, var(--wh-star) 55%, var(--wh-accent-2));
+  --wh-glass:         color-mix(in srgb, var(--wh-surface) 72%, transparent);
+  --wh-glass-strong:  color-mix(in srgb, var(--wh-surface) 94%, transparent);
+  --wh-hover:         color-mix(in srgb, var(--wh-accent) 10%, transparent);
+  --wh-active:        color-mix(in srgb, var(--wh-accent) 16%, transparent);
+  --wh-heading-gradient: linear-gradient(100deg, var(--wh-accent) 0%, var(--wh-star) 50%, var(--wh-accent-2) 100%);
+  --wh-rule-gradient: linear-gradient(90deg, transparent, var(--wh-accent) 22%, var(--wh-star) 50%, var(--wh-accent-2) 78%, transparent);
+  --shadow:    0 10px 30px -14px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 18px 50px -18px rgba(0, 0, 0, 0.7), 0 0 24px -12px var(--wh-glow);
+}
