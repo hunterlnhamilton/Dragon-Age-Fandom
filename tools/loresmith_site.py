@@ -775,34 +775,87 @@ for ntype, (plural, group) in TYPES.items():
                f"All {len(items)} {plural.lower()} in a fan codex of Dragon Age's Thedas.")
     manifest["links"] += [[slug_url(f"{CODEX}/{plural}.md"), n["url"]] for n in items]
 
-# Timeline
-events = []
-for n in lore_entries("event"):
-    y = abs_year(n["fm"].get("date"))
-    events.append((y, n))
-events.sort(key=lambda e: (e[0] is None, e[0] if e[0] is not None else 0, e[1]["name"]))
-tl, current = ['<p class="ls-lede">Every event, oldest first. Dates are shown as written; '
+# Timeline: the same things Loresmith's own timeline lists
+# type -> how its start and end read, in Loresmith's words
+FOUNDING = {
+    "organization": ("is founded", "is dissolved"),
+    "nation": ("is founded", "falls"),
+    "region": ("is formed", "comes to an end"),
+    "settlement": ("is founded", "comes to an end"),
+    "location": ("is built", "comes to an end"),
+}
+# Same year: born and founded first, deaths last
+TL_RANK = {"Birth": 0, "Founding": 1, "Calendar": 2, "Event": 3, "Death": 4}
+CHANGE_DATE = re.compile(r"^(.*?)\s*\(([^()]*\d[^()]*)\)\s*$")
+
+
+def tl_row(n, kind, title, date, end=None, label=None, where=None, text="", who=()):
+    return {"year": abs_year(date), "kind": kind, "n": n, "title": title, "date": date, "end": end,
+            "label": label or kind, "where": where, "text": text, "who": who}
+
+
+events = lore_entries("event")
+tl_rows = []
+for n in events:
+    fm = n["fm"]
+    tl_rows.append(tl_row(n, "Event", n["name"], fm.get("date"), fm.get("end"), label=fm.get("kind"),
+                       text=plain_excerpt(n["body"]), who=targets(fm.get("participants"))))
+for n in lore_entries("character"):
+    fm = n["fm"]
+    if abs_year(fm.get("born")) is not None:
+        tl_rows.append(tl_row(n, "Birth", f'{n["name"]} is born', fm["born"], where=fm.get("birthplace")))
+    if abs_year(fm.get("died")) is not None:
+        tl_rows.append(tl_row(n, "Death", f'{n["name"]} dies', fm["died"], where=fm.get("death_place")))
+for ntype, (began, ended) in FOUNDING.items():
+    for n in lore_entries(ntype):
+        fm = n["fm"]
+        if abs_year(fm.get("founded")) is not None:
+            tl_rows.append(tl_row(n, "Founding", f'{n["name"]} {began}', fm["founded"]))
+        if abs_year(fm.get("dissolved")) is not None:
+            how = str(fm.get("ended_how") or "").strip().lower()
+            phrase = (f"is {how}" if re.match(r"^\w+ed\b", how) else how) or ended
+            tl_rows.append(tl_row(n, "Death", f'{n["name"]} {phrase}', fm["dissolved"], label="End"))
+        for change in as_list(fm.get("changes")):
+            m = CHANGE_DATE.match(plain(change))
+            if m and abs_year(m.group(2)) is not None:
+                said = m.group(1)
+                if n["name"].removeprefix("The ") not in said:   # "Refounded" alone says nothing
+                    said = f'{n["name"]}: {said[:1].lower()}{said[1:]}'
+                tl_rows.append(tl_row(n, "Founding", said, m.group(2), label="Change"))
+for n in lore_entries("calendar"):
+    start = n["fm"].get("in_use_from")
+    if start not in (None, ""):
+        # A bare year is in the calendar's own count, named where it lines up with the others
+        own = re.search(r"-?\d+\s+([A-Za-z']+)\s*=", str(n["fm"].get("align") or ""))
+        date = f"{start} {own.group(1)}" if own and str(start).lstrip("-").isdigit() else start
+        if abs_year(date) is not None:
+            tl_rows.append(tl_row(n, "Calendar", f'{n["name"]} comes into use', date))
+
+tl_rows.sort(key=lambda r: (r["year"] is None, r["year"] if r["year"] is not None else 0,
+                         TL_RANK[r["kind"]], r["title"].lower()))
+tl, current = ['<p class="ls-lede">Events, births, deaths and foundings, oldest first. Dates are shown as written; '
                'Tevinter and Elvhen years are lined up with the Chantry calendar for ordering.</p>'], None
-for y, n in events:
-    era = era_of(y)
+for r in tl_rows:
+    era = era_of(r["year"])
     if era != current:
         if current is not None:
             tl.append("</ol>")
         tl.append(f'<h2>{esc(era)}</h2><ol class="ls-timeline">')
         current = era
-    fm = n["fm"]
-    when = esc(fm.get("date") or "Undated") + (f" – {esc(fm['end'])}" if fm.get("end") else "")
-    kind = f'<span class="ls-tl__kind">{esc(fm["kind"])}</span>' if fm.get("kind") else ""
-    who = targets(fm.get("participants"))
-    who_html = (" · " + ", ".join(link(f"[[{w}]]") for w in who)) if who else ""
-    ex = plain_excerpt(n["body"])
-    tl.append(f'<li><time>{when}</time><div><a class="internal-link" href="{n["url"]}">{esc(n["name"])}</a>{kind}'
-              f'{f"<p>{esc(ex)}</p>" if ex else ""}{f"<p class=ls-tl__who>{who_html[3:]}</p>" if who else ""}</div></li>')
+    n = r["n"]
+    when = esc(r["date"] or "Undated") + (f' – {esc(r["end"])}' if r["end"] else "")
+    kind = f'<span class="ls-tl__kind">{esc(r["label"])}</span>' if r["label"] else ""
+    place = f'<p>{link(r["where"])}</p>' if r["where"] else ""
+    ex = f'<p>{esc(r["text"])}</p>' if r["text"] else ""
+    who = ", ".join(link(f"[[{w}]]") for w in r["who"])
+    tl.append(f'<li data-kind="{r["kind"].lower()}"><time>{when}</time><div>'
+              f'<a class="internal-link" href="{n["url"]}">{esc(r["title"])}</a>{kind}'
+              f'{place}{ex}{f"<p class=ls-tl__who>{who}</p>" if who else ""}</div></li>')
 if current is not None:
     tl.append("</ol>")
 write_page(f"{CODEX}/Timeline.md", "\n".join(tl), "Timeline",
-           f"{len(events)} events in the history of Thedas, oldest first, across every calendar.")
-manifest["links"] += [[slug_url(f"{CODEX}/Timeline.md"), n["url"]] for _, n in events]
+           f"The history of Thedas in {len(tl_rows)} entries: events, births, deaths and foundings, oldest first.")
+manifest["links"] += [[slug_url(f"{CODEX}/Timeline.md"), n["url"]] for n in events]
 
 # Calendars overview
 cals = lore_entries("calendar")
@@ -845,7 +898,7 @@ for ntype, (plural, group) in TYPES.items():
     tiles.setdefault(group, []).append(
         f'<li><a class="ls-tile" data-type="{ntype}" href="{slug_url(CODEX + "/" + plural + ".md")}">'
         f'<span>{esc(plural)}</span><b>{count}</b></a></li>')
-features = [feature_tile("event", slug_url(CODEX + "/Timeline.md"), "Timeline", f"{len(events)} events, oldest first")]
+features = [feature_tile("event", slug_url(CODEX + "/Timeline.md"), "Timeline", f"{len(tl_rows)} entries, oldest first")]
 if cals:
     features.append(feature_tile("calendar", slug_url(CODEX + "/Calendars.md"), "Calendars", f"{len(cals)} ways of counting the year"))
 features += [feature_tile("map", m["url"], f'Map of {m["name"]}', "Nations, regions and cities") for m in lore_entries("map")]
@@ -865,4 +918,4 @@ manifest["links"] += [["/", m["url"]] for m in lore_entries("map")]
 with open(MANIFEST, "w", encoding="utf-8") as fh:
     json.dump(manifest, fh, ensure_ascii=False)
 
-print(f"loresmith_site: {len(lore_entries())} entries, {len(events)} events, {len(cals)} calendars")
+print(f"loresmith_site: {len(lore_entries())} entries, {len(events)} events, {len(tl_rows)} timeline rows, {len(cals)} calendars")

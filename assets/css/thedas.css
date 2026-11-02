@@ -257,6 +257,8 @@ main .ls-timeline > li::before {
   transform: rotate(45deg);
   background: var(--copper);
 }
+main .ls-timeline > li[data-kind="birth"]::before, main .ls-timeline > li[data-kind="founding"]::before { background: var(--bg); box-shadow: inset 0 0 0 1px var(--copper); }
+main .ls-timeline > li[data-kind="death"]::before { background: var(--muted); }
 main .ls-timeline time { font-size: 0.875rem; color: var(--muted); font-variant-numeric: tabular-nums; }
 main .ls-timeline p { margin: 0.25rem 0 0; font-size: 0.875rem; line-height: 1.25rem; color: var(--muted); }
 main .ls-tl__kind { font-size: 0.875rem; color: var(--muted); }
