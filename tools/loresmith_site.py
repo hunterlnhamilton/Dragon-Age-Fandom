@@ -424,10 +424,13 @@ def entry_chips(n):
 
 
 def portrait(n, big=False):
+    """The entry's image, or nothing: no placeholder standing in for art."""
     img = targets(n["fm"].get("image")) if n["type"] != "map" else []
     url = assets.get(os.path.basename(img[0])) if img else None
-    inner = f'<img src="{url}" alt="" loading="lazy">' if url else f'<span>{esc(n["name"][:1].upper())}</span>'
-    return f'<div class="ls-portrait{" ls-portrait--big" if big else ""}">{inner}</div>'
+    if not url:
+        return ""
+    return (f'<div class="ls-portrait{" ls-portrait--big" if big else ""}">'
+            f'<img src="{url}" alt="{esc(n["name"])}" loading="lazy"></div>')
 
 
 def hero(n):
@@ -436,7 +439,7 @@ def hero(n):
     title = fm.get("full_name") or n["name"]
     sub = (as_list(fm.get("titles")) or [None])[0]
     return (f'<header class="ls-hero" data-type="{esc(n["type"])}">'
-            f'{portrait(n, big=True) if n["type"] != "map" else ""}'
+            f'{portrait(n, big=True)}'
             f'<div class="ls-hero__text">'
             f'<a class="ls-badge" data-type="{esc(n["type"])}" href="{slug_url(CODEX + "/" + plural + ".md")}">{esc(SINGULAR.get(n["type"], plural))}</a>'
             f'<h1 class="ls-hero__name">{esc(title)}{"<span class=ls-dagger title=Deceased>†</span>" if n["type"] == "character" and is_dead(n) else ""}</h1>'
@@ -528,8 +531,8 @@ def calendar_sheet(n):
             facts.append(f'<div class="ls-row"><dt>{lab}</dt><dd>{link(fm[key])}</dd></div>')
     if p["months"]:
         facts.append(f'<div class="ls-row"><dt>Year length</dt><dd>{sum(d for _, d in p["months"])} days, {len(p["months"])} months</dd></div>')
-    out = [f'<h1 class="ls-sr">{esc(n["name"])}</h1><aside class="ls-sheet" data-type="calendar"><div class="ls-sheet__head"><a class="ls-badge" data-type="calendar" '
-           f'href="{slug_url(CODEX + "/Calendars.md")}">Calendar</a><p class="ls-sheet__title">{esc(n["name"])}</p></div>'
+    out = [f'<h1>{esc(n["name"])}</h1><aside class="ls-sheet" data-type="calendar"><div class="ls-sheet__head"><a class="ls-badge" data-type="calendar" '
+           f'href="{slug_url(CODEX + "/Calendars.md")}">Calendar</a></div>'
            f'<dl>{"".join(facts)}</dl></aside>']
 
     if p["months"]:
@@ -644,7 +647,7 @@ def map_view(n):
         owner = capitals.get(t[0]) or notes.get((targets(tfm.get("nation")) or [""])[0])
         shape = "anchor" if "port" in kind else ("star" if t[0] in capitals or "capital" in kind or "city-state" in kind else "dot")
         icon = {"anchor": "⚓", "star": "★", "dot": ""}[shape]
-        col = color_of(owner) if owner else "var(--wh-accent-2)"
+        col = color_of(owner) if owner else "var(--title)"
         tag, href = ("a", f' href="{target["url"]}"') if target else ("span", "")
         pins.append(f'<{tag} class="ls-pin ls-pin--{shape}" data-type="{ttype}"{href} '
                     f'style="left:{x * 100:.3f}%;top:{y * 100:.3f}%;--c:{col}">{icon}'
@@ -724,14 +727,13 @@ for n in notes.values():
 os.makedirs(os.path.join(STAGE, CODEX), exist_ok=True)
 
 
-def write_page(rel, text, title, description):
-    """A generated page. The h1 is for screen readers and search; the page's
-    look starts at its first section."""
+def write_page(rel, text, title, description, heading=None):
+    """A generated page, headed by its title."""
     path = os.path.join(STAGE, rel)
     os.makedirs(os.path.dirname(path) or STAGE, exist_ok=True)
     front = yaml.safe_dump({"title": title, "description": description}, allow_unicode=True)
     with open(path, "w", encoding="utf-8") as fh:
-        fh.write(f'---\n{front}---\n\n<h1 class="ls-sr">{esc(title)}</h1>\n\n{text.strip()}\n')
+        fh.write(f'---\n{front}---\n\n<h1>{esc(heading or title)}</h1>\n\n{text.strip()}\n')
     url = "/" if rel == "index.md" else slug_url(rel)
     manifest["pages"][url] = {"description": description, "words": None, "created": None, "updated": None}
 
@@ -740,9 +742,10 @@ def card(n):
     fm = n["fm"]
     sub = (as_list(fm.get("titles")) or [None])[0] or fm.get("kind") or fm.get("date") or ""
     dead = '<span class="ls-dagger" title="Deceased">†</span>' if n["type"] == "character" and is_dead(n) else ""
-    return (f'<li class="ls-card ls-card--portrait" data-type="{esc(n["type"])}">'
-            f'{portrait(n)}'
-            f'<div class="ls-card__foot"><a class="ls-card__link" href="{n["url"]}">{esc(n["name"])}</a>{dead}'
+    art = portrait(n)
+    return (f'<li class="ls-card{" ls-card--portrait" if art else ""}" data-type="{esc(n["type"])}">'
+            f'{art}'
+            f'<div{" class=ls-card__foot" if art else ""}><a class="ls-card__link" href="{n["url"]}">{esc(n["name"])}</a>{dead}'
             f'{f"<p class=ls-card__sub>{esc(sub)}</p>" if sub else ""}</div></li>')
 
 
@@ -762,7 +765,7 @@ for ntype, (plural, group) in TYPES.items():
         else:
             key = str(n["fm"].get("kind") or n["fm"].get("category") or "").strip().title()
         groups.setdefault(key, []).append(n)
-    parts = [f'<p class="ls-lede">{len(items)} {plural.lower()} · <a href="/">Codex home</a></p>']
+    parts = [f'<p class="ls-lede">{len(items)} {plural.lower()}</p>']
     for key in sorted(groups, key=lambda k: (k == "", k)):
         title = key or ("Other" if len(groups) > 1 else "")
         if title:
@@ -825,27 +828,36 @@ if os.path.exists(home_src):
     if "Run `kiln generate`" in home_body:      # Kiln's starter text
         home_body = ""
 
+# Calendars and maps have their own tiles up top, so they aren't listed twice
+FEATURED = {"calendar", "map"}
+
+
+def feature_tile(ntype, href, name, sub):
+    return (f'<li><a class="ls-tile" data-type="{ntype}" href="{href}">'
+            f'<span class="ls-tile__name">{esc(name)}</span><span class="ls-tile__sub">{esc(sub)}</span></a></li>')
+
+
 tiles = {}
 for ntype, (plural, group) in TYPES.items():
     count = category_counts.get(ntype, 0)
-    if not count:
+    if not count or ntype in FEATURED:
         continue
     tiles.setdefault(group, []).append(
         f'<li><a class="ls-tile" data-type="{ntype}" href="{slug_url(CODEX + "/" + plural + ".md")}">'
         f'<span>{esc(plural)}</span><b>{count}</b></a></li>')
-home = ['<p class="ls-lede">A codex of Thedas: people, places and history, kept in Obsidian with Loresmith.</p>',
-        f'<ul class="ls-tiles ls-tiles--feature"><li><a class="ls-tile" data-type="event" href="{slug_url(CODEX + "/Timeline.md")}">'
-        f'<span>Timeline</span><b>{len(events)}</b></a></li>'
-        + (f'<li><a class="ls-tile" data-type="calendar" href="{slug_url(CODEX + "/Calendars.md")}"><span>Calendars</span><b>{len(cals)}</b></a></li>' if cals else "")
-        + "".join(f'<li><a class="ls-tile" data-type="map" href="{m["url"]}"><span>Map of {esc(m["name"])}</span><b></b></a></li>' for m in lore_entries("map"))
-        + "</ul>"]
+features = [feature_tile("event", slug_url(CODEX + "/Timeline.md"), "Timeline", f"{len(events)} events, oldest first")]
+if cals:
+    features.append(feature_tile("calendar", slug_url(CODEX + "/Calendars.md"), "Calendars", f"{len(cals)} ways of counting the year"))
+features += [feature_tile("map", m["url"], f'Map of {m["name"]}', "Nations, regions and cities") for m in lore_entries("map")]
+home = ['<p class="ls-lede">A fan reference to the world of Dragon Age: who lived there, where, and when.</p>',
+        '<ul class="ls-tiles ls-tiles--feature">' + "".join(features) + "</ul>"]
 for group in ["People", "Nature", "Places", "Things", "History", "Language"]:
     if group in tiles:
         home.append(f"<h2>{group}</h2>")
         home.append('<ul class="ls-tiles">' + "".join(tiles[group]) + "</ul>")
 if home_body.strip():
     home.append(home_body)
-write_page("index.md", "\n\n".join(home), SITE_TITLE, SITE_DESCRIPTION)
+write_page("index.md", "\n\n".join(home), SITE_TITLE, SITE_DESCRIPTION, heading="Codex of Thedas")
 codex_pages = [plural for ntype, (plural, _) in TYPES.items() if category_counts.get(ntype)]
 manifest["links"] += [["/", slug_url(f"{CODEX}/{p}.md")] for p in codex_pages + ["Timeline"]]
 manifest["links"] += [["/", m["url"]] for m in lore_entries("map")]

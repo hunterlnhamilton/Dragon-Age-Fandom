@@ -1,941 +1,342 @@
 /* =============================================================
-   thedas.css · "The Fade" theme for Kiln's DEFAULT mode
-   Inspired by Dragon Age: The Veilguard's skill tree: deep Fade
-   violet, copper-framed panels, pale lilac type, violet glow.
-   Light mode is pale lavender vellum.
+   thedas.css: the site's theme, on top of Kiln's default mode.
+   build.sh copies this into public/assets/css/ and links it last.
 
-   build.sh copies this into public/assets/css/ and links it at the
-   end of every page's <head>, so it overrides Kiln's built-in theme.
-   Kiln switches modes with data-theme="dark|light" on <html>.
+   Spacing: multiples of 0.25rem.
+   Radius:  --radius, everywhere.
+   Depth:   one hairline border. No shadows, glows or blur.
+   Color:   violet is the primary, copper frames things, and category
+            colors appear only on small details like counts.
+   Type:    Cinzel for titles, Geist for everything else.
    ============================================================= */
 
-@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Geist:wght@400;500;600&display=swap");
 
-/* ---------- Dark: the Fade (default) ---------- */
+/* ---------- Tokens ----------
+   The [data-theme] selectors have to match Kiln's own for these to win. */
 html:root,
 html:root[data-theme="dark"] {
-  --da-deep: #0c0613;       /* sidebars */
-  --da-bg: #150a20;         /* behind pages */
-  --da-surface: #1a0f25;    /* panels, cards (tooltip black-plum) */
-  --da-text: #ece5f3;
-  --da-muted: #a99bbd;
-  --da-gold: #c8925f;       /* copper: frames, labels */
-  --da-highlight: #f3e3ff;  /* pale lilac: hovers, headings */
-  --da-red: #b3261e;        /* blood, for the deceased */
-  --da-lyrium: #9fc0ff;     /* links */
-  --da-fade: #b678ff;       /* violet glow: drop caps, holidays, timeline */
-  --da-vignette: rgba(4, 0, 10, 0.7);
+  --bg: #120c1a;
+  --surface: #1b1426;
+  --deep: #0e0915;
+  --text: #e6e0ee;
+  --muted: #a99bbd;
+  --title: #f0e6fb;
+  --copper: #c8925f;
+  --link: #c4a8ff;
+  --dead: #e0566a;
 
-  --color-red: #e0566a;
+  --color-red: #e87a8a;
   --color-orange: #e09a5c;
   --color-yellow: #e2c46e;
   --color-green: #7fcf9a;
   --color-cyan: #6fd0d8;
-  --color-blue: #7fa6ff;
-  --color-purple: #b678ff;
+  --color-blue: #8fb0ff;
+  --color-purple: #b995ff;
+  --color-pink: #f09acb;
   --color-comment: #a99bbd;
   color-scheme: dark;
 }
-
-/* ---------- Light: lavender vellum ---------- */
 html:root[data-theme="light"] {
-  --da-deep: #e6dcef;
-  --da-bg: #f4eff8;
-  --da-surface: #fbf8fd;
-  --da-text: #24162f;
-  --da-muted: #6b5a7c;
-  --da-gold: #8a5a2b;
-  --da-highlight: #5b21b6;
-  --da-red: #9b1c2c;
-  --da-lyrium: #2f5fb3;
-  --da-fade: #7c3aed;
-  --da-vignette: rgba(80, 40, 120, 0.12);
+  --bg: #f6f2f9;
+  --surface: #fdfbfe;
+  --deep: #ece5f2;
+  --text: #2a1f36;
+  --muted: #665774;
+  --title: #3f1d73;
+  --copper: #86552a;
+  --link: #5b2fb0;
+  --dead: #9b1c2c;
 
   --color-red: #a8243a;
-  --color-orange: #a35a1c;
-  --color-yellow: #8a6a10;
-  --color-green: #2f7a4c;
-  --color-cyan: #1f6e78;
+  --color-orange: #94500f;
+  --color-yellow: #7a5d0a;
+  --color-green: #2a6e44;
+  --color-cyan: #1f6670;
   --color-blue: #2f5ea8;
   --color-purple: #6d28d9;
-  --color-comment: #6b5a7c;
+  --color-pink: #a32a75;
+  --color-comment: #665774;
   color-scheme: light;
 }
-@media (prefers-color-scheme: light) {
-  html:root:not([data-theme="dark"]) {
-    --da-deep: #e6dcef; --da-bg: #f4eff8; --da-surface: #fbf8fd;
-    --da-text: #24162f; --da-muted: #6b5a7c;
-    --da-gold: #8a5a2b; --da-highlight: #5b21b6; --da-red: #9b1c2c;
-    --da-lyrium: #2f5fb3; --da-fade: #7c3aed;
-    --da-vignette: rgba(80, 40, 120, 0.12);
-    color-scheme: light;
-  }
+
+html:root,
+html:root[data-theme] {
+  --bg-color: var(--bg);
+  --text-color: var(--text);
+  --accent-color: var(--link);
+  --sidebar-bg: var(--deep);
+  --sidebar-border: color-mix(in srgb, var(--copper) 30%, var(--bg));
+  --hover-color: color-mix(in srgb, var(--link) 12%, transparent);
+  --font-main: "Geist", "Inter", system-ui, sans-serif;
+
+  --font-title: "Cinzel", "Trajan Pro", Georgia, serif;
+  --radius: 4px;
+  --line: color-mix(in srgb, var(--copper) 45%, var(--bg));
+  --line-soft: color-mix(in srgb, var(--copper) 22%, var(--bg));
 }
 
-/* ---------- Map onto Kiln's own variables ---------- */
-html:root {
-  --bg-color: var(--da-bg);
-  --text-color: var(--da-text);
-  --accent-color: var(--da-gold);
-  --sidebar-bg: var(--da-deep);
-  --sidebar-border: color-mix(in srgb, var(--da-gold) 28%, var(--da-surface));
-  --hover-color: color-mix(in srgb, var(--da-gold) 12%, transparent);
-  --font-main: "Cormorant Garamond", Garamond, Georgia, serif;
-
-  --da-halo: color-mix(in srgb, var(--da-highlight) 35%, transparent);
-  --da-ember: #ff9a3c;
-  --da-glow: color-mix(in srgb, var(--da-fade) 55%, transparent);
-  --da-gilt: linear-gradient(180deg, #ffffff 0%, var(--da-highlight) 60%, color-mix(in srgb, var(--da-highlight) 75%, var(--da-fade)) 100%);
-  --da-rule: linear-gradient(90deg, transparent, var(--da-gold) 18%, var(--da-fade) 50%, var(--da-gold) 82%, transparent);
-  /* tiny diamond used as the centre of rules */
-  --da-diamond: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 12'%3E%3Cpath d='M10 0l6 6-6 6-6-6z' fill='%23b678ff'/%3E%3Cpath d='M10 3l3 3-3 3-3-3z' fill='%23150a20'/%3E%3C/svg%3E");
-}
-
-::selection { background: color-mix(in srgb, var(--da-red) 45%, transparent); color: var(--da-text); }
-
-/* Slightly larger text: Cormorant runs small */
-.content { font-size: 1.14rem; }
-
-/* ---------- Background: Fade glow and a faint skill-tree web ---------- */
-body { background-color: var(--da-bg); position: relative; isolation: isolate; }
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background-image:
-    radial-gradient(ellipse 55% 60% at 50% 45%, color-mix(in srgb, var(--da-fade) 18%, transparent), transparent 70%),
-    radial-gradient(ellipse 45% 40% at 0% 100%, color-mix(in srgb, var(--da-fade) 14%, transparent), transparent 70%),
-    radial-gradient(ellipse 45% 40% at 100% 0%, color-mix(in srgb, var(--da-gold) 8%, transparent), transparent 70%),
-    radial-gradient(ellipse at center, transparent 40%, var(--da-vignette) 100%),
-    repeating-linear-gradient(60deg, color-mix(in srgb, var(--da-fade) 7%, transparent) 0 1px, transparent 1px 140px),
-    repeating-linear-gradient(-60deg, color-mix(in srgb, var(--da-fade) 7%, transparent) 0 1px, transparent 1px 140px);
-}
-
-/* Let the background show through Kiln's solid panels */
-main, article, .bg-background { background-color: transparent !important; }
-aside, nav { background-color: color-mix(in srgb, var(--da-deep) 92%, transparent); }
-#left-sidebar, #right-sidebar { box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.35); }
-
-/* ---------- Headings: carved capitals in gilt ---------- */
-main :is(h1, h2, h3, h4, h5, h6) {
-  font-family: "Cinzel", "Trajan Pro", Georgia, serif;
-  letter-spacing: 0.04em;
-  background-image: var(--da-gilt);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 8px var(--da-glow));
-}
-main :is(h1, h2) { font-weight: 600; }
-main :is(h3, h4, h5, h6) { font-weight: 500; }
-html:root[data-theme="light"] main :is(h1, h2, h3, h4, h5, h6) { filter: none; }
-aside, nav, th { font-family: "Cinzel", Georgia, serif; }
-
-/* gilt rule with a diamond under the page title */
-main h1::after {
-  content: "";
-  display: block;
-  height: 12px;
-  margin-top: 0.35em;
-  background:
-    var(--da-diamond) center / 20px 12px no-repeat,
-    var(--da-rule) center / 100% 1px no-repeat;
-}
-main h2 { border-bottom: 1px solid color-mix(in srgb, var(--da-gold) 25%, transparent); padding-bottom: 0.2em; }
-
-/* drop cap on the first paragraph of written sections */
-main .ls-entry__main > p:first-of-type:not(.ls-empty)::first-letter {
-  float: left;
-  font-family: "Cinzel", Georgia, serif;
-  font-size: 3.1em;
-  line-height: 0.85;
-  padding: 0.05em 0.1em 0 0;
-  color: var(--da-fade);
-  text-shadow: 0 0 12px var(--da-glow);
-}
-
-/* ---------- Text details ---------- */
-main a { color: var(--da-lyrium); text-decoration-color: color-mix(in srgb, var(--da-lyrium) 40%, transparent); }
-main a:hover { color: var(--da-highlight); }
-main em { color: color-mix(in srgb, var(--da-text) 85%, var(--da-gold)); }
-main mark { background: color-mix(in srgb, var(--da-gold) 30%, transparent); color: inherit; }
-main blockquote {
-  border-left: 3px double var(--da-gold);
-  background: linear-gradient(90deg, var(--hover-color), transparent 70%);
-  font-style: italic;
-}
-main :not(pre) > code { color: var(--da-highlight); }
-main th { color: var(--da-gold); }
-main hr {
-  border: 0;
-  height: 12px;
-  background: var(--da-diamond) center / 20px 12px no-repeat, var(--da-rule) center / 100% 1px no-repeat;
-}
-
-/* ---------- Callouts: codex plates ---------- */
-main .callout {
-  border-radius: 4px;
-  background-color: color-mix(in srgb, var(--da-surface) 85%, transparent);
-  border: 1px solid color-mix(in srgb, var(--da-gold) 40%, transparent);
-  box-shadow: inset 0 0 0 3px color-mix(in srgb, var(--da-bg) 80%, transparent),
-              inset 0 0 0 4px color-mix(in srgb, var(--da-gold) 25%, transparent),
-              0 10px 24px -14px rgba(0, 0, 0, 0.7);
-}
-main .callout-title { font-family: "Cinzel", Georgia, serif; letter-spacing: 0.04em; }
-
-
-/* =============================================================
-   Loresmith views (made by tools/loresmith_site.py)
-   ============================================================= */
-html:root {
-  --ls-surface: color-mix(in srgb, var(--da-surface) 78%, transparent);
-  --ls-border: color-mix(in srgb, var(--da-gold) 24%, var(--da-surface));
-}
-[data-type="character"]                       { --ls-type: var(--color-purple); }
-[data-type="organization"]                    { --ls-type: var(--color-red); }
-[data-type="culture"], [data-type="species"]  { --ls-type: #f58cd2; }
+/* Category colors */
+[data-type="character"]                       { --type: var(--color-red); }
+[data-type="organization"]                    { --type: var(--color-purple); }
+[data-type="culture"], [data-type="species"]  { --type: var(--color-pink); }
 [data-type="nation"], [data-type="region"],
 [data-type="settlement"], [data-type="location"],
-[data-type="map"]                             { --ls-type: var(--color-green); }
-[data-type="creature"], [data-type="plant"]   { --ls-type: var(--color-cyan); }
-[data-type="item"], [data-type="discovery"]   { --ls-type: var(--color-yellow); }
+[data-type="map"]                             { --type: var(--color-green); }
+[data-type="creature"], [data-type="plant"]   { --type: var(--color-cyan); }
+[data-type="item"], [data-type="discovery"]   { --type: var(--color-yellow); }
 [data-type="event"], [data-type="holiday"],
-[data-type="calendar"]                        { --ls-type: var(--color-orange); }
-[data-type="language"], [data-type="word"]    { --ls-type: var(--color-blue); }
+[data-type="calendar"]                        { --type: var(--color-orange); }
+[data-type="language"], [data-type="word"]    { --type: var(--color-blue); }
 
-main .ls-lede { color: var(--da-muted); font-style: italic; }
-main .ls-note { color: var(--da-muted); font-size: 0.85rem; }
-main .ls-empty { color: var(--da-muted); font-style: italic; opacity: 0.8; }
-main .ls-unresolved { color: var(--da-muted); border-bottom: 1px dashed currentColor; }
+/* ---------- Page ---------- */
+body { background-color: var(--bg); }
+main, article, .bg-background { background-color: var(--bg) !important; }
+::selection { background: color-mix(in srgb, var(--link) 35%, transparent); }
 
-/* ---- Info box (character sheet, place sheet…) ---- */
-main .ls-sheet {
-  float: right;
-  width: min(340px, 100%);
-  margin: 0 0 1.5rem 1.5rem;
-  padding: 1rem 1.1rem;
-  border: 1px solid var(--ls-border);
-  border-top: 3px solid var(--ls-type, var(--da-gold));
-  border-radius: 12px;
-  background: var(--ls-surface);
-  -webkit-backdrop-filter: blur(4px);
-  backdrop-filter: blur(4px);
-  box-shadow: 0 14px 34px -18px rgba(0, 0, 0, 0.7), 0 0 22px -14px var(--da-glow);
-  font-size: 0.92rem;
-}
-main .ls-sheet--bare { float: none; width: auto; margin: 0 0 1.5rem; padding: 0.6rem 1rem; }
-main .ls-sheet__head { display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 0.6rem; }
-main .ls-sheet__title {
-  margin: 0;
-  font-family: "Cinzel", Georgia, serif;
-  font-size: 1.15rem;
-  font-weight: 600;
-  color: var(--da-text);
-}
-main .ls-badge {
-  align-self: flex-start;
-  padding: 0.1em 0.65em;
-  border-radius: 999px;
-  border: 1px solid color-mix(in srgb, var(--ls-type) 55%, transparent);
-  color: var(--ls-type) !important;
-  font-family: "Cinzel", Georgia, serif;
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  text-decoration: none !important;
-}
-main .ls-sheet dl, main .ls-connections dl { margin: 0; }
-main .ls-row {
-  display: grid;
-  grid-template-columns: 7.5rem 1fr;
+.content { font-size: 1rem; line-height: 1.5rem; }
+.content:has(.ls-hero, .ls-cards, .ls-tiles, .ls-year, .ls-mapwrap, .ls-timeline) { max-width: min(1040px, 100%); }
+main:has(.ls-tiles, .ls-cards, .ls-timeline) .note-meta-bar { display: none; }
+
+/* One quiet entrance when a page changes */
+@keyframes page-in { from { opacity: 0; transform: translateY(4px); } }
+.content { animation: page-in 180ms ease-out; }
+@media (prefers-reduced-motion: reduce) { .content { animation: none; } }
+
+/* ---------- Sidebars ---------- */
+/* Browse through Codex only; Lore pages keep their addresses */
+li:has(> details > summary > a:is([href="/lore"], [href="/lore/"])),
+li:has(> details > summary > a:is([href="/reference"], [href="/reference/"])) { display: none; }
+/* The home page reads "Home", not "index" */
+li:has(> a[href="/"]) > a > span { font-size: 0; }
+li:has(> a[href="/"]) > a > span::after { content: "Home"; font-size: 0.875rem; }
+#left-sidebar > header > a { font-family: var(--font-title); font-weight: 600; letter-spacing: 0.02em; }
+#left-sidebar a:hover, #right-sidebar a:hover { color: var(--link); }
+
+/* ---------- Titles ---------- */
+main :is(h1, h2) { font-family: var(--font-title); font-weight: 500; color: var(--title); letter-spacing: 0.02em; }
+main :is(h3, h4, h5, h6) { font-family: var(--font-main); font-weight: 600; color: var(--title); }
+
+main .content h1 { margin: 0 0 0.5rem; padding: 0; border: 0; font-size: 2rem; line-height: 2.5rem; }
+main .content h3 { font-size: 1rem; line-height: 1.5rem; margin: 1.5rem 0 0.5rem; }
+
+/* Section titles: left-aligned, then a copper hairline to the edge of the column */
+main .content h2 {
+  display: flex;
+  align-items: center;
   gap: 0.75rem;
-  padding: 0.4rem 0;
-  border-top: 1px solid var(--ls-border);
+  margin: 2.5rem 0 1rem;
+  padding: 0;
+  border: 0;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
 }
-main .ls-row dt {
-  font-family: "Cinzel", Georgia, serif;
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--da-gold);
-  padding-top: 0.15em;
-}
-main .ls-row dt span { text-transform: none; letter-spacing: 0; color: var(--da-muted); font-weight: 400; }
-main .ls-row dd { margin: 0; }
-main .ls-row dd ul { margin: 0; padding: 0; list-style: none; }
-main .ls-connections { clear: both; margin-top: 2.5rem; }
-main .ls-connections .ls-row { grid-template-columns: 12rem 1fr; }
+main .content h2::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+main h2 small { font-family: var(--font-main); font-size: 0.875rem; font-weight: 400; color: var(--muted); }
 
-/* ---- Cards and tiles ---- */
-main .ls-cards, main .ls-tiles {
+/* ---------- Text ---------- */
+main a, main .content a { color: var(--link); text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--link) 35%, transparent); text-underline-offset: 2px; }
+main a:hover { text-decoration-color: currentColor; }
+/* Lists and breadcrumbs are all links, so underlines only add noise there */
+main > header a, main .ls-timeline li > div > a:first-child { text-decoration: none; }
+main > header a:hover, main .ls-timeline li > div > a:first-child:hover { text-decoration: underline; }
+main mark { background: color-mix(in srgb, var(--copper) 30%, transparent); color: inherit; }
+main blockquote { border-left: 2px solid var(--line); padding-left: 1rem; color: var(--muted); }
+main :not(pre) > code { color: var(--title); }
+main hr { border: 0; height: 1px; background: var(--line); margin: 2rem 0; }
+main th { color: var(--muted); font-weight: 500; text-align: left; }
+main table { font-size: 0.875rem; line-height: 1.25rem; }
+main .callout { border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); box-shadow: none; }
+main .callout-title { font-weight: 600; }
+
+main .ls-lede { margin: 0 0 1.5rem; color: var(--muted); }
+main .ls-note { color: var(--muted); font-size: 0.875rem; line-height: 1.25rem; }
+main .ls-empty { color: var(--muted); }
+main .ls-unresolved { color: var(--muted); border-bottom: 1px dashed currentColor; }
+main .ls-dagger { margin-left: 0.25em; font-size: 0.7em; line-height: 0; vertical-align: super; color: var(--muted); }
+
+/* ---------- Panels: one recipe ---------- */
+main :is(.ls-details, .ls-sheet, .ls-card, .ls-tile, .ls-month) {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+main :is(.ls-card, .ls-tile) { transition: border-color 120ms ease; }
+main :is(.ls-card, .ls-tile):hover { border-color: var(--title); }
+
+/* ---- Home and category tiles ---- */
+main .ls-tiles, main .ls-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-  gap: 0.9rem;
-  margin: 1rem 0 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(216px, 1fr));
+  gap: 0.75rem;
+  margin: 0 0 1rem;
   padding: 0;
   list-style: none;
 }
-main .ls-cards > li, main .ls-tiles > li { margin: 0; }
-main .ls-card {
-  position: relative;
-  padding: 0.85rem 1rem;
-  border: 1px solid var(--ls-border);
-  border-left: 3px solid var(--ls-type, var(--da-gold));
-  border-radius: 10px;
-  background: var(--ls-surface);
-  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
-}
-main .ls-card:hover {
-  transform: translateY(-2px);
-  border-color: color-mix(in srgb, var(--ls-type) 60%, transparent);
-  box-shadow: 0 0 22px -12px var(--ls-type);
-}
-main .ls-card__link {
-  font-family: "Cinzel", Georgia, serif;
-  font-weight: 600;
-  color: var(--da-text) !important;
-  text-decoration: none !important;
-}
-main .ls-card__link::after { content: ""; position: absolute; inset: 0; }
-main .ls-card:hover .ls-card__link { color: var(--da-highlight) !important; }
-main .ls-card__sub { margin: 0.2rem 0 0; font-size: 0.85rem; font-style: italic; color: var(--da-muted); }
-main .ls-card__sub a, main .ls-card__ex a { position: relative; z-index: 1; }
-main .ls-card__ex {
-  margin: 0.4rem 0 0;
-  font-size: 0.85rem;
-  line-height: 1.5;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-main h2 small { font-family: system-ui, sans-serif; font-size: 0.75rem; -webkit-text-fill-color: var(--da-muted); }
-
+main .ls-tiles > li, main .ls-cards > li { margin: 0; }
 main .ls-tile {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  padding: 1rem 1.1rem;
-  border: 1px solid var(--ls-border);
-  border-radius: 12px;
-  background:
-    radial-gradient(ellipse at 100% 0%, color-mix(in srgb, var(--ls-type) 22%, transparent), transparent 65%),
-    var(--ls-surface);
-  color: var(--da-text) !important;
+  gap: 0.75rem;
+  height: 100%;
+  padding: 1rem;
+  color: var(--text) !important;
+  font-weight: 500;
   text-decoration: none !important;
-  font-family: "Cinzel", Georgia, serif;
-  font-weight: 600;
-  transition: transform .18s ease, border-color .18s ease;
 }
-main .ls-tile b { color: var(--ls-type); font-size: 1.3rem; }
-main .ls-tile:hover { transform: translateY(-2px); border-color: var(--ls-type); color: var(--da-highlight) !important; }
-main .ls-tiles--feature .ls-tile { padding: 1.4rem 1.2rem; font-size: 1.1rem; }
+main .ls-tile b { font-weight: 500; font-variant-numeric: tabular-nums; color: var(--type, var(--copper)); }
+main .ls-tiles--feature { margin-bottom: 0; }
+main .ls-tiles--feature .ls-tile { flex-direction: column; gap: 0.25rem; }
+main .ls-tile__name { font-family: var(--font-title); font-size: 1.125rem; line-height: 1.5rem; color: var(--title); }
+main .ls-tile__sub { font-size: 0.875rem; line-height: 1.25rem; font-weight: 400; color: var(--muted); }
+
+/* ---- Entry cards ---- */
+main .ls-card { position: relative; height: 100%; padding: 0.75rem 1rem; }
+main .ls-card__link { font-weight: 500; color: var(--text) !important; text-decoration: none !important; }
+main .ls-card__link::after { content: ""; position: absolute; inset: 0; }
+main .ls-card__sub { margin: 0.25rem 0 0; font-size: 0.875rem; line-height: 1.25rem; color: var(--muted); }
+main .ls-card__ex { margin: 0.25rem 0 0; font-size: 0.875rem; line-height: 1.25rem; color: var(--muted); }
+main .ls-card__sub a, main .ls-card__ex a { position: relative; z-index: 1; }
+main .ls-card--portrait { display: flex; flex-direction: column; padding: 0; overflow: hidden; }
+main .ls-card__foot { padding: 0.75rem 1rem; }
+main .ls-card--portrait .ls-card__sub { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Portraits appear only when there's a real image */
+main .ls-portrait { aspect-ratio: 3 / 4; overflow: hidden; background: var(--deep); }
+main .ls-portrait img { display: block; width: 100%; height: 100%; object-fit: cover; margin: 0; border: 0; border-radius: 0; }
+main .ls-portrait--big { flex: 0 0 152px; border: 1px solid var(--line); border-radius: var(--radius); }
+
+/* ---- Entry page ---- */
+main .ls-hero { display: flex; gap: 1.5rem; align-items: flex-start; margin: 0 0 2rem; }
+main .ls-hero__text { display: flex; flex-direction: column; gap: 0.5rem; }
+main .content .ls-hero__name { margin: 0; }
+main .ls-hero__sub { margin: 0; color: var(--muted); }
+main .ls-badge {
+  align-self: flex-start;
+  color: var(--copper) !important;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none !important;
+}
+main .ls-badge:hover { text-decoration: underline !important; }
+main .ls-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+main .ls-chip { padding: 0 0.5rem; border: 1px solid var(--line); border-radius: var(--radius); font-size: 0.875rem; line-height: 1.5rem; }
+main .ls-entry { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 2rem; align-items: start; }
+main .ls-entry--full { grid-template-columns: minmax(0, 65ch); }
+main .ls-entry__main > :first-child { margin-top: 0; }
+main .ls-details { position: sticky; top: 1rem; padding: 1rem; font-size: 0.875rem; line-height: 1.25rem; }
+main .ls-details__title { margin: 0 0 0.5rem; font-family: var(--font-title); font-size: 1rem; line-height: 1.5rem; color: var(--title); }
+
+/* Label and value rows */
+main .ls-sheet dl, main .ls-connections dl, main .ls-details dl { margin: 0; }
+main .ls-row { display: grid; grid-template-columns: 7rem 1fr; gap: 0.75rem; padding: 0.5rem 0; border-top: 1px solid var(--line-soft); }
+main .ls-row dt { color: var(--muted); font-weight: 400; }
+main .ls-row dt span { color: var(--muted); }
+main .ls-row dd { margin: 0; }
+main .ls-row dd ul { margin: 0; padding: 0; list-style: none; }
+main .ls-connections { clear: both; margin-top: 2rem; }
+main .ls-connections .ls-row { grid-template-columns: 12rem 1fr; font-size: 0.875rem; line-height: 1.25rem; }
+
+/* Calendar facts */
+main .ls-sheet { float: right; width: min(320px, 100%); margin: 0 0 1.5rem 1.5rem; padding: 1rem; font-size: 0.875rem; line-height: 1.25rem; }
+main .ls-sheet__head { margin-bottom: 0.5rem; }
 
 /* ---- Timeline ---- */
-main .ls-timeline {
-  list-style: none;
-  margin: 0.5rem 0 2rem;
-  padding: 0 0 0 1.5rem;
-  border-left: 1px solid var(--ls-border);
-}
-main .ls-timeline > li {
-  position: relative;
-  display: grid;
-  grid-template-columns: 11rem 1fr;
-  gap: 1rem;
-  padding: 0.65rem 0;
-}
+main .ls-timeline { list-style: none; margin: 0 0 2rem; padding: 0 0 0 1.5rem; border-left: 1px solid var(--line); }
+main .ls-timeline > li { position: relative; display: grid; grid-template-columns: 11rem 1fr; gap: 1rem; margin: 0; padding: 0.75rem 0; }
 main .ls-timeline > li::before {
   content: "";
   position: absolute;
   left: calc(-1.5rem - 4px);
-  top: 1.05rem;
+  top: 1.25rem;
   width: 7px; height: 7px;
-  border-radius: 50%;
-  background: var(--da-highlight);
-  box-shadow: 0 0 8px var(--da-halo), 0 0 0 3px var(--da-bg);
+  transform: rotate(45deg);
+  background: var(--copper);
 }
-main .ls-timeline time { font-family: "Cinzel", Georgia, serif; font-size: 0.85rem; color: var(--da-highlight); padding-top: 0.15em; }
-main .ls-timeline p { margin: 0.2rem 0 0; font-size: 0.9rem; color: var(--da-muted); }
-main .ls-tl__kind {
-  margin-left: 0.5rem;
-  padding: 0 0.5em;
-  border: 1px solid var(--ls-border);
-  border-radius: 999px;
-  font-size: 0.72rem;
-  color: var(--da-muted);
-}
+main .ls-timeline time { font-size: 0.875rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+main .ls-timeline p { margin: 0.25rem 0 0; font-size: 0.875rem; line-height: 1.25rem; color: var(--muted); }
+main .ls-tl__kind { font-size: 0.875rem; color: var(--muted); }
+main .ls-tl__kind::before { content: " · "; }
 
-/* ---- Calendar year ---- */
-main .ls-year {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-  gap: 1rem;
-  margin: 1rem 0;
-}
-main .ls-month {
-  padding: 0.7rem;
-  border: 1px solid var(--ls-border);
-  border-radius: 10px;
-  background: var(--ls-surface);
-}
-main .ls-month h3 { margin: 0 0 0.5rem; font-size: 0.95rem; text-align: center; }
-main .ls-month h3::after { display: none; }
-main .ls-days { display: grid; grid-template-columns: repeat(var(--cols, 7), 1fr); gap: 2px; font-size: 0.75rem; text-align: center; }
+/* ---- Calendar ---- */
+main .ls-year { display: grid; grid-template-columns: repeat(auto-fill, minmax(192px, 1fr)); gap: 0.75rem; margin: 0 0 1rem; }
+main .ls-month { padding: 0.75rem; }
+main .content .ls-month h3 { margin: 0 0 0.5rem; text-align: center; }
+main .ls-days { display: grid; grid-template-columns: repeat(var(--cols, 7), 1fr); gap: 2px; font-size: 0.75rem; line-height: 1.25rem; text-align: center; }
 main .ls-wk { display: contents; }
-main .ls-wk span { color: var(--da-gold); font-family: "Cinzel", Georgia, serif; font-size: 0.65rem; padding-bottom: 2px; }
-main .ls-day { padding: 0.2rem 0; border-radius: 4px; color: var(--da-muted); }
-main a.ls-day.is-holiday {
-  background: color-mix(in srgb, var(--da-highlight) 22%, transparent);
-  color: var(--da-highlight) !important;
-  font-weight: 600;
-  text-decoration: none !important;
-  box-shadow: 0 0 8px -2px var(--da-halo);
-}
+main .ls-wk span { color: var(--copper); }
+main .ls-day { border-radius: 2px; color: var(--muted); }
+main a.ls-day.is-holiday { background: color-mix(in srgb, var(--link) 22%, transparent); color: var(--title) !important; font-weight: 600; text-decoration: none !important; }
 
 /* ---- Map ---- */
-main .ls-map {
-  position: relative;
-  clear: both;
-  margin: 1.5rem 0 0.5rem;
-  border: 1px solid var(--ls-border);
-  border-radius: 12px;
-  overflow: hidden;
-}
+main .ls-mapwrap { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin: 0 0 1.5rem; }
+main .ls-filters-label { font-size: 0.875rem; color: var(--muted); }
+main .ls-filter__input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+main .ls-filter { padding: 0 0.5rem; border: 1px solid var(--line); border-radius: var(--radius); font-size: 0.875rem; line-height: 1.5rem; cursor: pointer; user-select: none; }
+main input:not(:checked) + .ls-filter { opacity: 0.5; text-decoration: line-through; }
+main .ls-filter__input:focus-visible + .ls-filter { outline: 2px solid var(--link); outline-offset: 2px; }
+main .ls-map__scroll { flex-basis: 100%; min-width: 0; width: 100%; overflow-x: auto; }
+main .ls-map__hint { display: none; }
+main .ls-map { position: relative; margin: 0; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: var(--surface); }
 main .ls-map img { display: block; width: 100%; height: 100%; object-fit: fill; margin: 0; border: 0; border-radius: 0; }
 main .ls-map svg { position: absolute; inset: 0; width: 100%; height: 100%; }
-main .ls-map polygon {
-  fill: color-mix(in srgb, var(--da-gold) 12%, transparent);
-  stroke: var(--da-gold);
-  stroke-width: 0.25;
-  vector-effect: non-scaling-stroke;
-  transition: fill .18s ease;
-}
-main .ls-map a:hover polygon { fill: color-mix(in srgb, var(--da-highlight) 30%, transparent); }
-main .ls-pin {
-  position: absolute;
-  width: 12px; height: 12px;
-  margin: -6px 0 0 -6px;
-  border-radius: 50%;
-  background: var(--da-highlight);
-  border: 2px solid var(--da-deep);
-  box-shadow: 0 0 10px var(--da-highlight);
-  z-index: 2;
-}
-main .ls-pin__label {
-  position: absolute;
-  left: 50%; bottom: 150%;
-  transform: translateX(-50%);
-  padding: 0.15em 0.55em;
-  border-radius: 6px;
-  background: color-mix(in srgb, var(--da-deep) 90%, transparent);
-  border: 1px solid var(--ls-border);
-  color: var(--da-text);
-  font-family: "Cinzel", Georgia, serif;
-  font-size: 0.72rem;
-  white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .15s ease;
-}
-main .ls-pin:hover .ls-pin__label, main .ls-pin:focus .ls-pin__label { opacity: 1; }
-
-@media (max-width: 700px) {
-  main .ls-sheet { float: none; width: 100%; margin: 0 0 1.5rem; }
-  main .ls-timeline > li { grid-template-columns: 1fr; gap: 0.2rem; }
-  main .ls-connections .ls-row, main .ls-row { grid-template-columns: 1fr; gap: 0.15rem; }
-}
-
-
-/* =============================================================
-   Loresmith look, round 2: hero header, details panel,
-   portrait cards, coloured map
-   ============================================================= */
-
-/* Wider content on Loresmith pages; hide reading-time line on overviews */
-/* Kiln caps notes at 65ch (.content); open it up on Loresmith pages */
-.content:has(.ls-hero, .ls-cards, .ls-tiles, .ls-year, .ls-mapwrap, .ls-timeline) { max-width: min(1150px, 100%); }
-/* "1 min read · words · updated" bar: hide on overview pages */
-main:has(.ls-tiles, .ls-cards, .ls-timeline) .note-meta-bar { display: none; }
-/* Sidebar: browse through Codex only; Lore pages keep their addresses */
-li:has(> details > summary > a:is([href="/lore"], [href="/lore/"])),
-li:has(> details > summary > a:is([href="/reference"], [href="/reference/"])) { display: none; }
-
-/* ---- Hero ---- */
-main .ls-hero {
-  display: flex;
-  gap: 1.4rem;
-  align-items: flex-start;
-  margin: 0.5rem 0 1.75rem;
-}
-main .ls-portrait {
-  display: grid;
-  place-items: center;
-  aspect-ratio: 3 / 4;
-  border-radius: 10px;
-  overflow: hidden;
-  border: 1px solid var(--ls-border);
-  background:
-    radial-gradient(ellipse at 50% 110%, color-mix(in srgb, var(--ls-type) 28%, transparent), transparent 70%),
-    color-mix(in srgb, var(--da-deep) 85%, transparent);
-}
-main .ls-portrait span {
-  font-family: "Cinzel", Georgia, serif;
-  font-size: 2.6rem;
-  color: color-mix(in srgb, var(--ls-type) 70%, var(--da-muted));
-}
-main .ls-portrait img { width: 100%; height: 100%; object-fit: cover; margin: 0; border: 0; border-radius: 0; }
-main .ls-portrait--big {
-  flex: 0 0 150px;
-  border-bottom: 4px solid var(--ls-type);
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--da-text) 25%, transparent), 0 14px 30px -16px rgba(0,0,0,.8);
-}
-main .ls-portrait--big span { font-size: 3.4rem; color: var(--ls-type); }
-main .ls-hero__text { display: flex; flex-direction: column; gap: 0.45rem; padding-top: 0.25rem; }
-main .ls-hero__name {
-  margin: 0;
-  font-family: "Cinzel", Georgia, serif;
-  font-size: clamp(1.7rem, 3.5vw, 2.4rem);
-  line-height: 1.1;
-  background-image: var(--da-gilt);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 7px var(--da-glow));
-}
-main .ls-hero__sub { margin: 0; font-style: italic; color: var(--da-muted); }
-main .ls-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.2rem; }
-main .ls-chip {
-  padding: 0.15em 0.6em;
-  border: 1px solid var(--ls-border);
-  border-radius: 6px;
-  font-size: 0.8rem;
-  color: var(--da-text);
-  background: color-mix(in srgb, var(--da-deep) 55%, transparent);
-}
-main .ls-chip--dead { border-style: dashed; border-color: color-mix(in srgb, var(--ls-type) 60%, transparent); }
-
-/* ---- Body + details panel ---- */
-main .ls-entry {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 320px;
-  gap: 2rem;
-  align-items: start;
-}
-main .ls-entry--full { grid-template-columns: minmax(0, 1fr); }
-main .ls-entry__main > :first-child { margin-top: 0; }
-main .ls-details {
-  position: sticky;
-  top: 1rem;
-  padding: 0.9rem 1.1rem;
-  border: 1px solid var(--ls-border);
-  border-radius: 12px;
-  background: var(--ls-surface);
-  -webkit-backdrop-filter: blur(4px);
-  backdrop-filter: blur(4px);
-  font-size: 0.9rem;
-}
-main .ls-details__title {
-  margin: 0 0 0.4rem;
-  font-family: "Cinzel", Georgia, serif;
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--da-gold);
-}
-main .ls-details .ls-row { grid-template-columns: 7rem 1fr; }
-
-/* ---- Portrait cards ---- */
-main .ls-cards:has(.ls-card--portrait) { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
-main .ls-card--portrait {
-  display: flex;
-  flex-direction: column;
-  padding: 0;
-  overflow: hidden;
-  border-left-width: 3px;
-}
-main .ls-card--portrait .ls-portrait { border: 0; border-radius: 0; aspect-ratio: 4 / 5; }
-main .ls-card__foot {
-  padding: 0.55rem 0.75rem 0.7rem;
-  background: linear-gradient(transparent, color-mix(in srgb, var(--da-deep) 75%, transparent));
-}
-main .ls-card--portrait .ls-card__link { font-size: 0.92rem; }
-main .ls-card--portrait .ls-card__sub {
-  font-size: 0.75rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-main .ls-card__dead {
-  position: absolute;
-  top: 0.4rem; left: 0.55rem;
-  font-size: 0.85rem;
-  color: var(--da-muted);
-  z-index: 1;
-}
-
-/* ---- Map ---- */
-main .ls-mapwrap { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; margin: 0 0 1.5rem; }
-main .ls-filters-label { font-size: 0.8rem; color: var(--da-muted); margin-right: 0.2rem; }
-main .ls-filter {
-  padding: 0.15em 0.7em;
-  border: 1px solid color-mix(in srgb, var(--ls-type) 55%, transparent);
-  border-radius: 999px;
-  font-size: 0.8rem;
-  cursor: pointer;
-  user-select: none;
-  background: color-mix(in srgb, var(--ls-type) 14%, transparent);
-}
-main .ls-filter::before { content: "● "; color: var(--ls-type); }
-main input:not(:checked) + .ls-filter { opacity: 0.45; background: transparent; }
-main .ls-mapwrap .ls-map { flex-basis: 100%; margin-top: 0.4rem; }
-main .ls-map polygon {
-  fill: color-mix(in srgb, var(--c) 22%, transparent);
-  stroke: var(--c);
-  stroke-width: 2;
-}
+main .ls-map polygon { fill: color-mix(in srgb, var(--c) 22%, transparent); stroke: var(--c); stroke-width: 2; vector-effect: non-scaling-stroke; transition: fill 120ms ease; }
 main .ls-map a:hover polygon { fill: color-mix(in srgb, var(--c) 40%, transparent); }
+
+/* Map labels sit on the artwork, so they keep fixed colors in both themes */
+main :is(.ls-area-label, .ls-pin__label) { color: #fff; text-shadow: 0 0 3px #000, 0 0 6px #000, 0 1px 2px #000; white-space: nowrap; }
 main .ls-area-label {
   position: absolute;
   transform: translate(-50%, -50%);
-  font-family: "Cinzel", Georgia, serif;
+  font-family: var(--font-title);
   font-weight: 600;
-  font-size: clamp(0.5rem, 1.1vw, 0.85rem);
+  font-size: clamp(0.5rem, 1.1vw, 0.875rem);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #fff;
-  text-shadow: 0 0 3px #000, 0 0 6px #000, 0 1px 2px #000;
-  white-space: nowrap;
   pointer-events: none;
 }
-main .ls-area-label[data-type="region"] { text-transform: none; font-style: italic; font-weight: 500; }
+main .ls-area-label[data-type="region"] { text-transform: none; font-weight: 500; }
 main .ls-pin {
+  position: absolute;
+  z-index: 2;
   display: grid;
   place-items: center;
   width: 16px; height: 16px;
   margin: -8px 0 0 -8px;
+  border-radius: 50%;
   background: var(--c);
   border: 2px solid #120a14;
-  box-shadow: 0 0 6px color-mix(in srgb, var(--c) 70%, transparent);
   font-size: 10px;
   line-height: 1;
-  color: #120a14;
+  color: #120a14 !important;
   text-decoration: none !important;
 }
-main .ls-pin--star {
-  width: 20px; height: 20px; margin: -10px 0 0 -10px;
-  background: none; border: 0; box-shadow: none;
-  font-size: 22px; color: var(--c);
-  text-shadow: 0 0 2px #000, 0 0 4px #000;
-}
-main .ls-pin__label {
-  opacity: 1;
-  bottom: 120%;
-  background: none;
-  border: 0;
-  padding: 0;
-  color: #fff;
-  font-size: clamp(0.5rem, 0.95vw, 0.78rem);
-  font-weight: 600;
-  text-shadow: 0 0 3px #000, 0 0 6px #000, 0 1px 2px #000;
-}
-main .ls-pin:hover .ls-pin__label { color: var(--da-highlight); }
+main .ls-pin--star { width: 20px; height: 20px; margin: -10px 0 0 -10px; background: none; border: 0; font-size: 22px; color: var(--c) !important; text-shadow: 0 0 2px #000, 0 0 4px #000; }
+main .ls-pin__label { position: absolute; left: 50%; bottom: 120%; transform: translateX(-50%); font-size: clamp(0.5rem, 0.95vw, 0.75rem); font-weight: 500; pointer-events: none; }
 
+/* Text for screen readers only */
+.ls-sr { position: absolute !important; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* ---------- Small screens ---------- */
 @media (max-width: 860px) {
-  main .ls-entry { grid-template-columns: 1fr; }
+  main .ls-entry { grid-template-columns: minmax(0, 1fr); }
   main .ls-details { position: static; order: -1; }
 }
-@media (max-width: 560px) {
-  main .ls-hero { flex-direction: column; }
-  main .ls-portrait--big { flex-basis: auto; width: 120px; }
-  main .ls-pin__label, main .ls-area-label { display: none; }
-}
-
-/* Sidebar: show the home page as "Home" instead of "index" */
-li:has(> a[href="/"]) > a > span { font-size: 0; }
-li:has(> a[href="/"]) > a > span::after { content: "Home"; font-size: 0.875rem; }
-
-
-/* =============================================================
-   Codex touches on the Loresmith views
-   ============================================================= */
-/* framed panels: hairline gilt + inner rule, squarer corners */
-main :is(.ls-sheet, .ls-details, .ls-card, .ls-tile, .ls-month, .ls-map) {
-  border-radius: 6px;
-  border-color: color-mix(in srgb, var(--da-gold) 38%, transparent);
-  box-shadow: inset 0 0 0 3px color-mix(in srgb, var(--da-bg) 70%, transparent),
-              inset 0 0 0 4px color-mix(in srgb, var(--da-gold) 18%, transparent),
-              0 12px 28px -18px rgba(0, 0, 0, 0.8);
-}
-main .ls-details__title, main .ls-row dt { color: var(--da-gold); }
-main .ls-details__title { text-align: center; background: var(--da-diamond) center bottom / 14px 8px no-repeat; padding-bottom: 0.7rem; }
-main .ls-hero__name { filter: drop-shadow(0 0 10px var(--da-glow)); }
-main .ls-portrait--big {
-  border: 1px solid var(--da-gold);
-  border-bottom: 4px solid var(--ls-type);
-  box-shadow: inset 0 0 0 3px var(--da-bg), inset 0 0 0 4px color-mix(in srgb, var(--da-gold) 45%, transparent),
-              0 14px 30px -16px rgba(0, 0, 0, 0.85);
-}
-main .ls-chip { border-radius: 3px; font-family: "Cinzel", Georgia, serif; font-size: 0.72rem; letter-spacing: 0.04em; }
-main .ls-chip--dead { color: var(--color-red); border-color: color-mix(in srgb, var(--color-red) 55%, transparent); }
-main .ls-badge { border-radius: 3px; }
-
-/* timeline + holidays in Fade green */
-main .ls-timeline { border-left: 2px solid color-mix(in srgb, var(--da-gold) 35%, transparent); }
-main .ls-timeline > li::before {
-  width: 9px; height: 9px; border-radius: 1px; transform: rotate(45deg);
-  left: calc(-1.5rem - 6px);
-  background: var(--da-fade);
-  box-shadow: 0 0 0 3px var(--da-bg), 0 0 0 4px var(--da-gold), 0 0 14px var(--da-glow);
-}
-main .ls-timeline time { color: var(--da-highlight); }
-main a.ls-day.is-holiday {
-  background: color-mix(in srgb, var(--da-fade) 22%, transparent);
-  color: var(--da-fade) !important;
-  box-shadow: 0 0 8px -2px color-mix(in srgb, var(--da-fade) 60%, transparent);
-}
-
-/* map: aged frame */
-main .ls-map { border: 2px solid color-mix(in srgb, var(--da-gold) 45%, transparent); }
-main .ls-area-label { font-family: "Cinzel", Georgia, serif; }
-
-/* type colours: characters in dragon-blood red, like Loresmith */
-[data-type="character"]    { --ls-type: var(--color-red); }
-[data-type="organization"] { --ls-type: var(--color-purple); }
-
-/* =============================================================
-   Veilguard touches: copper tooltip frames, violet node glow
-   ============================================================= */
-main :is(.ls-details, .ls-card, .ls-tile, .ls-month, .ls-sheet) {
-  background: linear-gradient(180deg, color-mix(in srgb, var(--da-surface) 96%, transparent), color-mix(in srgb, var(--da-deep) 92%, transparent));
-  border: 1px solid color-mix(in srgb, var(--da-gold) 70%, transparent);
-  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--da-deep) 90%, transparent),
-              inset 0 0 0 3px color-mix(in srgb, var(--da-gold) 22%, transparent),
-              0 14px 32px -18px rgba(0, 0, 0, 0.9);
-}
-main :is(.ls-card, .ls-tile):hover {
-  border-color: var(--da-fade);
-  box-shadow: inset 0 0 0 2px var(--da-deep), 0 0 18px -4px var(--da-glow);
-}
-main .ls-portrait--big {
-  border: 1px solid var(--da-gold);
-  border-bottom: 1px solid var(--da-gold);
-  box-shadow: inset 0 0 0 3px var(--da-deep), inset 0 0 0 4px color-mix(in srgb, var(--da-gold) 45%, transparent),
-              0 0 26px -8px var(--da-glow);
-}
-main .ls-portrait span { color: var(--da-highlight); text-shadow: 0 0 14px var(--da-glow); }
-main .ls-details__title { color: var(--da-highlight); }
-main .ls-row dt { color: var(--da-gold); }
-main .ls-badge { color: var(--da-highlight) !important; border-color: color-mix(in srgb, var(--da-fade) 60%, transparent); background: color-mix(in srgb, var(--da-fade) 14%, transparent); }
-main .ls-chip { border-color: color-mix(in srgb, var(--da-gold) 45%, transparent); }
-main .ls-map { border: 1px solid var(--da-gold); }
-main a { text-decoration-color: color-mix(in srgb, var(--da-lyrium) 35%, transparent); }
-main h2 { border-bottom-color: color-mix(in srgb, var(--da-gold) 30%, transparent); }
-#left-sidebar a:hover, #right-sidebar a:hover { color: var(--da-highlight); text-shadow: 0 0 8px var(--da-glow); }
-main .ls-portrait {
-  background:
-    radial-gradient(ellipse at 50% 110%, color-mix(in srgb, var(--da-fade) 30%, transparent), transparent 70%),
-    color-mix(in srgb, var(--da-deep) 90%, transparent);
-}
-
-
-/* =============================================================
-   Restraint pass: fewer UI-kit tells, more book and game menu
-   (this block wins over everything above)
-   ============================================================= */
-
-/* Headings: solid lilac, no gradient fill, no glow */
-main :is(h1, h2, h3, h4, h5, h6),
-main .ls-hero__name {
-  background: none;
-  -webkit-text-fill-color: currentColor;
-  color: var(--da-highlight);
-  filter: none;
-  text-shadow: none;
-  letter-spacing: 0.03em;
-}
-main :is(h1, .ls-hero__name) { font-weight: 500; }
-main h3, main h4 { color: var(--da-gold); font-weight: 500; }
-
-/* Section headings centred between copper hairlines */
-main h2 {
-  display: flex;
-  align-items: center;
-  gap: 0.9em;
-  border-bottom: 0;
-  padding-bottom: 0;
-  font-size: 1.15em;
-  font-weight: 500;
-  font-variant: small-caps;
-  text-transform: none;
-}
-main h2::before,
-main h2::after {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--da-gold) 70%, transparent));
-}
-main h2::after { background: linear-gradient(90deg, color-mix(in srgb, var(--da-gold) 70%, transparent), transparent); }
-main h2 small { order: 0; -webkit-text-fill-color: var(--da-muted); font-family: inherit; font-size: 0.7em; }
-
-/* Labels: italic serif instead of tiny tracked capitals */
-main .ls-row dt {
-  font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: 0.95rem;
-  font-style: italic;
-  font-weight: 500;
-  letter-spacing: 0;
-  text-transform: none;
-  color: var(--da-muted);
-}
-main .ls-row dt span { font-style: normal; }
-main .ls-details__title {
-  font-variant: small-caps;
-  text-transform: none;
-  letter-spacing: 0.06em;
-  font-size: 1rem;
-  font-weight: 500;
-}
-
-/* Type label: plain small caps text, like the game's "TRAIT" */
-main .ls-badge {
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  background: none;
-  color: var(--da-gold) !important;
-  font-size: 0.75rem;
-  letter-spacing: 0.14em;
-}
-
-/* Hero meta line + dagger for the dead */
-main .ls-meta { margin: 0.1rem 0 0; font-style: italic; color: var(--da-muted); }
-main .ls-dagger { margin-left: 0.25em; font-size: 0.7em; vertical-align: super; color: var(--da-muted); }
-main .ls-hero__sub { color: var(--da-text); font-style: italic; }
-
-/* Panels: one copper hairline, no blur, no stacked shadows, no lift */
-main :is(.ls-details, .ls-card, .ls-tile, .ls-month, .ls-sheet, .ls-map, .ls-portrait--big) {
-  border: 1px solid color-mix(in srgb, var(--da-gold) 55%, transparent);
-  border-radius: 3px;
-  box-shadow: none;
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
-  transform: none !important;
-}
-main :is(.ls-details, .ls-card, .ls-month, .ls-sheet) { background: color-mix(in srgb, var(--da-surface) 88%, transparent); }
-main :is(.ls-card, .ls-tile):hover {
-  border-color: var(--da-highlight);
-  box-shadow: none;
-}
-main .ls-card--portrait { border-left-width: 1px; }
-main .ls-portrait span { text-shadow: none; color: color-mix(in srgb, var(--da-highlight) 70%, var(--da-muted)); }
-main .ls-card__foot { background: none; border-top: 1px solid color-mix(in srgb, var(--da-gold) 30%, transparent); }
-main .ls-card__link { font-weight: 500; }
-
-/* Home tiles: framed boxes, name left, count right */
-main .ls-tiles { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.8rem; }
-main .ls-tile {
-  padding: 0.95rem 1.1rem;
-  background: color-mix(in srgb, var(--da-surface) 88%, transparent);
-  font-family: "Cinzel", Georgia, serif;
-  font-size: 0.95rem;
-  font-weight: 500;
-  letter-spacing: 0.03em;
-  color: var(--da-text) !important;
-}
-main .ls-tile b { font-family: "Cormorant Garamond", Georgia, serif; font-size: 1.35rem; font-weight: 600; color: var(--ls-type, var(--da-gold)); }
-main .ls-tile:hover { color: var(--da-highlight) !important; }
-main .ls-tiles--feature .ls-tile { padding: 1.2rem 1.1rem; font-size: 1.05rem; }
-
-/* Chips under the name: small copper-outlined tags */
-main .ls-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.15rem; }
-main .ls-chip {
-  padding: 0.12em 0.6em;
-  border: 1px solid color-mix(in srgb, var(--da-gold) 50%, transparent);
-  border-radius: 3px;
-  background: color-mix(in srgb, var(--da-deep) 60%, transparent);
-  font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: 0.9rem;
-  letter-spacing: 0;
-  color: var(--da-text);
-}
-
-/* Kiln adds its own line under h2; the hairlines replace it */
-main .content h2 { border-bottom: 0 !important; padding-bottom: 0 !important; }
-
-/* Drop cap: copper, no glow */
-main .ls-entry__main > p:first-of-type:not(.ls-empty)::first-letter { color: var(--da-gold); text-shadow: none; }
-
-/* Timeline markers: small copper diamonds, no glow */
-main .ls-timeline > li::before { background: var(--da-gold); box-shadow: 0 0 0 3px var(--da-bg); }
-main .ls-tl__kind { border: 0; padding: 0; font-style: italic; }
-main .ls-tl__kind::before { content: "· "; }
-
-/* Map filters: plain toggles */
-main .ls-filter { border-radius: 3px; background: none; }
-main .ls-filter::before { content: none; }
-main input:checked + .ls-filter { border-color: var(--da-gold); color: var(--da-highlight); }
-
-/* Background: drop the line web, keep the quiet violet glow */
-body::before {
-  background-image:
-    radial-gradient(ellipse 60% 55% at 50% 40%, color-mix(in srgb, var(--da-fade) 13%, transparent), transparent 70%),
-    radial-gradient(ellipse at center, transparent 45%, var(--da-vignette) 100%);
-}
-
-/* Bubbles: rounder tiles with a soft type-colour tint, pill chips */
-main .ls-tile {
-  border-radius: 12px;
-  min-height: 3.6rem;
-  align-items: center;
-  background:
-    radial-gradient(ellipse at 100% 0%, color-mix(in srgb, var(--ls-type, var(--da-fade)) 22%, transparent), transparent 65%),
-    color-mix(in srgb, var(--da-surface) 88%, transparent);
-}
-main .ls-tile:hover { border-color: var(--ls-type, var(--da-highlight)); }
-main .ls-chip { border-radius: 999px; padding: 0.12em 0.75em; }
-
-
-/* =============================================================
-   Feature fixes
-   ============================================================= */
-
-/* Text for screen readers and search only */
-.ls-sr {
-  position: absolute !important;
-  width: 1px; height: 1px;
-  margin: -1px; padding: 0; border: 0;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-}
-
-/* The hero name is the page's h1 now; it doesn't take the h1 rule */
-main .ls-hero__name::after { display: none; }
-
-/* Map filters: real checkboxes, so they work from the keyboard */
-main .ls-filter__input {
-  position: absolute;
-  width: 1px; height: 1px;
-  opacity: 0;
-}
-main .ls-filter__input:focus-visible + .ls-filter { outline: 2px solid var(--da-highlight); outline-offset: 2px; }
-
-/* Map: one scrolling frame; on small screens keep it readable and let it pan */
-main .ls-map__scroll { flex-basis: 100%; min-width: 0; width: 100%; overflow-x: auto; }
-main .ls-map__hint { display: none; }
-
 @media (max-width: 700px) {
-  main .ls-map__hint { display: block; flex-basis: 100%; margin: 0.25rem 0 0; font-size: 0.85rem; font-style: italic; color: var(--da-muted); }
+  main .ls-sheet { float: none; width: 100%; margin: 0 0 1.5rem; }
+  main .ls-timeline > li { grid-template-columns: 1fr; gap: 0.25rem; }
+  main .ls-connections .ls-row { grid-template-columns: 1fr; gap: 0.25rem; }
+  main .ls-map__hint { display: block; flex-basis: 100%; margin: 0; font-size: 0.875rem; color: var(--muted); }
   main .ls-map { min-width: 720px; }
-  main .ls-pin__label, main .ls-area-label { display: block; font-size: 0.72rem; }
+  main :is(.ls-pin__label, .ls-area-label) { font-size: 0.75rem; }
 }
-
-/* Kiln underlines every h1; the hero name doesn't want that */
-main .content .ls-hero__name, main .ls-hero__name { border-bottom: 0 !important; padding-bottom: 0 !important; }
+@media (max-width: 560px) {
+  main .ls-tiles:not(.ls-tiles--feature), main .ls-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.5rem; }
+  main .ls-tiles--feature { grid-template-columns: minmax(0, 1fr); gap: 0.5rem; }
+  main .ls-hero { flex-direction: column; gap: 1rem; }
+  main .ls-portrait--big { flex-basis: auto; width: 120px; }
+}
