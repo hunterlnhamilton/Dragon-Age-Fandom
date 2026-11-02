@@ -332,7 +332,9 @@ def abs_year(date):
     if m:
         off = OFFSETS.get(m.group(2).lower())
         if off is not None:
-            return int(m.group(1)) + off
+            year = int(m.group(1)) + off
+            # The Chantry count has no year 0: -1 Ancient is followed by 1:01 Divine
+            return year + 1 if m.group(2).lower() != "ancient" and year >= 0 else year
     return None
 
 
@@ -833,26 +835,97 @@ for n in lore_entries("calendar"):
 
 tl_rows.sort(key=lambda r: (r["year"] is None, r["year"] if r["year"] is not None else 0,
                          TL_RANK[r["kind"]], r["title"].lower()))
-tl, current = ['<p class="ls-lede">Events, births, deaths and foundings, oldest first. Dates are shown as written; '
-               'Tevinter and Elvhen years are lined up with the Chantry calendar for ordering.</p>'], None
+
+
+def timeline_calendars():
+    """[(id, label, how to write a year)] with the Chantry count, which the others line up to, first."""
+    out = []
+    for n in sorted(lore_entries("calendar"), key=lambda c: (bool(c["fm"].get("align")), c["name"])):
+        own = re.search(r"(-?\d+)\s+([A-Za-z']+)\s*=", str(n["fm"].get("align") or ""))
+        word = own.group(2) if own and own.group(2).lower() in OFFSETS else None
+        zero = not n["fm"].get("no_year_zero")
+        out.append((re.sub(r"[^a-z0-9]+", "-", calendar_short(n).lower()), calendar_short(n), word, zero))
+    return out
+
+
+def year_in(year, word, zero):
+    """A Chantry-count year written in another calendar. No word: Chantry's own ages."""
+    if word is None:
+        if year < 1:
+            return f"{year} Ancient"
+        age = min(year // 100, len(AGES) - 1)
+        return f"{age + 1}:{year - age * 100:02d} {AGES[age][1]}"
+    own = (year if year < 0 else year - 1) - OFFSETS[word.lower()]
+    if own < 1 and not zero:
+        own -= 1
+    return f"{own} {word}"
+
+
+TL_CALS = timeline_calendars()
+TL_KINDS = [("event", "Events"), ("birth", "Births"), ("death", "Deaths and endings"),
+            ("founding", "Foundings and changes"), ("calendar", "Calendars")]
+present = {r["kind"].lower() for r in tl_rows}
+TL_KINDS = [k for k in TL_KINDS if k[0] in present]
+
+
+def tl_dates(r):
+    """The date in every calendar; CSS shows the one that's selected."""
+    if r["year"] is None:
+        return esc(r["date"] or "Undated")
+    end = abs_year(r["end"])
+    spans = []
+    for cid, _, word, zero in TL_CALS:
+        text = year_in(r["year"], word, zero) + (f" – {year_in(end, word, zero)}" if end is not None else "")
+        spans.append(f'<span class="ls-date" data-cal="{cid}">{esc(text)}</span>')
+    return "".join(spans)
+
+
+# Radio buttons and checkboxes with CSS, so this works without any script.
+# [id=...], not #id: Kiln reads "#word" as a tag, even inside <style>.
+css, inputs, cal_labels, kind_labels = [], [], [], []
+for i, (cid, label_text, word, _) in enumerate(TL_CALS):
+    fid = f"ls-tl-cal-{cid}"
+    inputs.append(f'<input type="radio" class="ls-filter__input" name="ls-tl-cal" id="{fid}"{" checked" if i == 0 else ""}>')
+    cal_labels.append(f'<label for="{fid}" class="ls-filter">{esc(label_text)}</label>')
+    css.append(f'[id="{fid}"]:checked ~ ol time [data-cal="{cid}"]{{display:inline}}')
+    if word:    # one long era, so Chantry's age headings don't apply
+        css.append(f'[id="{fid}"]:checked ~ h2{{display:none!important}}[id="{fid}"]:checked ~ ol{{margin:0}}')
+for kind, label_text in TL_KINDS:
+    fid = f"ls-tl-kind-{kind}"
+    inputs.append(f'<input type="checkbox" class="ls-filter__input" id="{fid}" checked>')
+    kind_labels.append(f'<label for="{fid}" class="ls-filter">{esc(label_text)}</label>')
+    css.append(f'[id="{fid}"]:not(:checked) ~ ol > li[data-kind="{kind}"]{{display:none}}')
+    css.append(f'[id="{fid}"]:not(:checked) ~ .ls-tlbar label[for="{fid}"]{{opacity:.5;text-decoration:line-through}}')
+    css.append(f'[id="{fid}"]:checked ~ h2:has(+ ol > li[data-kind="{kind}"]){{display:flex}}')
+for fid in [f"ls-tl-cal-{c[0]}" for c in TL_CALS]:
+    css.append(f'[id="{fid}"]:checked ~ .ls-tlbar label[for="{fid}"]{{border-color:var(--link);color:var(--title);background:var(--hover-color)}}')
+for fid in [f"ls-tl-cal-{c[0]}" for c in TL_CALS] + [f"ls-tl-kind-{k[0]}" for k in TL_KINDS]:
+    css.append(f'[id="{fid}"]:focus-visible ~ .ls-tlbar label[for="{fid}"]{{outline:2px solid var(--link);outline-offset:2px}}')
+
+tl = ['<p class="ls-lede">Events, births, deaths and foundings, oldest first, with every date written in the calendar you choose.</p>',
+      f'<div class="ls-tlwrap"><style>{"".join(css)}</style>{"".join(inputs)}'
+      f'<div class="ls-tlbar"><div class="ls-tlbar__row"><span class="ls-filters-label">Calendar</span>{"".join(cal_labels)}</div>'
+      f'<div class="ls-tlbar__row"><span class="ls-filters-label">Show</span>{"".join(kind_labels)}</div></div>']
+current = None
 for r in tl_rows:
     era = era_of(r["year"])
     if era != current:
         if current is not None:
             tl.append("</ol>")
-        tl.append(f'<h2>{esc(era)}</h2><ol class="ls-timeline">')
+        tl.append(f'<h2 class="ls-tl__era">{esc(era)}</h2><ol class="ls-timeline">')
         current = era
     n = r["n"]
-    when = esc(r["date"] or "Undated") + (f' – {esc(r["end"])}' if r["end"] else "")
     kind = f'<span class="ls-tl__kind">{esc(r["label"])}</span>' if r["label"] else ""
     place = f'<p>{link(r["where"])}</p>' if r["where"] else ""
     ex = f'<p>{esc(r["text"])}</p>' if r["text"] else ""
     who = ", ".join(link(f"[[{w}]]") for w in r["who"])
-    tl.append(f'<li data-kind="{r["kind"].lower()}"><time>{when}</time><div>'
+    written = esc(r["date"] or "") + (f' – {esc(r["end"])}' if r["end"] else "")
+    tl.append(f'<li data-kind="{r["kind"].lower()}"><time title="Written in the note as {written}">{tl_dates(r)}</time><div>'
               f'<a class="internal-link" href="{n["url"]}">{esc(r["title"])}</a>{kind}'
               f'{place}{ex}{f"<p class=ls-tl__who>{who}</p>" if who else ""}</div></li>')
 if current is not None:
     tl.append("</ol>")
+tl.append("</div>")
 write_page(f"{CODEX}/Timeline.md", "\n".join(tl), "Timeline",
            f"The history of Thedas in {len(tl_rows)} entries: events, births, deaths and foundings, oldest first.")
 manifest["links"] += [[slug_url(f"{CODEX}/Timeline.md"), n["url"]] for n in events]
