@@ -29,6 +29,11 @@ echo "Downloading binary from $URL..."
 curl -L -o ./kiln "$URL"
 chmod +x ./kiln
 
+# Page dates come from git history, so make sure the clone has all of it
+if [ "$(git rev-parse --is-shallow-repository 2>/dev/null)" = "true" ]; then
+  git fetch --quiet --unshallow || echo "Warning: shallow clone, page dates will be hidden."
+fi
+
 # Turn Loresmith notes into sheets, category pages, timeline and calendars.
 # Works on a copy in ./.build, so the vault itself is never touched.
 echo "Preparing Loresmith pages..."
@@ -43,14 +48,21 @@ echo "Building site..."
   --name "$SITE_NAME" \
   --url "$DEPLOYMENT_URL"
 
+# Put back what Kiln can't get from the staged pages: graph links, page
+# descriptions, real word counts and dates
+echo "Finishing pages..."
+python3 tools/postbuild.py ./public ./.build-manifest.json
+
 # Add the Fade theme on top of Kiln's built-in one
 echo "Applying Fade theme..."
 mkdir -p ./public/assets/css
 cp "$THEME_CSS" ./public/assets/css/
+cp assets/favicon.svg ./public/favicon.svg
 CSS_HREF="/assets/css/$(basename "$THEME_CSS")"
 # Also fix Kiln's home link: with flat URLs it writes href="//", which browsers block
 find ./public -name '*.html' -exec \
-  sed -i -e "s#</head>#<link rel=\"stylesheet\" href=\"${CSS_HREF}\"></head>#" \
-         -e 's#href="//"#href="/"#g' {} +
+  sed -i -e "s#</head>#<link rel=\"icon\" href=\"/favicon.svg\" type=\"image/svg+xml\"><link rel=\"stylesheet\" href=\"${CSS_HREF}\"></head>#" \
+         -e 's#href="//"#href="/"#g' \
+         -e 's#\(pages\.dev\)//#\1/#g' {} +
 
 echo "Kiln build complete successfully"

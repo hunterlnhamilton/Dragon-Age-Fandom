@@ -3,5 +3,6 @@
 DAFics/Reference/*
 !DAFics/Reference/Assets/
 .build/
+.build-manifest.json
 public/
 kiln

@@ -900,3 +900,42 @@ main .ls-tile {
 }
 main .ls-tile:hover { border-color: var(--ls-type, var(--da-highlight)); }
 main .ls-chip { border-radius: 999px; padding: 0.12em 0.75em; }
+
+
+/* =============================================================
+   Feature fixes
+   ============================================================= */
+
+/* Text for screen readers and search only */
+.ls-sr {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0; border: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* The hero name is the page's h1 now; it doesn't take the h1 rule */
+main .ls-hero__name::after { display: none; }
+
+/* Map filters: real checkboxes, so they work from the keyboard */
+main .ls-filter__input {
+  position: absolute;
+  width: 1px; height: 1px;
+  opacity: 0;
+}
+main .ls-filter__input:focus-visible + .ls-filter { outline: 2px solid var(--da-highlight); outline-offset: 2px; }
+
+/* Map: one scrolling frame; on small screens keep it readable and let it pan */
+main .ls-map__scroll { flex-basis: 100%; min-width: 0; width: 100%; overflow-x: auto; }
+main .ls-map__hint { display: none; }
+
+@media (max-width: 700px) {
+  main .ls-map__hint { display: block; flex-basis: 100%; margin: 0.25rem 0 0; font-size: 0.85rem; font-style: italic; color: var(--da-muted); }
+  main .ls-map { min-width: 720px; }
+  main .ls-pin__label, main .ls-area-label { display: block; font-size: 0.72rem; }
+}
+
+/* Kiln underlines every h1; the hero name doesn't want that */
+main .content .ls-hero__name, main .ls-hero__name { border-bottom: 0 !important; padding-bottom: 0 !important; }

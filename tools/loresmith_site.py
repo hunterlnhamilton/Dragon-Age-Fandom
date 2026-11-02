@@ -15,16 +15,18 @@ views, so Kiln can publish them. Your real vault is never changed.
 Drafting tools (generators, writing log, goals, boards) stay in Obsidian.
 """
 import html
+import json
 import os
 import re
 import shutil
+import subprocess
 import sys
+from datetime import datetime
 from urllib.parse import quote
 
 try:
     import yaml
 except ImportError:
-    import subprocess
     subprocess.check_call([sys.executable, "-m", "pip", "install", "--quiet", "--user", "pyyaml"])
     import site
     sys.path.append(site.getusersitepackages())
@@ -32,6 +34,11 @@ except ImportError:
 
 VAULT, STAGE = sys.argv[1], sys.argv[2]
 CODEX = "Codex"
+# Facts Kiln can't work out from the staged pages, read by tools/postbuild.py
+MANIFEST = STAGE.rstrip("/\\") + "-manifest.json"
+SITE_TITLE = "Dragon Age: Fandom"
+SITE_DESCRIPTION = ("A fan codex of Thedas, the world of Dragon Age: its people, "
+                    "nations, history and calendars.")
 
 # type -> (plural label, group). Order here is the order on the home page.
 TYPES = {
@@ -85,6 +92,31 @@ LABELS = {
 }
 
 WIKILINK = re.compile(r"\[\[([^\]|#]+)(?:#[^\]|]*)?(?:\|([^\]]+))?\]\]")
+
+
+# ---------------------------------------------------------------- git dates
+def git_dates(vault):
+    """{path relative to the vault: (first commit time, last commit time)}.
+    A fresh clone gives every file the same timestamp, so history is the only
+    honest source. Returns {} if there's no usable history."""
+    try:
+        out = subprocess.run(
+            ["git", "-c", "core.quotepath=off", "log", "--format=%x00%aI", "--name-only",
+             "--relative", "--", "."],
+            cwd=vault, capture_output=True, text=True, encoding="utf-8", check=True).stdout
+        shallow = subprocess.run(["git", "rev-parse", "--is-shallow-repository"], cwd=vault,
+                                 capture_output=True, text=True, check=True).stdout.strip()
+    except (OSError, subprocess.CalledProcessError):
+        return {}
+    if shallow == "true":
+        return {}
+    dates = {}
+    for chunk in out.split("\x00")[1:]:
+        lines = [l for l in chunk.splitlines() if l.strip()]
+        for path in lines[1:]:
+            newest = dates.get(path, (None, lines[0]))[1]
+            dates[path] = (lines[0], newest)   # log runs newest first
+    return dates
 
 
 # ---------------------------------------------------------------- helpers
@@ -155,6 +187,40 @@ def label(key):
         return LABELS[key]
     k = re.sub(r"(?<=[a-z])([A-Z])", r" \1", key).replace("_", " ")
     return k[:1].upper() + k[1:]
+
+
+def sections_text(n):
+    """The written part of a note. Calendars keep their data in lists, not prose."""
+    body = strip_comments(n["body"])
+    if n["type"] == "calendar":
+        return "\n".join(t for h, t in sections(body)
+                         if h and not re.match(r"^(Months|Weekdays|Moons|Eras)\b", h))
+    return body
+
+
+def count_words(markdown):
+    """Words a reader would actually read: no markup, comments or link syntax."""
+    t = re.sub(r"!\[\[[^\]]*\]\]", " ", strip_comments(markdown))
+    t = WIKILINK.sub(lambda m: m.group(2) or m.group(1), t)
+    t = re.sub(r"<[^>]+>", " ", t)
+    t = re.sub(r"^#+\s.*$", " ", t, flags=re.M)
+    return len(re.findall(r"[^\W_][\w'’-]*", t))
+
+
+def plain(value):
+    """A frontmatter value as text, with wikilink brackets removed."""
+    return WIKILINK.sub(lambda m: m.group(2) or m.group(1), str(value)).strip()
+
+
+def describe(n):
+    """One sentence for search results and link previews."""
+    excerpt = plain_excerpt(sections_text(n), 155)
+    if excerpt:
+        return excerpt
+    kind = SINGULAR.get(n["type"], "Entry").lower()
+    title = (as_list(n["fm"].get("titles")) or [None])[0]
+    who = f'{n["name"]}, {plain(title)}' if title else n["name"]
+    return f"{who}: {kind} entry in a fan codex of Dragon Age's Thedas."
 
 
 def esc(s):
@@ -373,7 +439,7 @@ def hero(n):
             f'{portrait(n, big=True) if n["type"] != "map" else ""}'
             f'<div class="ls-hero__text">'
             f'<a class="ls-badge" data-type="{esc(n["type"])}" href="{slug_url(CODEX + "/" + plural + ".md")}">{esc(SINGULAR.get(n["type"], plural))}</a>'
-            f'<p class="ls-hero__name">{esc(title)}{"<span class=ls-dagger title=Deceased>†</span>" if n["type"] == "character" and is_dead(n) else ""}</p>'
+            f'<h1 class="ls-hero__name">{esc(title)}{"<span class=ls-dagger title=Deceased>†</span>" if n["type"] == "character" and is_dead(n) else ""}</h1>'
             f'{f"<p class=ls-hero__sub>{link(sub)}</p>" if sub else ""}'
             f'{f"<div class=ls-chips>{chips}</div>" if (chips := entry_chips(n)) else ""}</div></header>')
 
@@ -462,7 +528,7 @@ def calendar_sheet(n):
             facts.append(f'<div class="ls-row"><dt>{lab}</dt><dd>{link(fm[key])}</dd></div>')
     if p["months"]:
         facts.append(f'<div class="ls-row"><dt>Year length</dt><dd>{sum(d for _, d in p["months"])} days, {len(p["months"])} months</dd></div>')
-    out = [f'<aside class="ls-sheet" data-type="calendar"><div class="ls-sheet__head"><a class="ls-badge" data-type="calendar" '
+    out = [f'<h1 class="ls-sr">{esc(n["name"])}</h1><aside class="ls-sheet" data-type="calendar"><div class="ls-sheet__head"><a class="ls-badge" data-type="calendar" '
            f'href="{slug_url(CODEX + "/Calendars.md")}">Calendar</a><p class="ls-sheet__title">{esc(n["name"])}</p></div>'
            f'<dl>{"".join(facts)}</dl></aside>']
 
@@ -588,20 +654,42 @@ def map_view(n):
     chips, rules = [], []
     for ttype in sorted(counts, key=lambda k: list(TYPES).index(k) if k in TYPES else 99):
         cid = f"ls-f-{uid}-{ttype}"
-        chips.append(f'<input type="checkbox" id="{cid}" checked hidden>'
+        chips.append(f'<input type="checkbox" class="ls-filter__input" id="{cid}" checked>'
                      f'<label for="{cid}" class="ls-filter" data-type="{ttype}">{esc(TYPES.get(ttype, (ttype.title(),))[0])} ({counts[ttype]})</label>')
-        rules.append(f'#{cid}:not(:checked) ~ .ls-map [data-type="{ttype}"]{{display:none}}'
-                     f'#{cid}:not(:checked) ~ .ls-map a:has(polygon[data-type="{ttype}"]){{display:none}}')
+        # [id=...], not #id: Kiln reads "#word" as a tag, even inside <style>,
+        # and turning it into a link breaks the whole rule.
+        rules.append(f'[id="{cid}"]:not(:checked) ~ .ls-map__scroll [data-type="{ttype}"]{{display:none}}')
 
     return (f'<div class="ls-mapwrap"><style>{"".join(rules)}</style>'
             f'<span class="ls-filters-label">Show</span>{"".join(chips)}'
-            f'<figure class="ls-map" style="aspect-ratio:{aspect}">'
+            f'<p class="ls-map__hint">Swipe the map to see all of it.</p>'
+            f'<div class="ls-map__scroll"><figure class="ls-map" style="aspect-ratio:{aspect}">'
             f'<img src="{url}" alt="Map of {esc(n["name"])}" loading="lazy">'
             f'<svg viewBox="0 0 100 100" preserveAspectRatio="none">{"".join(areas)}</svg>'
-            f'{"".join(labels)}{"".join(pins)}</figure></div>')
+            f'{"".join(labels)}{"".join(pins)}</figure></div></div>')
 
 
 # ---------------------------------------------------------------- write sheets
+DATES = git_dates(VAULT)
+manifest = {"pages": {}, "links": [], "home": {"title": SITE_TITLE, "description": SITE_DESCRIPTION}}
+
+
+def graph_edges(n):
+    """Note-to-note links. Sheets are written as HTML, so Kiln can't see these."""
+    found = {t for value in n["fm"].values() for t in targets(value)}
+    found |= {m.group(1).strip() for m in WIKILINK.finditer(strip_comments(n["body"]))}
+    return [[n["url"], notes[t]["url"]] for t in sorted(found) if t in notes and t != n["name"]]
+
+
+for n in notes.values():
+    if n["type"] in TYPES:
+        created, updated = DATES.get(n["rel"].replace(os.sep, "/"), (None, None))
+        words = count_words(sections_text(n))
+        manifest["pages"][n["url"]] = {
+            "description": describe(n), "words": words, "created": created, "updated": updated,
+        }
+        manifest["links"] += graph_edges(n)
+
 for n in notes.values():
     if n["type"] not in TYPES:
         if n["fm"] or "%%" in n["body"]:
@@ -619,20 +707,33 @@ for n in notes.values():
 
     # keep tags so Kiln's tag pages still work
     tags = as_list(n["fm"].get("tags"))
-    head = "---\n" + yaml.safe_dump({"tags": tags}, allow_unicode=True) + "---\n\n" if tags else ""
+    front = {"title": n["name"], "description": describe(n)}
+    if tags:
+        front["tags"] = tags
+    head = "---\n" + yaml.safe_dump(front, allow_unicode=True) + "---\n\n"
     with open(n["path"], "w", encoding="utf-8") as fh:
         fh.write(head + main + "\n")
+    # Kiln takes "Updated" and the sitemap date from the file's timestamp
+    updated = manifest["pages"][n["url"]]["updated"]
+    if updated:
+        stamp = datetime.fromisoformat(updated).timestamp()
+        os.utime(n["path"], (stamp, stamp))
 
 
 # ---------------------------------------------------------------- codex pages
 os.makedirs(os.path.join(STAGE, CODEX), exist_ok=True)
 
 
-def write_page(rel, text):
+def write_page(rel, text, title, description):
+    """A generated page. The h1 is for screen readers and search; the page's
+    look starts at its first section."""
     path = os.path.join(STAGE, rel)
-    os.makedirs(os.path.dirname(path), exist_ok=True)
+    os.makedirs(os.path.dirname(path) or STAGE, exist_ok=True)
+    front = yaml.safe_dump({"title": title, "description": description}, allow_unicode=True)
     with open(path, "w", encoding="utf-8") as fh:
-        fh.write(text.strip() + "\n")
+        fh.write(f'---\n{front}---\n\n<h1 class="ls-sr">{esc(title)}</h1>\n\n{text.strip()}\n')
+    url = "/" if rel == "index.md" else slug_url(rel)
+    manifest["pages"][url] = {"description": description, "words": None, "created": None, "updated": None}
 
 
 def card(n):
@@ -667,7 +768,9 @@ for ntype, (plural, group) in TYPES.items():
         if title:
             parts.append(f"<h2>{esc(title)} <small>{len(groups[key])}</small></h2>")
         parts.append('<ul class="ls-cards">' + "".join(card(n) for n in groups[key]) + "</ul>")
-    write_page(f"{CODEX}/{plural}.md", "\n\n".join(parts))
+    write_page(f"{CODEX}/{plural}.md", "\n\n".join(parts), plural,
+               f"All {len(items)} {plural.lower()} in a fan codex of Dragon Age's Thedas.")
+    manifest["links"] += [[slug_url(f"{CODEX}/{plural}.md"), n["url"]] for n in items]
 
 # Timeline
 events = []
@@ -694,7 +797,9 @@ for y, n in events:
               f'{f"<p>{esc(ex)}</p>" if ex else ""}{f"<p class=ls-tl__who>{who_html[3:]}</p>" if who else ""}</div></li>')
 if current is not None:
     tl.append("</ol>")
-write_page(f"{CODEX}/Timeline.md", "\n".join(tl))
+write_page(f"{CODEX}/Timeline.md", "\n".join(tl), "Timeline",
+           f"{len(events)} events in the history of Thedas, oldest first, across every calendar.")
+manifest["links"] += [[slug_url(f"{CODEX}/Timeline.md"), n["url"]] for _, n in events]
 
 # Calendars overview
 cals = lore_entries("calendar")
@@ -706,7 +811,9 @@ if cals:
         align = f'<p class="ls-card__ex">{link(c["fm"]["align"])}</p>' if c["fm"].get("align") else ""
         rows.append(f'<li class="ls-card" data-type="calendar"><a class="ls-card__link" href="{c["url"]}">{esc(c["name"])}</a>'
                     f'<p class="ls-card__sub">{len(p["months"])} months · {days} days</p>{align}</li>')
-    write_page(f"{CODEX}/Calendars.md", '<p class="ls-lede">The calendars of Thedas.</p>\n\n<ul class="ls-cards">' + "".join(rows) + "</ul>")
+    write_page(f"{CODEX}/Calendars.md", '<p class="ls-lede">The calendars of Thedas.</p>\n\n<ul class="ls-cards">' + "".join(rows) + "</ul>",
+               "Calendars", f"The {len(cals)} calendars of Thedas, with months, weekdays, moons, eras and holidays.")
+    manifest["links"] += [[slug_url(f"{CODEX}/Calendars.md"), c["url"]] for c in cals]
 
 # ---------------------------------------------------------------- home
 home_src = os.path.join(STAGE, "Home.md")
@@ -738,6 +845,12 @@ for group in ["People", "Nature", "Places", "Things", "History", "Language"]:
         home.append('<ul class="ls-tiles">' + "".join(tiles[group]) + "</ul>")
 if home_body.strip():
     home.append(home_body)
-write_page("index.md", "\n\n".join(home))
+write_page("index.md", "\n\n".join(home), SITE_TITLE, SITE_DESCRIPTION)
+codex_pages = [plural for ntype, (plural, _) in TYPES.items() if category_counts.get(ntype)]
+manifest["links"] += [["/", slug_url(f"{CODEX}/{p}.md")] for p in codex_pages + ["Timeline"]]
+manifest["links"] += [["/", m["url"]] for m in lore_entries("map")]
+
+with open(MANIFEST, "w", encoding="utf-8") as fh:
+    json.dump(manifest, fh, ensure_ascii=False)
 
 print(f"loresmith_site: {len(lore_entries())} entries, {len(events)} events, {len(cals)} calendars")
